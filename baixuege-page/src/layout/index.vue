@@ -5,6 +5,9 @@
   <footer>789</footer>
 </template>
 
-<style lang="scss" scoped>
-
+<style lang="less" scoped>
+header {
+  height: 56px;
+  background-color: #999;
+}
 </style>
