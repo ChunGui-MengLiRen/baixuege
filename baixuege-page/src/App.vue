@@ -1,11 +1,12 @@
 <script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-// import HelloWorld from './components/HelloWorld.vue'
+import zhCN from "ant-design-vue/es/locale/zh_CN";
+import dayjs from "dayjs";
+import "dayjs/locale/zh-cn";
+dayjs.locale("zh-cn");
 </script>
 
 <template>
-  <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
-  <!-- <HelloWorld msg="Hello Vue 3 + Vite" /> -->
-  <router-view />
+  <a-config-provider :locale="zhCN">
+    <router-view />
+  </a-config-provider>
 </template>
