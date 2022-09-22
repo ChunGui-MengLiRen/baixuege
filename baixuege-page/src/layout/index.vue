@@ -36,6 +36,8 @@ const toHome = function () {
 
 <style lang="less" scoped>
 .header {
+  position: fixed;
+  width: 100%;
   height: 56px;
   box-shadow: 0 0 18px #000;
   background-color: rgba(0, 0, 0, 0.85);
@@ -87,7 +89,8 @@ const toHome = function () {
 }
 
 .main {
-  height: calc(100vh - 56px);
+  // height: 100vh;
+  // height: calc(100vh - 56px);
 }
 
 .footer {
