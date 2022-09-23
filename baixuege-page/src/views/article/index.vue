@@ -1,17 +1,33 @@
-<script setup></script>
+<script setup>
+import MyFooter from '../../components/footer.vue';
+</script>
 
 <template>
   <div class="container wrap">
     <div class="article-box">
       <ul>
-        <li v-for="i in 10" :key="i" class="article-item">
+        <li v-for="i in 10" :key="i" class="article-item xl-max-height">
           <div class="image">
-            <img src="../../assets/logo.png" alt="" />
+            <img src="../../assets/panda.webp" alt="" />
           </div>
           <div class="data">
             <div class="title">我的文章</div>
-            <div class="content">测试的文章内容没有实际的意义</div>
-            <div class="meta">2022-09-22</div>
+            <div class="content">
+              测试的文章内容没有实际的意义,测试的文章内容没有实际的意义测试的文章内容没有实际的意义测试的文章内容没有实际的意义测试的文章内容没有实际的意义
+            </div>
+            <div class="tag">
+              <a-tag color="pink">pink</a-tag>
+              <a-tag color="red">red</a-tag>
+              <a-tag color="orange">orange</a-tag>
+              <a-tag color="green">green</a-tag>
+              <a-tag color="cyan">cyan</a-tag>
+              <a-tag color="blue">blue</a-tag>
+              <a-tag color="purple">purple</a-tag>
+            </div>
+            <div class="meta">
+              <span>杨柳依依</span>
+              <span>2022-09-22 17:15:45</span>
+            </div>
           </div>
         </li>
       </ul>
@@ -20,45 +36,41 @@
       </div>
     </div>
 
-    <div class="card-box"></div>
+    <div class="card-box lg-show"></div>
   </div>
-  <footer class="footer">
-    <div class="container">
-      <div>本网站由Vue3+Node+Element-plus联合驱动</div>
-      <div>京ICP备2021039823号-1 杨柳依依保留所有权利</div>
-    </div>
-  </footer>
+  <MyFooter />
 </template>
 
 <style lang="less" scoped>
 .wrap {
-  padding-top: 80px;
-  padding-bottom: 24px;
+  padding: 80px 12px 24px 12px;
   margin: 0 auto;
   display: flex;
   gap: 24px;
 }
 .article-box {
   flex: 1;
-  background-color: #f2f2f2;
+  background-color: #fff;
   .article-item {
-    min-height: 160px;
-    height: 10vw;
     border-bottom: 1px solid #ccc;
     padding: 20px;
     box-shadow: 0px 0px 10px rgba(116, 116, 116, 0.08);
     display: flex;
+    cursor: pointer;
     .image {
-      width: 16vw;
-      min-width: 180px;
-      height: 100%;
+      width: 30%;
+      aspect-ratio: auto 16 / 9;
       margin-right: 32px;
+      &:hover {
+        transform: scale(1.05);
+      }
       img {
         width: 100%;
         height: 100%;
       }
     }
     .data {
+      flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -69,6 +81,10 @@
       .content {
         font-size: 16px;
       }
+      .meta{
+        display: flex;
+        justify-content: space-between;
+      }
     }
   }
   .pagination {
@@ -78,8 +94,9 @@
 }
 
 .card-box {
-  width: 320px;
-  background-color: #f2f2f2;
+  display: none;
+  width: 300px;
+  background-color: #fff;
 }
 
 .footer {
