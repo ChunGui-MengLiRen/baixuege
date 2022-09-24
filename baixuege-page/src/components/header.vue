@@ -1,8 +1,8 @@
 <script setup>
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 const $router = useRouter();
 const toHome = function () {
-  $router.push({ path: 'home' });
+  $router.push({ path: "home" });
 };
 </script>
 
@@ -18,10 +18,10 @@ const toHome = function () {
           <router-link to="/article">文章</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/log">日志</router-link>
+          <router-link to="/note">随笔</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/note">随笔</router-link>
+          <router-link to="/log">日志</router-link>
         </li>
         <li class="menu-item">
           <router-link to="/about">关于</router-link>
@@ -33,6 +33,7 @@ const toHome = function () {
 
 <style lang="less" scoped>
 .header {
+  z-index: 999999;
   position: fixed;
   width: 100%;
   height: 56px;

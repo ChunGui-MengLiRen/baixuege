@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import MyFooter from "../../components/footer.vue";
+</script>
 
 <template>
   <div class="container wrap">
@@ -11,10 +13,7 @@
         <img src="../../assets/banner.svg" alt="" />
       </div>
     </div>
-    <!-- <footer class="footer">
-    <div>本网站由Vue3+Node+Element-plus联合驱动</div>
-    <div>京ICP备2021039823号-1 杨柳依依保留所有权利</div>
-  </footer> -->
+    <!-- <MyFooter /> -->
   </div>
 </template>
 
