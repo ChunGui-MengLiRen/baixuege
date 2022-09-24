@@ -4,51 +4,86 @@ import MyFooter from "../../components/footer.vue";
 
 <template>
   <div class="container wrap">
-    <div class="banner">
-      <div class="text">
-        <h2>杨柳依依</h2>
-        <h4>懦弱之举，我绝不姑息</h4>
-      </div>
-      <div class="image">
-        <img src="../../assets/banner.svg" alt="" />
+    <div class="card card-side">
+      <div class="head">关于本站</div>
+      <div class="body">
+        <div class="left">
+          <ul>
+            <li>页面：vue3</li>
+            <li>后台：vue3 + antd</li>
+            <li>接口：node + koa</li>
+            <li>云服务：阿里云</li>
+            <li>数据库：mysql</li>
+            <li>源代码：https://github.com/gujiwuqing</li>
+          </ul>
+        </div>
+        <!-- <div class="right"></div> -->
       </div>
     </div>
-    <!-- <MyFooter /> -->
+    <div class="card card-self">
+      <div class="head">关于我</div>
+      <div class="body">
+        <div class="left">
+          <ul>
+            <li>昵称：杨柳依依 —— 《诗经·小雅·采薇》</li>
+            <li>籍贯：安徽合肥</li>
+            <li>激励语：懦弱之举，我绝不姑息</li>
+            <li>邮箱：chunguimengliren@163.com</li>
+            <li>Gitee：https://gitee.com/fwh1998</li>
+            <li>Github：https://github.com/gujiwuqing</li>
+          </ul>
+        </div>
+        <!-- <div class="right"></div> -->
+      </div>
+    </div>
   </div>
+  <MyFooter />
 </template>
 
 <style lang="less" scoped>
 .wrap {
+  padding: 80px 40px 24px;
   margin: 0 auto;
-  padding: 0 40px;
-  background-color: #f2f2f2;
 
-  .banner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 64px 0;
-    .text {
-      h2 {
-        font-size: 64px;
-        font-weight: 600;
-        color: #00bfa6;
-        margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100vh;
+
+  .card {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0px 0px 10px rgba(116, 116, 116, 0.08);
+
+    .head {
+      height: 56px;
+      line-height: 56px;
+      padding-left: 24px;
+      border-bottom: 1px solid #eee;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .body {
+      padding: 24px;
+      font-size: 18px;
+      display: flex;
+      justify-content: center;
+      .left {
+        flex: 1;
       }
-      h4 {
-        font-size: 40px;
-        font-weight: 400;
+      .right {
+        flex: 1;
       }
     }
-    .image {
-      width: auto;
-      height: auto;
-      max-height: 30vw;
-      img {
-        width: auto;
-        max-height: 30vw;
-      }
-    }
+  }
+
+  .card-side {
+    flex: 1;
+  }
+
+  .card-self {
+    flex: 1;
   }
 }
 </style>

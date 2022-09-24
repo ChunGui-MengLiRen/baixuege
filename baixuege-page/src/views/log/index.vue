@@ -23,10 +23,17 @@ import MyFooter from "../../components/footer.vue";
                 'currnet-left ': i % 2 == 0,
               }"
             ></div>
-            <div class="head">2022-09-24</div>
-            <div class="body">
-              <p>初始化</p>
+            <div class="box-head">
+              <div class="head-avatar">
+                <img src="../../assets/bing_img.jpg" alt="" />
+                <span>杨柳依依</span>
+              </div>
+              <div class="time">2022-09-25</div>
             </div>
+            <div class="box-body">
+              <p>山水一程，风雪一更，聒碎乡心梦不成。</p>
+            </div>
+            <!-- <div class="box-footer"></div> -->
           </div>
         </li>
       </ul>
@@ -44,8 +51,8 @@ import MyFooter from "../../components/footer.vue";
   .time-log {
     width: 100%;
     position: relative;
-    // background-color: #ccc;
-    padding: 64px 240px 24px;
+    background-color: #f0f3f4;
+    padding: 64px 24px 24px;
     border-radius: 16px;
     box-shadow: 0px 0px 10px rgba(116, 116, 116, 0.08);
 
@@ -56,7 +63,7 @@ import MyFooter from "../../components/footer.vue";
         position: absolute;
         width: 2px;
         height: calc(100% - 10px);
-        background-color: #1890ff;
+        background-color: #fff;
         left: 50%;
         top: 10px;
       }
@@ -67,7 +74,7 @@ import MyFooter from "../../components/footer.vue";
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        border: 2px solid #1890ff;
+        border: 2px solid #fff;
       }
       .content {
         position: relative;
@@ -78,7 +85,7 @@ import MyFooter from "../../components/footer.vue";
         padding: 8px 16px;
         border-radius: 12px;
         background-color: #fff;
-        box-shadow: 0px 0px 10px rgba(116, 116, 116, 0.08);
+        // box-shadow: 0px 0px 10px rgba(116, 116, 116, 0.08);
 
         .currnet {
           position: absolute;
@@ -98,16 +105,34 @@ import MyFooter from "../../components/footer.vue";
           right: -6px;
         }
 
-        .head {
-          margin-bottom: 8px;
-          height: 24px;
-          font-weight: 600;
+        .box-head {
+          height: 32px;
+          border-bottom: 1px solid #eee;
+          text-align: right;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .head-avatar {
+            img {
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+              margin-right: 8px;
+            }
+          }
+        }
+
+        .box-body {
+          margin: 0;
+          padding: 8px;
+          min-height: 80px;
           font-size: 18px;
         }
 
-        .body {
-          margin: 0;
-          padding-left: 8px;
+        .box-footer {
+          border-top: 1px solid #eee;
+          height: 24px;
         }
       }
 

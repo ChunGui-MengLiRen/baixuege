@@ -18,9 +18,6 @@ const toHome = function () {
           <router-link to="/article">文章</router-link>
         </li>
         <li class="menu-item">
-          <router-link to="/note">随笔</router-link>
-        </li>
-        <li class="menu-item">
           <router-link to="/log">日志</router-link>
         </li>
         <li class="menu-item">
@@ -76,6 +73,8 @@ const toHome = function () {
         }
         .router-link-active {
           background-color: #333;
+          color: #00bfa6;
+          font-weight: 600;
         }
 
         &:hover {
