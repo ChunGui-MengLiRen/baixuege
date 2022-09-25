@@ -6,7 +6,7 @@ import MyFooter from "../../components/footer.vue";
   <div class="container wrap">
     <div class="card card-side">
       <div class="head">关于本站</div>
-      <div class="body">
+      <div class="body about-font-size">
         <div class="left">
           <ul>
             <li>页面：vue3</li>
@@ -22,7 +22,7 @@ import MyFooter from "../../components/footer.vue";
     </div>
     <div class="card card-self">
       <div class="head">关于我</div>
-      <div class="body">
+      <div class="body about-font-size">
         <div class="left">
           <ul>
             <li>昵称：杨柳依依 —— 《诗经·小雅·采薇》</li>
@@ -42,7 +42,7 @@ import MyFooter from "../../components/footer.vue";
 
 <style lang="less" scoped>
 .wrap {
-  padding: 80px 40px 24px;
+  padding: 80px 16px 24px;
   margin: 0 auto;
 
   display: flex;
@@ -66,7 +66,7 @@ import MyFooter from "../../components/footer.vue";
 
     .body {
       padding: 24px;
-      font-size: 18px;
+      font-size: 16px;
       display: flex;
       justify-content: center;
       .left {

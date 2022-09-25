@@ -31,9 +31,9 @@ body {
   // }
 }
 
-// #app {
-//   height: 100%;
-// }
+body {
+  font-size: 16px;
+}
 
 ul,
 ol {
@@ -42,15 +42,57 @@ ol {
   padding: 0;
 }
 
-// @media screen and (min-width: 640px) {
-//   .container {
-//     max-width: 100%;
-//   }
-// }
+@media screen and (min-width: 640px) {
+  .container {
+    max-width: 100%;
+  }
+  html {
+    font-size: 16px;
+  }
+  .show-article-content {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    white-space: normal !important;
+  }
+  .show-article-time {
+    display: inline-block !important;
+  }
+  .show-article-pagination {
+    display: block !important;
+  }
+  .show-article-pagination-button {
+    display: none !important;
+  }
+  .hide-article--pagination {
+    display: none !important;
+  }
+  .show-article-tag {
+    display: flex !important;
+  }
+  .article-title-font-size {
+    font-size: 24px !important;
+  }
+  .article-meta-font-size {
+    font-size: 16px !important;
+  }
+
+  .say-time-log {
+    font-size: 16px !important;
+    padding: 48px 24px 0 !important;
+    .box-body {
+      font-size: 18px !important;
+    }
+  }
+}
 
 @media screen and (min-width: 768px) {
   .container {
     max-width: 100%;
+  }
+  html {
+    font-size: 16px;
   }
 }
 
@@ -61,21 +103,46 @@ ol {
   .lg-show {
     display: block !important;
   }
+  html {
+    font-size: 24px;
+  }
+  .show-menu {
+    display: flex !important;
+  }
+  .hide-menu-icon {
+    display: none !important;
+  }
+
+  .about-font-size {
+    font-size: 20px !important;
+  }
+
+  .say-time-log-lg {
+    padding: 48px 32px 0 !important;
+  }
 }
 
 @media screen and (min-width: 1280px) {
   .container {
     max-width: 1280px;
   }
+  html {
+    font-size: 32px;
+  }
   .xl-show {
     display: block !important;
   }
-  // .xl-max-height {
-  //   max-height: 200px !important;
-  // }
+
+  .say-time-log-xl {
+    padding: 48px 64px 0 !important;
+  }
 }
 
 @media screen and (min-width: 1536px) {
+  html {
+    font-size: 40px;
+  }
+
   .container {
     max-width: 1496px;
   }

@@ -4,25 +4,13 @@ import MyFooter from "../../components/footer.vue";
 
 <template>
   <div class="container wrap">
-    <section class="time-log">
+    <section class="time-log say-time-log say-time-log-lg say-time-log-xl">
       <ul>
         <li class="time-item" v-for="i in 20" :key="i">
           <div class="line"></div>
           <div class="dot"></div>
-          <div
-            class="content"
-            :class="{
-              'content-right ': i % 2 == 0,
-              'content-left ': i % 2 == 1,
-            }"
-          >
-            <div
-              class="currnet"
-              :class="{
-                'currnet-right ': i % 2 == 1,
-                'currnet-left ': i % 2 == 0,
-              }"
-            ></div>
+          <div class="content">
+            <div class="currnet"></div>
             <div class="box-head">
               <div class="head-avatar">
                 <img src="../../assets/bing_img.jpg" alt="" />
@@ -31,7 +19,10 @@ import MyFooter from "../../components/footer.vue";
               <div class="time">2022-09-25</div>
             </div>
             <div class="box-body">
-              <p>山水一程，风雪一更，聒碎乡心梦不成。</p>
+              <p v-if="i % 2 == 0">
+                山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。
+              </p>
+              <p v-else>山水一程，风雪一更，聒碎乡心梦不成。</p>
             </div>
             <!-- <div class="box-footer"></div> -->
           </div>
@@ -52,25 +43,30 @@ import MyFooter from "../../components/footer.vue";
     width: 100%;
     position: relative;
     background-color: #f0f3f4;
-    padding: 64px 24px 24px;
+    padding: 24px 0 0;
     border-radius: 16px;
     box-shadow: 0px 0px 10px rgba(116, 116, 116, 0.08);
 
     .time-item {
       position: relative;
+      margin-bottom: 16px;
 
       .line {
         position: absolute;
         width: 2px;
-        height: calc(100% - 10px);
+        height: calc(100% + 8px);
         background-color: #fff;
-        left: 50%;
         top: 10px;
+      }
+
+      &:last-child {
+        .line {
+          height: calc(100% - 30px);
+        }
       }
       .dot {
         position: absolute;
         margin-left: -4px;
-        left: 50%;
         width: 10px;
         height: 10px;
         border-radius: 50%;
@@ -79,30 +75,21 @@ import MyFooter from "../../components/footer.vue";
       .content {
         position: relative;
         top: -21px;
-        width: calc(50% - 24px);
+        margin-left: 24px;
         height: 100%;
         padding-bottom: 12px;
         padding: 8px 16px;
         border-radius: 12px;
         background-color: #fff;
-        // box-shadow: 0px 0px 10px rgba(116, 116, 116, 0.08);
 
         .currnet {
           position: absolute;
+          top: 20px;
+          left: -6px;
           width: 12px;
           height: 12px;
           transform: rotate(45deg);
           background-color: #fff;
-        }
-
-        .currnet-left {
-          top: 20px;
-          left: -6px;
-        }
-
-        .currnet-right {
-          top: 20px;
-          right: -6px;
         }
 
         .box-head {
@@ -112,6 +99,7 @@ import MyFooter from "../../components/footer.vue";
           display: flex;
           justify-content: space-between;
           align-items: center;
+          font-size: 14px;
 
           .head-avatar {
             img {
@@ -126,28 +114,13 @@ import MyFooter from "../../components/footer.vue";
         .box-body {
           margin: 0;
           padding: 8px;
-          min-height: 80px;
-          font-size: 18px;
+          min-height: 160px;
         }
 
         .box-footer {
           border-top: 1px solid #eee;
           height: 24px;
         }
-      }
-
-      .content-right {
-        position: relative;
-        margin-left: 24px;
-        // width: calc(50% - 24px);
-        left: 50%;
-      }
-
-      .content-left {
-        position: relative;
-        margin-right: 24px;
-        text-align: right;
-        // width: calc(50% - 24px);
       }
     }
   }

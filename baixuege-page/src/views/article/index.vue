@@ -10,6 +10,7 @@ import {
 
 const isMusic = ref(false);
 const isRadius = ref(false);
+const current = ref(6);
 </script>
 
 <template>
@@ -21,27 +22,34 @@ const isRadius = ref(false);
             <img src="../../assets/panda.webp" alt="" />
           </div>
           <div class="data">
-            <div class="title">我的文章</div>
-            <div class="content">
+            <div class="title article-title-font-size">我的文章</div>
+            <div class="content show-article-content">
               测试的文章内容没有实际的意义,测试的文章内容没有实际的意义测试的文章内容没有实际的意义测试的文章内容没有实际的意义测试的文章内容没有实际的意义
             </div>
-            <div class="tag">
-              <a-tag color="pink">javascript</a-tag>
-              <a-tag color="red">node</a-tag>
-              <a-tag color="orange">element-ui</a-tag>
-              <a-tag color="green">koa</a-tag>
-              <a-tag color="cyan">vue</a-tag>
-              <a-tag color="blue">antd</a-tag>
+            <div class="article-tag show-article-tag">
+              <div class="item-tag">javascript</div>
+              <div class="item-tag">node</div>
+              <div class="item-tag">koa</div>
+              <div class="item-tag">vue</div>
+              <div class="item-tag">react</div>
             </div>
-            <div class="meta">
+            <div class="meta article-meta-font-size">
               <span>杨柳依依</span>
-              <span>2022-09-22 17:15:45</span>
+              <span>
+                <span>2022-09-25</span>&nbsp;
+                <span style="display: none" class="show-article-time">
+                  17:15:45
+                </span>
+              </span>
             </div>
           </div>
         </li>
       </ul>
-      <div class="pagination">
+      <div class="pagination show-article-pagination">
         <a-pagination v-model:current="current" :total="500" />
+      </div>
+      <div class="pagination-button show-article-pagination-button">
+        <button>加载更多</button>
       </div>
     </div>
 
@@ -106,18 +114,21 @@ const isRadius = ref(false);
   gap: 24px;
 }
 .article-box {
+  width: 100%;
   flex: 1;
   background-color: #fff;
   .article-item {
     border-bottom: 1px solid #eee;
-    padding: 20px;
+    padding: 12px;
     // box-shadow: 0px 0px 10px rgba(116, 116, 116, 0.08);
     display: flex;
     cursor: pointer;
+    max-width: 100%;
     .image {
       width: 30%;
+      min-width: 100px;
       aspect-ratio: auto 16 / 9;
-      margin-right: 32px;
+      margin-right: 24px;
       &:hover {
         transform: scale(1.05);
       }
@@ -131,22 +142,53 @@ const isRadius = ref(false);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow: hidden;
+
       .title {
-        font-size: 24px;
+        font-size: 18px;
         font-weight: 700;
       }
       .content {
-        font-size: 16px;
+        font-size: 14px;
+        font-style: italic;
+        text-overflow: -o-ellipsis-lastline;
+        overflow: hidden;
+        margin: 4px 0;
+        // display: -webkit-box;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .article-tag {
+        display: none;
+        gap: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        overflow-x: auto;
+        .item-tag {
+          font-size: 14px;
+          padding: 0 4px;
+          height: 24px;
+          border: 1px solid #ccc;
+          cursor: pointer;
+        }
       }
       .meta {
+        margin-top: 4px;
+        font-size: 12px;
         display: flex;
         justify-content: space-between;
       }
     }
   }
   .pagination {
+    display: none;
     padding: 24px;
     text-align: right;
+  }
+  .pagination-button {
+    padding: 24px;
+    text-align: center;
   }
 }
 
@@ -155,7 +197,7 @@ const isRadius = ref(false);
   width: 300px;
   background-color: #f5f5f5;
   .card-info {
-    height: 320px;
+    height: 340px;
     background-color: #fff;
     padding: 8px;
     .avatar {

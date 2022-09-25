@@ -8,7 +8,9 @@
 
 <style lang="less" scoped>
 .wrap {
-  height: 100vh;
+  position: absolute;
+  width: 100%;
+  height: 100%;
   background-image: url(../../assets/卧室.jpg);
   background-repeat: no-repeat;
   background-position: center 0;
@@ -17,7 +19,7 @@
   justify-content: center;
   align-items: center;
   h2 {
-    font-size: 56px;
+    font-size: 2rem;
     color: #fff;
     text-shadow: 4px 4px 10px #000;
     // transform: translateY(-200px);
