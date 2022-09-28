@@ -21,17 +21,15 @@
           <a-menu-item key="/about">关于</a-menu-item>
         </a-menu>
       </a-layout-sider>
-      <a-layout style="padding: 0 24px 24px">
-        <a-breadcrumb style="margin: 16px 0">
+      <a-layout style="padding: 24px">
+        <!-- <a-breadcrumb style="margin: 16px 0">
           <a-breadcrumb-item v-for="(item, i) in breadcrumbList" :key="i">
             {{ item }}
           </a-breadcrumb-item>
-        </a-breadcrumb>
+        </a-breadcrumb> -->
         <a-layout-content
           :style="{
-            background: '#fff',
-            padding: '24px',
-            margin: 0,
+            background: '#f0f0f0',
             minHeight: '280px',
           }"
         >
@@ -46,16 +44,16 @@ import {
   UserOutlined,
   LaptopOutlined,
   NotificationOutlined,
-} from "@ant-design/icons-vue";
-import { ref, computed } from "vue";
-import { useRouter, useRoute } from "vue-router";
+} from '@ant-design/icons-vue';
+import { ref, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 const $router = useRouter();
 const $route = useRoute();
-let breadcrumbList = ref(["home"]);
-let selectedKeys = ref(["/home"]);
+let breadcrumbList = ref(['home']);
+let selectedKeys = ref(['/home']);
 const select = (value) => {
   console.log(value);
-  breadcrumbList.value = value.key.split("/").filter((item) => item);
+  breadcrumbList.value = value.key.split('/').filter((item) => item);
   $router.push(value.key);
 };
 </script>
