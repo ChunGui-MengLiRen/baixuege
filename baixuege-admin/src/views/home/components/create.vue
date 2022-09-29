@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive, defineProps, defineEmits } from 'vue';
+import { UploadOutlined } from '@ant-design/icons-vue';
 
 defineProps({
   visible: {
@@ -9,10 +10,6 @@ defineProps({
 });
 const emit = defineEmits(['update:visible']);
 const loading = ref(false);
-
-const showModal = () => {
-  emit('update:visible', true);
-};
 
 const handleOk = () => {
   loading.value = true;
@@ -27,9 +24,10 @@ const handleCancel = () => {
 };
 
 const formState = reactive({
-  username: 'admin',
-  password: '123456',
-  checked: true,
+  name: '',
+  text: '',
+  status: true,
+  fileList: [],
 });
 
 const onFinish = (values) => {
@@ -66,23 +64,35 @@ const onFinish = (values) => {
         @finish="onFinish"
       >
         <a-form-item
-          name="username"
+          name="name"
           label="图片名称"
           :rules="[{ required: true, message: '请输入账号' }]"
         >
           <a-input
-            v-model:value="formState.username"
+            v-model:value="formState.name"
             placeholder="请输入图片名称"
           />
         </a-form-item>
-        <a-form-item name="password" label="首页文字">
+        <a-form-item name="text" label="首页文字">
           <a-input
-            v-model:value="formState.password"
+            v-model:value="formState.text"
             placeholder="请输入首页文字"
           />
         </a-form-item>
-        <a-form-item name="password" label="是否启用">
-          <a-switch v-model:checked="formState.checked" />
+        <a-form-item name="status" label="是否启用">
+          <a-switch v-model:checked="formState.status" />
+        </a-form-item>
+        <a-form-item name="backImage" label="背景图片">
+          <a-upload
+            v-model:file-list="formState.fileList"
+            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            list-type="picture"
+          >
+            <a-button>
+              <upload-outlined></upload-outlined>
+              上传
+            </a-button>
+          </a-upload>
         </a-form-item>
       </a-form>
     </a-modal>

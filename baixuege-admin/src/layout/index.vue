@@ -1,20 +1,16 @@
 <template>
   <a-layout class="layout-container">
     <a-layout-header class="header">
-      <div class="title">后台管理系统</div>
+      <div class="title">杨柳依依</div>
       <div class="login">
-        <img src="../assets/bing_img.jpg" class="logo" alt="" />
-        <a-button type="link">杨柳依依</a-button>
+        <!-- <img src="../assets/bing_img.jpg" class="logo" alt="" /> -->
+        <a-button type="link" danger @click="logout">退出</a-button>
       </div>
     </a-layout-header>
     <a-layout>
       <a-layout-sider width="200">
-        <a-menu
-          v-model:selectedKeys="selectedKeys"
-          mode="inline"
-          :style="{ height: '100%', borderRight: 0 }"
-          @select="select"
-        >
+        <a-menu v-model:selectedKeys="selectedKeys" mode="inline" :style="{ height: '100%', borderRight: 0 }"
+          @select="select">
           <a-menu-item key="/home">首页</a-menu-item>
           <a-menu-item key="/article">文章</a-menu-item>
           <a-menu-item key="/say">说说</a-menu-item>
@@ -27,12 +23,10 @@
             {{ item }}
           </a-breadcrumb-item>
         </a-breadcrumb> -->
-        <a-layout-content
-          :style="{
-            background: '#f0f0f0',
-            minHeight: '280px',
-          }"
-        >
+        <a-layout-content :style="{
+          background: '#f0f0f0',
+          minHeight: '280px',
+        }">
           <router-view />
         </a-layout-content>
       </a-layout>
@@ -56,6 +50,9 @@ const select = (value) => {
   breadcrumbList.value = value.key.split('/').filter((item) => item);
   $router.push(value.key);
 };
+const logout = () => {
+  $router.push('/login');
+}
 </script>
 <style lang="less" scoped>
 .layout-container {
@@ -67,11 +64,13 @@ const select = (value) => {
     justify-content: space-between;
     align-items: center;
     padding: 0 24px;
+
     .title {
       font-size: 24px;
       color: #fff;
       font-weight: 600;
     }
+
     .logo {
       width: 40px;
       height: 40px;

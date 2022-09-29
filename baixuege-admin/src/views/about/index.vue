@@ -1,70 +1,80 @@
+
 <template>
-  <a-table :columns="columns" :data-source="data">
-    <template #bodyCell="{ column, record }">
-      <template v-if="column.key === 'status'">
-        <a-switch v-model:checked="record.status" />
-      </template>
-      <template v-else-if="column.key === 'action'">
-        <span>
-          <a>编辑</a>
-          <a-divider type="vertical" />
-          <a>删除</a>
-        </span>
-      </template>
-    </template>
-  </a-table>
+  <div class="about">
+    <div class="self">
+      <div class="action">
+        <form-outlined class='icon' @click="update" /> 关于我
+      </div>
+      <div class="editor">
+        <v-md-editor v-model="selfText" mode="preview" height="100%"></v-md-editor>
+
+      </div>
+    </div>
+    <div class="site">
+      <div class="action">
+        <form-outlined class='icon' @click="update" /> 关于本站
+      </div>
+      <div class="editor">
+        <v-md-editor v-model="siteText" mode="preview" height="100%"></v-md-editor>
+      </div>
+    </div>
+
+  </div>
 </template>
 <script setup>
-import { SmileOutlined, DownOutlined } from "@ant-design/icons-vue";
+import { FormOutlined } from "@ant-design/icons-vue";
 import { ref } from "vue";
-const columns = ref([
-  {
-    title: "文章标题",
-    name: "name",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "发布时间",
-    dataIndex: "date",
-    key: "date",
-  },
-  {
-    title: "标签",
-    dataIndex: "tag",
-    key: "tag",
-  },
-  {
-    title: "状态",
-    dataIndex: "status",
-    key: "status",
-  },
-  {
-    title: "操作",
-    key: "action",
-  },
-]);
-const data = ref([
-  {
-    key: "1",
-    name: "图片1",
-    tag: "node",
-    date: "2022-09-21 12:34:24",
-    status: false,
-  },
-  {
-    key: "2",
-    name: "图片2",
-    tag: "vue",
-    date: "2022-09-22 12:34:24",
-    status: true,
-  },
-  {
-    key: "3",
-    name: "图片3",
-    tag: "koa",
-    date: "2022-09-23 12:34:24",
-    status: true,
-  },
-]);
+import { useRouter, useRoute } from 'vue-router';
+const $router = useRouter();
+const $route = useRoute();
+const selfText = ref("## 关于自己")
+const siteText = ref("## 关于本站")
+const update = () => {
+  $router.push('/updateAbout')
+}
 </script>
+
+<style lang="less" scoped>
+.about {
+  height: 100%;
+  display: flex;
+  gap: 24px;
+
+  .self {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .site {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .editor {
+    flex: 1;
+  }
+
+  .action {
+    height: 40px;
+    line-height: 40px;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    position: relative;
+    font-weight: 600;
+
+    .icon {
+      font-size: 20px;
+      cursor: pointer;
+      position: absolute;
+      left: 16px;
+      top: 10px;
+      color: #1890ff
+    }
+  }
+
+
+}
+</style>
