@@ -3,7 +3,7 @@ const { userLogin } = require('../controller/users');
 
 router.prefix('/users');
 
-router.get('/login', userLogin);
+router.post('/login', userLogin);
 
 // router.get('/bar', function (ctx, next) {
 //   ctx.body = 'this is a users/bar response';
