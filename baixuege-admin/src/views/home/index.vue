@@ -16,23 +16,23 @@
         </a-col>
         <a-col :span="8">
           <a-form-item label="上传时间">
-            <a-range-picker v-model:value="searchForm.dateRange" format="YYYY/MM/DD" value-format="YYYY/MM/DD"
+            <a-range-picker v-model:value="searchForm.time" format="YYYY/MM/DD" value-format="YYYY/MM/DD"
               style="width: 100%" />
           </a-form-item>
         </a-col>
         <a-col :span="8">
           <a-form-item label="状态">
             <a-select placeholder="请选择" v-model:value="searchForm.status">
-              <a-select-option value="1"> 启用 </a-select-option>
-              <a-select-option value="2"> 禁用 </a-select-option>
+              <a-select-option :value="1"> 启用 </a-select-option>
+              <a-select-option :value="0"> 禁用 </a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="8">
           <a-form-item label=" " :colon="false">
             <a-space>
-              <a-button>重置</a-button>
-              <a-button type="primary">搜索</a-button>
+              <a-button @click="reset">重置</a-button>
+              <a-button type="primary" @click="search">搜索</a-button>
             </a-space>
           </a-form-item>
         </a-col>
@@ -40,31 +40,40 @@
     </a-form>
     <div class="table">
       <div class="action">
-        <a-button type="primary" @click="createData">新增</a-button>
+        <a-button type="primary" @click="openCreate">新增</a-button>
       </div>
-      <a-table size="small" :columns="columns" :data-source="data" :pagination="pagination">
+      <a-table size="small" :columns="columns" :data-source="data" :pagination="false">
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'status'">
-            <a-switch v-model:checked="record.status" />
+            <div :style="{color:record.status?'green':'red'}">{{record.status=='1'?'启用':'禁用'}}</div>
           </template>
           <template v-else-if="column.key === 'action'">
             <span>
-              <a-button type="link" size="small" @click="updateData">
+              <a-button type="link" size="small" @click="openUpdate(record)">
                 编辑
               </a-button>
+              <a-divider v-if="record.status=='0'" type="vertical"></a-divider>
+              <a-popconfirm v-if="record.status=='0'" title="确认启用当前数据吗？" ok-text="是" cancel-text="否"
+                @confirm="changeConfirm(record)">
+                <a-button type="link" size="small">启用</a-button>
+              </a-popconfirm>
               <a-divider type="vertical" />
-              <a-popconfirm title="确认删除当前数据吗？" ok-text="是" cancel-text="否" @confirm="delConfirm">
+              <a-popconfirm title="确认删除当前数据吗？" ok-text="是" cancel-text="否" @confirm="delConfirm(record)">
                 <a-button type="link" danger size="small">删除</a-button>
               </a-popconfirm>
             </span>
           </template>
         </template>
       </a-table>
+      <div class="page">
+        <a-pagination v-model:current="pagination.current" v-model:page-size="pagination.pageSize" showSizeChanger
+          :total="pagination.total" :show-total="total => `共 ${total} 条`" @change="pageChange" />
+      </div>
     </div>
   </div>
 
-  <Create v-model:visible="visibleCreate" />
-  <Update v-model:visible="visibleUpdate" />
+  <Create v-model:visible="visibleCreate" @create='onCreate' />
+  <Update v-model:visible="visibleUpdate" :id="row.id" @update='onUpdate' />
 </template>
 <script setup>
 import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
@@ -72,32 +81,34 @@ import { message } from 'ant-design-vue';
 import { ref, reactive, computed } from 'vue';
 import Create from './components/create.vue';
 import Update from './components/update.vue';
+import { getHomeList, delHome, changeStatus } from "../../api/home"
+
 // 查询表单
-const searchForm = reactive({
+const searchForm = ref({
   name: '',
   text: '',
-  dateRange: [],
+  time: [],
   status: undefined,
 });
 
+// 当前行
+let row = ref({})
+
 const visibleCreate = ref(false);// 新增
 const visibleUpdate = ref(false);// 编辑
-const createData = () => {
-  visibleCreate.value = true;
-};
-const updateData = () => {
-  visibleUpdate.value = true;
-};
+
+
+let data = ref([]) // 列表数据
+
 
 // 分页
-const pagination = computed(() => ({
+let pagination = ref({
   total: 100,
   current: 1,
   pageSize: 10,
-  showTotal: (total) => {
-    return `共 100 条`;
-  },
-}));
+})
+
+// 列
 const columns = ref([
   {
     title: '序号',
@@ -120,8 +131,8 @@ const columns = ref([
   },
   {
     title: '上传时间',
-    dataIndex: 'date',
-    key: 'date',
+    dataIndex: 'time',
+    key: 'time',
   },
   {
     title: '状态',
@@ -131,38 +142,104 @@ const columns = ref([
   {
     title: '操作',
     key: 'action',
-    width: 140
-  },
-]);
-const data = ref([
-  {
-    key: '1',
-    name: '图片1',
-    text: '得之我幸，失之我命',
-    date: '2022-09-21 12:34:24',
-    status: false,
-  },
-  {
-    key: '2',
-    name: '图片2',
-    text: '得之我幸，失之我命',
-    date: '2022-09-22 12:34:24',
-    status: true,
-  },
-  {
-    key: '3',
-    name: '图片3',
-    text: '得之我幸，失之我命',
-    date: '2022-09-23 12:34:24',
-    status: true,
+    width: 200
   },
 ]);
 
-const delConfirm = (e) => {
-  console.log(e);
-  message.success('Click on Yes');
+// 获取列表
+const getList = async () => {
+  const res = await getHomeList({
+    page: {
+      current: pagination.value.current,
+      pageSize: pagination.value.pageSize,
+    },
+    data: searchForm.value
+  })
+  if (res.status == '1') {
+    data.value = res.data.data
+    pagination.value = res.data.page
+  }
+}
+
+getList()
+
+// 打开新增弹框
+const openCreate = () => {
+  visibleCreate.value = true;
 };
 
+// 打开编辑弹框
+const openUpdate = (record) => {
+  console.log(record);
+  row.value = record
+  visibleUpdate.value = true;
+};
+
+// 新增成功
+const onCreate = () => {
+  visibleCreate.value = false;
+  getList()
+}
+
+// 更新成功
+const onUpdate = () => {
+  visibleUpdate.value = false;
+  getList()
+}
+
+// 删除
+const delConfirm = async (record) => {
+  console.log(record);
+  try {
+    const res = await delHome(record.id)
+    if (res.status == '1') {
+      message.success('删除成功！');
+      getList()
+    } else {
+      message.warning('删除失败！');
+    }
+  } catch (error) {
+    message.error('删除失败！' + error);
+  }
+};
+
+// 更改状态
+const changeConfirm = async (record) => {
+  console.log(record);
+  try {
+    const res = await changeStatus(record.id)
+    if (res.status == '1') {
+      message.success('更新成功！');
+      getList()
+    } else {
+      message.warning('更新失败！');
+    }
+  } catch (error) {
+    message.error('更新失败！' + error);
+  }
+};
+
+// 重置
+const reset = () => {
+  searchForm.value = {
+    name: '',
+    text: '',
+    time: [],
+    status: undefined,
+  }
+  getList()
+}
+
+// 搜索
+const search = () => {
+  getList()
+}
+
+const pageChange = (page, pageSize) => {
+  pagination.value.current = page
+  pagination.value.pageSize = pageSize
+  getList()
+}
 </script>
 
 <style lang="less" scoped>
@@ -188,6 +265,11 @@ const delConfirm = (e) => {
       text-align: right;
       padding: 16px 0px;
     }
+  }
+
+  .page {
+    text-align: right;
+    padding: 24px 0;
   }
 }
 </style>

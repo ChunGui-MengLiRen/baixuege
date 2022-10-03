@@ -1,5 +1,5 @@
 // import type {RouteRecordRaw} from 'vue-router'
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
   {
@@ -23,12 +23,12 @@ const routes = [
         name: 'Article',
       },
       {
-        path: 'addArticle',
+        path: 'article/add',
         component: () => import('../views/article/add.vue'),
         name: 'AddArticle',
       },
       {
-        path: 'updateArticle',
+        path: 'article/update',
         component: () => import('../views/article/update.vue'),
         name: 'UpdateArticle',
       },
@@ -43,7 +43,7 @@ const routes = [
         name: 'About',
       },
       {
-        path: 'updateAbout',
+        path: 'about/update',
         component: () => import('../views/about/update.vue'),
         name: 'UpdateAbout',
       },
@@ -52,7 +52,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });
 

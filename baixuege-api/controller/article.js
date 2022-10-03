@@ -14,7 +14,9 @@ const articleList = async (ctx, next) => {
 
   console.log(page, data);
   try {
-    const res = await db.query(`select count(*) as total from article`);
+    const res = await db.query(
+      `select count(*) as total from article where is_del='0'`
+    );
     const total = res[0].total; // 总数
     const pageSize = page.pageSize; // 每页条数
     const current = page.current; //当前页数
@@ -24,17 +26,22 @@ const articleList = async (ctx, next) => {
 
     let search = [];
     Object.keys(data).forEach((key) => {
-      if (data[key]) {
+      if (key == 'title') {
+        search.push(`${key} like '%${data[key]}%'`);
+      } else if (key == 'time') {
+        if (data[key].length) {
+          search.push(`${key} between '${data[key][0]}' and '${data[key][1]}'`);
+        }
+      } else {
         search.push(`${key}='${data[key]}'`);
       }
     });
-    const str = search.join(' and ');
+    const sql = `select * from article where ${[...search, "is_del='0'"].join(
+      ' and '
+    )} limit ${(current - 1) * pageSize},${pageSize}`;
+    console.log(sql);
 
-    console.log(str);
-
-    const result = await db.query(
-      `select *  from article where ${str} limit ${current - 1},${pageSize}`
-    );
+    const result = await db.query(sql);
 
     console.log(result);
 
@@ -49,7 +56,12 @@ const articleList = async (ctx, next) => {
             pages,
             total,
           },
-          data: result,
+          data: result.map((item) => {
+            return {
+              ...item,
+              time: dayjs(item.time).format('YYYY-MM-DD HH:mm:ss'),
+            };
+          }),
         },
       };
     } else {
@@ -70,11 +82,19 @@ const articleList = async (ctx, next) => {
 const addArticle = async (ctx, next) => {
   try {
     const data = ctx.request.body;
+    const currentUser = getCurrentUser(ctx.header.authorization).nickname;
 
-    const updateField = [...Object.keys(data), 'time'].join(',');
+    const updateField = [...Object.keys(data), 'time', 'author_name'].join(',');
     const updateValue = [
-      ...Object.values(data).map((item) => `'${item}'`),
+      ...Object.values(data).map((item) => {
+        if (typeof item == 'number') {
+          return item;
+        } else {
+          return `'${item}'`;
+        }
+      }),
       `'${dayjs().format('YYYY-MM-DD HH:mm:ss')}'`,
+      `'${currentUser}'`,
     ].join(',');
 
     const sql = `insert into article (${updateField}) values (${updateValue});`;
@@ -139,7 +159,9 @@ const updateArticle = async (ctx, next) => {
 
     const field = [];
     Object.keys(data).forEach((key) => {
-      if (key !== 'id') field.push(`${key}='${data[key]}'`);
+      if (key !== 'id') {
+        field.push(`${key}='${data[key]}'`);
+      }
     });
 
     const sql = `update article set ${field.join()} where id='${data.id}'`;
@@ -196,10 +218,38 @@ const delArticle = async (ctx, next) => {
   }
 };
 
+// 更改文章状态
+const changeStatus = async (ctx, next) => {
+  try {
+    const { id, status } = ctx.request.query;
+    const sql = `update article set status='${status}' where id='${id}'`;
+    const res = await db.query(sql);
+    console.log('id', id);
+
+    if (res) {
+      ctx.body = {
+        status: '1',
+        message: '更新成功',
+      };
+    } else {
+      ctx.body = {
+        status: '0',
+        message: '更新失败',
+      };
+    }
+  } catch (error) {
+    ctx.body = {
+      status: '0',
+      message: error.message,
+    };
+  }
+};
+
 module.exports = {
   articleList,
   addArticle,
   articleDetail,
   updateArticle,
   delArticle,
+  changeStatus,
 };

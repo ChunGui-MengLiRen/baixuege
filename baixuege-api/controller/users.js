@@ -19,7 +19,6 @@ const userLogin = async (ctx, next) => {
   }
   console.log(username, password);
   try {
-
     const res = await db.query(
       `select * from users where username='${username}' and password='${password}'`
     );
@@ -30,6 +29,7 @@ const userLogin = async (ctx, next) => {
         {
           //返回的数据
           username: res[0].username,
+          nickname: res[0].nickname,
           id: res[0].id,
         },
         //加密的字符

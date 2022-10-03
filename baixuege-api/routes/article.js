@@ -5,6 +5,7 @@ const {
   articleDetail,
   updateArticle,
   delArticle,
+  changeStatus,
 } = require('../controller/article');
 
 router.prefix('/article');
@@ -14,6 +15,7 @@ router.post('/add', addArticle);
 router.get('/detail', articleDetail);
 router.post('/update', updateArticle);
 router.get('/delete', delArticle);
+router.get('/change', changeStatus);
 
 // router.get('/bar', function (ctx, next) {
 //   ctx.body = 'this is a users/bar response';

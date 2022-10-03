@@ -10,31 +10,31 @@
         </a-col>
         <a-col :span="8">
           <a-form-item label="发布日期">
-            <a-range-picker v-model:value="searchForm.dateRange" format="YYYY/MM/DD" value-format="YYYY/MM/DD"
+            <a-range-picker v-model:value="searchForm.time" format="YYYY/MM/DD" value-format="YYYY/MM/DD"
               style="width: 100%" />
           </a-form-item>
         </a-col>
-        <a-col :span="8">
+        <!-- <a-col :span="8">
           <a-form-item label="标签">
             <a-select placeholder="请选择" v-model:value="searchForm.tag">
               <a-select-option value="node"> node </a-select-option>
               <a-select-option value="vue"> vue </a-select-option>
             </a-select>
           </a-form-item>
-        </a-col>
+        </a-col> -->
         <a-col :span="8">
           <a-form-item label="状态">
             <a-select placeholder="请选择" v-model:value="searchForm.status">
-              <a-select-option value="1"> 启用 </a-select-option>
-              <a-select-option value="2"> 禁用 </a-select-option>
+              <a-select-option :value="1"> 启用 </a-select-option>
+              <a-select-option :value="0"> 禁用 </a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="8">
           <a-form-item label=" " :colon="false">
             <a-space>
-              <a-button>重置</a-button>
-              <a-button type="primary">搜索</a-button>
+              <a-button @click="reset">重置</a-button>
+              <a-button type="primary" @click="search">搜索</a-button>
             </a-space>
           </a-form-item>
         </a-col>
@@ -44,24 +44,33 @@
       <div class="action">
         <a-button type="primary" @click="addArticle">新增</a-button>
       </div>
-      <a-table size="small" :columns="columns" :data-source="data" :pagination="pagination">
+      <a-table size="small" :columns="columns" :data-source="data" :pagination="false">
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'status'">
-            <a-switch v-model:checked="record.status" />
+            <div :style="{color:record.status?'green':'red'}">{{record.status=='1'?'启用':'禁用'}}</div>
           </template>
           <template v-else-if="column.key === 'action'">
             <span>
-              <a-button type="link" size="small" @click="updateArticle">
+              <a-button type="link" size="small" @click="updateArticle(record)">
                 编辑
               </a-button>
+              <a-divider type="vertical"></a-divider>
+              <a-popconfirm :title="`确认${record.status=='0'?'启用':'禁用'}当前数据吗？`" ok-text="是" cancel-text="否"
+                @confirm="changeConfirm(record)">
+                <a-button type="link" size="small">{{record.status=='0'?'启用':'禁用'}}</a-button>
+              </a-popconfirm>
               <a-divider type="vertical" />
-              <a-popconfirm title="确认删除当前数据吗？" ok-text="是" cancel-text="否" @confirm="delConfirm">
+              <a-popconfirm title="确认删除当前数据吗？" ok-text="是" cancel-text="否" @confirm="delConfirm(record)">
                 <a-button type="link" danger size="small">删除</a-button>
               </a-popconfirm>
             </span>
           </template>
         </template>
       </a-table>
+      <div class="page">
+        <a-pagination v-model:current="pagination.current" v-model:page-size="pagination.pageSize" showSizeChanger
+          :total="pagination.total" :show-total="total => `共 ${total} 条`" @change="pageChange" />
+      </div>
     </div>
   </div>
 </template>
@@ -70,32 +79,31 @@ import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import { ref, reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { getArticleList, delArticle, changeStatus } from "../../api/article.js";
 const $router = useRouter();
 const $route = useRoute();
 // 查询表单
-const searchForm = reactive({
+const searchForm = ref({
   title: '',
   tag: undefined,
-  dateRange: [],
+  time: [],
   status: undefined,
 });
 
 const addArticle = () => {
-  $router.push('/addArticle');
+  $router.push('/article/add');
 };
-const updateArticle = () => {
-  $router.push('/updateArticle');
+const updateArticle = (record) => {
+  $router.push('/article/update?id=' + record.id);
 };
 
 // 分页
-const pagination = computed(() => ({
+// 分页
+let pagination = ref({
   total: 100,
   current: 1,
   pageSize: 10,
-  showTotal: (total) => {
-    return `共 100 条`;
-  },
-}));
+})
 const columns = ref([
   {
     title: '序号',
@@ -111,9 +119,20 @@ const columns = ref([
     key: 'title',
   },
   {
+    title: '作者',
+    dataIndex: 'author_name',
+    key: 'author_name',
+  },
+  {
     title: '发布日期',
-    dataIndex: 'date',
-    key: 'date',
+    dataIndex: 'time',
+    key: 'time',
+  },
+  {
+    title: '类型',
+    name: 'type',
+    dataIndex: 'type',
+    key: 'type',
   },
   {
     title: '标签',
@@ -129,37 +148,82 @@ const columns = ref([
   {
     title: '操作',
     key: 'action',
-    width: 140
+    width: 200
   },
 ]);
-const data = ref([
-  {
-    key: '1',
-    title: 'node介绍',
-    tag: 'node',
-    date: '2022-09-21 12:34:24',
-    status: false,
-  },
-  {
-    key: '2',
-    title: 'vue介绍',
-    tag: 'vue',
-    date: '2022-09-22 12:34:24',
-    status: true,
-  },
-  {
-    key: '3',
-    title: 'vue介绍2',
-    tag: 'vue',
-    date: '2022-09-23 12:34:24',
-    status: true,
-  },
-]);
+let data = ref([]);
 
-const delConfirm = (e) => {
-  console.log(e);
-  message.success('Click on Yes');
+// 获取列表
+const getList = async () => {
+  const res = await getArticleList({
+    page: {
+      current: pagination.value.current,
+      pageSize: pagination.value.pageSize,
+    },
+    data: searchForm.value
+  })
+  if (res.status == '1') {
+    data.value = res.data.data
+    pagination.value = res.data.page
+  }
+}
+
+getList()
+
+// 删除
+const delConfirm = async (record) => {
+  console.log(record);
+  try {
+    const res = await delArticle(record.id)
+    if (res.status == '1') {
+      message.success('删除成功！');
+      getList()
+    } else {
+      message.warning('删除失败！');
+    }
+  } catch (error) {
+    message.error('删除失败！' + error);
+  }
 };
+
+// 更改状态
+const changeConfirm = async (record) => {
+  console.log(record);
+  try {
+    const res = await changeStatus(record.id, record.status == 1 ? 0 : 1)
+    if (res.status == '1') {
+      message.success('更新成功！');
+      getList()
+    } else {
+      message.warning('更新失败！');
+    }
+  } catch (error) {
+    message.error('更新失败！' + error);
+  }
+};
+
+// 重置
+const reset = () => {
+  searchForm.value = {
+    title: '',
+    tag: undefined,
+    time: [],
+    status: undefined,
+  }
+  getList()
+}
+
+// 搜索
+const search = () => {
+  getList()
+}
+
+const pageChange = (page, pageSize) => {
+  pagination.value.current = page
+  pagination.value.pageSize = pageSize
+  getList()
+
+}
 
 </script>
 
@@ -186,6 +250,11 @@ const delConfirm = (e) => {
       text-align: right;
       padding: 16px 0px;
     }
+  }
+
+  .page {
+    text-align: right;
+    padding: 24px 0;
   }
 }
 </style>

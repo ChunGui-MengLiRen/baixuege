@@ -1,15 +1,20 @@
 <script setup>
 import { defineComponent, reactive } from "vue";
+import { login } from "../../api/login.js"
 import { useRouter } from "vue-router";
 const $router = useRouter();
 const formState = reactive({
   username: "admin",
   password: "123456",
 });
-const onFinish = (values) => {
+const onFinish = async (values) => {
   console.log("Success:", values);
-  console.log(values.username);
-  if (values.username == "admin" && values.password == "123456") {
+  const res = await login({
+    username: values.username,
+    password: values.password,
+  })
+  if (res.status == '1') {
+    localStorage.setItem('BAIXUEGE_TOKEN', res.data.token)
     $router.push("/");
   }
 };

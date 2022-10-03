@@ -3,16 +3,15 @@
   <div class="about">
     <div class="self">
       <div class="action">
-        <form-outlined class='icon' @click="update" /> 关于我
+        <form-outlined class='icon' @click="update('self')" /> 关于我
       </div>
       <div class="editor">
         <v-md-editor v-model="selfText" mode="preview" height="100%"></v-md-editor>
-
       </div>
     </div>
     <div class="site">
       <div class="action">
-        <form-outlined class='icon' @click="update" /> 关于本站
+        <form-outlined class='icon' @click="update('site')" /> 关于本站
       </div>
       <div class="editor">
         <v-md-editor v-model="siteText" mode="preview" height="100%"></v-md-editor>
@@ -22,16 +21,30 @@
   </div>
 </template>
 <script setup>
+import { getDetail } from "../../api/about"
 import { FormOutlined } from "@ant-design/icons-vue";
 import { ref } from "vue";
 import { useRouter, useRoute } from 'vue-router';
 const $router = useRouter();
 const $route = useRoute();
-const selfText = ref("## 关于自己")
-const siteText = ref("## 关于本站")
-const update = () => {
-  $router.push('/updateAbout')
+const selfText = ref("")
+const siteText = ref("")
+const update = (type) => {
+  $router.push('/about/update?type=' + type)
 }
+
+const getDetailData = async () => {
+  const res = await getDetail()
+  if (res.status == '1') {
+    console.log(res.data);
+    selfText.value = res.data[0].self
+    siteText.value = res.data[0].site
+  }
+}
+
+getDetailData()
+
+
 </script>
 
 <style lang="less" scoped>
