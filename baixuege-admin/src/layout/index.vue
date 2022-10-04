@@ -53,6 +53,7 @@ const select = (value) => {
 };
 const logout = () => {
   $router.push('/login');
+  localStorage.removeItem('BAIXUEGE_TOKEN')
 }
 
 </script>

@@ -8,7 +8,7 @@ function getCurrentUser(auth) {
   return jwt.verify(auth, 'baixuege-token');
 }
 
-// 获取首页详情
+// 获取关于详情
 const aboutDetail = async (ctx, next) => {
   try {
     const sql = `select * from about`;
@@ -34,7 +34,7 @@ const aboutDetail = async (ctx, next) => {
   }
 };
 
-// 更新首页
+// 更新关于
 const updateAbout = async (ctx, next) => {
   try {
     const { text, type } = ctx.request.body;

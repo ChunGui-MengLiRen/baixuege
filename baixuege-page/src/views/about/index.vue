@@ -1,39 +1,35 @@
 <script setup>
 import MyFooter from "../../components/footer.vue";
+import { ref } from "vue"
+import { getAboutDetail } from "../../api"
+
+const selfText = ref("")
+const siteText = ref("")
+
+const getData = async () => {
+  const res = await getAboutDetail()
+  if (res.status == '1') {
+    console.log(res.data);
+    selfText.value = res.data[0].self
+    siteText.value = res.data[0].site
+  }
+}
+
+getData()
 </script>
 
 <template>
   <div class="container wrap">
     <div class="card card-side">
       <div class="head">关于本站</div>
-      <div class="body about-font-size">
-        <div class="left">
-          <ul>
-            <li>页面：vue3</li>
-            <li>后台：vue3 + antd</li>
-            <li>接口：node + koa</li>
-            <li>云服务：阿里云</li>
-            <li>数据库：mysql</li>
-            <li>源代码：https://github.com/gujiwuqing</li>
-          </ul>
-        </div>
-        <!-- <div class="right"></div> -->
+      <div class="body">
+        <v-md-editor v-model="selfText" mode="preview" height="100%"></v-md-editor>
       </div>
     </div>
     <div class="card card-self">
       <div class="head">关于我</div>
-      <div class="body about-font-size">
-        <div class="left">
-          <ul>
-            <li>昵称：杨柳依依 —— 《诗经·小雅·采薇》</li>
-            <li>籍贯：安徽合肥</li>
-            <li>激励语：懦弱之举，我绝不姑息</li>
-            <li>邮箱：chunguimengliren@163.com</li>
-            <li>Gitee：https://gitee.com/fwh1998</li>
-            <li>Github：https://github.com/gujiwuqing</li>
-          </ul>
-        </div>
-        <!-- <div class="right"></div> -->
+      <div class="body">
+        <v-md-editor v-model="siteText" mode="preview" height="100%"></v-md-editor>
       </div>
     </div>
   </div>
@@ -48,9 +44,11 @@ import MyFooter from "../../components/footer.vue";
   display: flex;
   flex-direction: column;
   gap: 24px;
-  height: 100vh;
+  min-height: 100vh;
 
   .card {
+    display: flex;
+    flex-direction: column;
     background-color: #fff;
     border-radius: 16px;
     box-shadow: 0px 0px 10px rgba(116, 116, 116, 0.08);
@@ -65,16 +63,11 @@ import MyFooter from "../../components/footer.vue";
     }
 
     .body {
-      padding: 24px;
-      font-size: 16px;
+      flex: 1;
+      // padding: 24px;
+      // font-size: 16px;
       display: flex;
       justify-content: center;
-      .left {
-        flex: 1;
-      }
-      .right {
-        flex: 1;
-      }
     }
   }
 

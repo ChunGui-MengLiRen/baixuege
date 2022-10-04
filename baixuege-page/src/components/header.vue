@@ -1,6 +1,6 @@
 <script setup>
 import myDrawer from "./drawer.vue";
-import { MenuOutlined } from "@ant-design/icons-vue";
+import { MenuOutlined, SettingOutlined } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 const $router = useRouter();
@@ -15,6 +15,10 @@ const toPage = (url) => {
   // $router.push({ path: url });
   visible.value = false;
 };
+
+const toAdmin = () => {
+  window.open('https://www.baidu.com')
+}
 </script>
 
 <template>
@@ -34,6 +38,11 @@ const toPage = (url) => {
         </li>
         <li class="menu-item">
           <router-link to="/about">关于</router-link>
+        </li>
+        <li class="menu-item">
+          <div class="admin" @click="toAdmin">
+            <setting-outlined />
+          </div>
         </li>
       </ul>
     </div>
@@ -72,6 +81,7 @@ const toPage = (url) => {
     justify-content: space-between;
     align-items: center;
     margin: 0 auto;
+
     .avatar {
       display: flex;
       align-items: center;
@@ -80,11 +90,13 @@ const toPage = (url) => {
       cursor: pointer;
       color: #fff;
     }
+
     .menu-icon {
       font-size: 24px;
       color: #fff;
       cursor: pointer;
     }
+
     .menu {
       height: 100%;
       display: none;
@@ -98,6 +110,7 @@ const toPage = (url) => {
         line-height: 56px;
         text-align: center;
         cursor: pointer;
+
         a {
           display: inline-block;
           width: 100%;
@@ -105,6 +118,7 @@ const toPage = (url) => {
           color: #fff;
           text-decoration: none;
         }
+
         .router-link-active {
           background-color: #333;
           color: #00bfa6;
@@ -118,10 +132,12 @@ const toPage = (url) => {
     }
   }
 }
+
 .phone-menu {
   .phone-menu-item {
     height: 40px;
     cursor: pointer;
+
     a {
       display: inline-block;
       width: 100%;
@@ -129,6 +145,7 @@ const toPage = (url) => {
       text-decoration: none;
       color: #000;
     }
+
     .router-link-active {
       color: #00bfa6;
       font-weight: 600;

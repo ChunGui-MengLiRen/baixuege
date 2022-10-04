@@ -1,12 +1,33 @@
 <script setup>
 import MyFooter from "../../components/footer.vue";
+import { getSayList } from "../../api"
+import { ref } from "vue"
+
+const list = ref([])
+
+const page = ref({
+  current: 1,
+  pageSize: 20,
+})
+
+const getData = async () => {
+  const res = await getSayList({
+    page: page.value
+  })
+  if (res.status == '1') {
+    console.log(res.data);
+    list.value = res.data.data
+  }
+}
+
+getData()
 </script>
 
 <template>
   <div class="container wrap">
     <section class="time-log say-time-log say-time-log-lg say-time-log-xl">
       <ul>
-        <li class="time-item" v-for="i in 20" :key="i">
+        <li class="time-item" v-for="item in list" :key="item.id">
           <div class="line"></div>
           <div class="dot"></div>
           <div class="content">
@@ -14,15 +35,12 @@ import MyFooter from "../../components/footer.vue";
             <div class="box-head">
               <div class="head-avatar">
                 <img src="../../assets/bing_img.jpg" alt="" />
-                <span>杨柳依依</span>
+                <span>{{item.author_name}}</span>
               </div>
-              <div class="time">2022-09-25</div>
+              <div class="time">{{item.time}}</div>
             </div>
             <div class="box-body">
-              <p v-if="i % 2 == 0">
-                山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。山水一程，风雪一更，聒碎乡心梦不成。
-              </p>
-              <p v-else>山水一程，风雪一更，聒碎乡心梦不成。</p>
+              <p>{{item.content}}</p>
             </div>
             <!-- <div class="box-footer"></div> -->
           </div>
@@ -39,6 +57,7 @@ import MyFooter from "../../components/footer.vue";
   margin: 0 auto;
   display: flex;
   gap: 24px;
+
   .time-log {
     width: 100%;
     position: relative;
@@ -64,6 +83,7 @@ import MyFooter from "../../components/footer.vue";
           height: calc(100% - 30px);
         }
       }
+
       .dot {
         position: absolute;
         margin-left: -4px;
@@ -72,6 +92,7 @@ import MyFooter from "../../components/footer.vue";
         border-radius: 50%;
         border: 2px solid #fff;
       }
+
       .content {
         position: relative;
         top: -21px;

@@ -245,5 +245,5 @@ module.exports = {
   homeDetail,
   updateHome,
   delHome,
-  changeStatus
+  changeStatus,
 };

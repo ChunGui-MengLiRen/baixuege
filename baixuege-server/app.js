@@ -16,6 +16,7 @@ const home = require('./routes/home');
 const say = require('./routes/say');
 const upload = require('./routes/upload');
 const about = require('./routes/about');
+const page = require('./routes/page');
 
 // error handler
 onerror(app);
@@ -57,7 +58,13 @@ app.use(
     secret: 'baixuege-token',
   }).unless({
     // 不需要验证的路由
-    path: [/^\/users\/login/, /^\/users\/reg/, /^\/upload/, /^\/images/],
+    path: [
+      /^\/users\/login/,
+      /^\/users\/reg/,
+      /^\/upload/,
+      /^\/images/,
+      /^\/page/,
+    ],
   })
 );
 
@@ -76,6 +83,7 @@ app.use(article.routes(), article.allowedMethods());
 app.use(home.routes(), home.allowedMethods());
 app.use(say.routes(), say.allowedMethods());
 app.use(about.routes(), about.allowedMethods());
+app.use(page.routes(), page.allowedMethods());
 
 app.use(
   koaBody({

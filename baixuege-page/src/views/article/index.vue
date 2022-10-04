@@ -7,38 +7,91 @@ import {
   GithubOutlined,
   RightOutlined,
 } from "@ant-design/icons-vue";
+import { getArticleList } from "../../api"
+import { useRouter, useRoute } from 'vue-router';
+const $router = useRouter();
+const $route = useRoute();
+
+
+const baseURL = import.meta.env.VITE_APP_BASE_API
 
 const isMusic = ref(false);
 const isRadius = ref(false);
 const current = ref(6);
+
+
+const list = ref([])
+
+const page = ref({
+  current: 1,
+  pageSize: 10,
+  total: 0
+})
+
+const getData = async () => {
+  const res = await getArticleList({
+    page: page.value
+  })
+  if (res.status == '1') {
+    console.log(res.data);
+    list.value = res.data.data
+    page.value = res.data.page
+  }
+}
+
+getData()
+
+const toDetail = (data) => {
+  $router.push('/article/detail?id=' + data.id)
+}
+
+const pageChange = (page, pageSize) => {
+  page.value.current = page
+  page.value.pageSize = pageSize
+  getData()
+
+}
+
+const more = () => {
+  if (page.value.current < page.value.pages) {
+    page.value.current++
+    getData()
+  }
+}
+
+const toGitHub = () => {
+  window.open('https://github.com/ChunGui-MengLiRen')
+}
 </script>
 
 <template>
   <div class="container wrap">
     <div class="article-box">
       <ul>
-        <li v-for="i in 10" :key="i" class="article-item xl-max-height">
-          <div class="image">
-            <img src="../../assets/panda.webp" alt="" />
+        <li v-for="item in list" :key="item.id" class="article-item xl-max-height">
+          <div class="image" @click="toDetail(item)">
+            <img v-if="item.image" :src="`${baseURL}${item.image}`" alt="" />
+            <img v-else src="../../assets/panda.webp" alt="" />
           </div>
           <div class="data">
-            <div class="title article-title-font-size">我的文章</div>
+            <div class="title article-title-font-size" @click="toDetail(item)">{{item.title}}</div>
             <div class="content show-article-content">
-              测试的文章内容没有实际的意义,测试的文章内容没有实际的意义测试的文章内容没有实际的意义测试的文章内容没有实际的意义测试的文章内容没有实际的意义
+              {{item.info}}
             </div>
             <div class="article-tag show-article-tag">
-              <div class="item-tag">javascript</div>
+              <!-- <div class="item-tag">javascript</div>
               <div class="item-tag">node</div>
               <div class="item-tag">koa</div>
               <div class="item-tag">vue</div>
-              <div class="item-tag">react</div>
+              <div class="item-tag">react</div> -->
+              暂不支持
             </div>
             <div class="meta article-meta-font-size">
-              <span>杨柳依依</span>
+              <span>{{item.author_name}}</span>
               <span>
-                <span>2022-09-25</span>&nbsp;
-                <span style="display: none" class="show-article-time">
-                  17:15:45
+                <span class="hide-article-time">{{item.time.slice(0,10)}}</span>&nbsp;
+                <span style="display: none" class="show-article-datetime">
+                  {{item.time}}
                 </span>
               </span>
             </div>
@@ -46,10 +99,12 @@ const current = ref(6);
         </li>
       </ul>
       <div class="pagination show-article-pagination">
-        <a-pagination v-model:current="current" :total="500" />
+        <!-- <a-pagination v-model:current="current" :total="500" /> -->
+        <a-pagination v-model:current="page.current" v-model:page-size="page.pageSize" showSizeChanger
+          :total="page.total" :show-total="total => `共 ${total} 条`" @change="pageChange" />
       </div>
-      <div class="pagination-button show-article-pagination-button">
-        <button>加载更多</button>
+      <div class="pagination-button show-article-pagination-button" v-if="page.current!==page.pages">
+        <button @click="more">加载更多</button>
       </div>
     </div>
 
@@ -71,9 +126,19 @@ const current = ref(6);
           <div class="line"></div>
         </div>
         <div class="icon">
-          <qq-outlined />
-          <wechat-outlined />
-          <github-outlined />
+          <a-popover title="QQ" trigger="click">
+            <template #content>
+              <p>1971421491</p>
+            </template>
+            <qq-outlined />
+          </a-popover>
+          <a-popover title="微信" trigger="click">
+            <template #content>
+              <p>ChunGui-MengLiRen</p>
+            </template>
+            <wechat-outlined />
+          </a-popover>
+          <github-outlined @click="toGitHub" />
         </div>
       </div>
 
@@ -83,7 +148,8 @@ const current = ref(6);
           <right-outlined />
         </div>
         <div class="card-body">
-          <div class="tag" v-for="i in 10" :key="i">标签{{ i + 1 }}</div>
+          <!-- <div class="tag" v-for="i in 10" :key="i">标签{{ i + 1 }}</div> -->
+          <div>暂不支持</div>
         </div>
       </div>
 
@@ -93,12 +159,13 @@ const current = ref(6);
           <right-outlined />
         </div>
         <div class="card-body">
-          <ul class="setting-list">
+          <!-- <ul class="setting-list">
             <li class="item">播放器：<a-switch v-model:checked="isMusic" /></li>
             <li class="item">
               卡片圆角：<a-switch v-model:checked="isRadius" />
             </li>
-          </ul>
+          </ul> -->
+          <div>暂不支持</div>
         </div>
       </div>
     </div>
@@ -112,11 +179,14 @@ const current = ref(6);
   margin: 0 auto;
   display: flex;
   gap: 24px;
+  min-height: 100vh;
 }
+
 .article-box {
   width: 100%;
   flex: 1;
   background-color: #fff;
+
   .article-item {
     border-bottom: 1px solid #eee;
     padding: 12px;
@@ -124,19 +194,23 @@ const current = ref(6);
     display: flex;
     cursor: pointer;
     max-width: 100%;
+
     .image {
       width: 30%;
       min-width: 100px;
       aspect-ratio: auto 16 / 9;
       margin-right: 24px;
+
       &:hover {
         transform: scale(1.05);
       }
+
       img {
         width: 100%;
         height: 100%;
       }
     }
+
     .data {
       flex: 1;
       display: flex;
@@ -148,6 +222,7 @@ const current = ref(6);
         font-size: 18px;
         font-weight: 700;
       }
+
       .content {
         font-size: 14px;
         font-style: italic;
@@ -159,12 +234,14 @@ const current = ref(6);
         overflow: hidden;
         white-space: nowrap;
       }
+
       .article-tag {
         display: none;
         gap: 6px;
         white-space: nowrap;
         overflow: hidden;
         overflow-x: auto;
+
         .item-tag {
           font-size: 14px;
           padding: 0 4px;
@@ -173,6 +250,7 @@ const current = ref(6);
           cursor: pointer;
         }
       }
+
       .meta {
         margin-top: 4px;
         font-size: 12px;
@@ -181,11 +259,13 @@ const current = ref(6);
       }
     }
   }
+
   .pagination {
     display: none;
     padding: 24px;
     text-align: right;
   }
+
   .pagination-button {
     padding: 24px;
     text-align: center;
@@ -196,20 +276,24 @@ const current = ref(6);
   display: none;
   width: 300px;
   background-color: #f5f5f5;
+
   .card-info {
     height: 340px;
     background-color: #fff;
     padding: 8px;
+
     .avatar {
       width: 80px;
       height: 80px;
       margin: 0 auto;
       transition: all 0.5s;
+
       img {
         width: 100%;
         height: 100%;
         border-radius: 50%;
       }
+
       &:hover {
         transform: rotate(720deg) scale(1.1);
       }
@@ -219,6 +303,7 @@ const current = ref(6);
       margin: 8px 0;
       text-align: center;
     }
+
     .self {
       margin-top: 8px;
       font-size: 20px;
@@ -230,11 +315,13 @@ const current = ref(6);
       margin: 12px 0;
       display: flex;
       align-items: center;
+
       .line {
         flex: 1;
         height: 1px;
         background-color: #eee;
       }
+
       .text {
         flex: 1;
         text-align: center;
@@ -252,6 +339,7 @@ const current = ref(6);
     margin-top: 24px;
     padding: 8px;
     background-color: #fff;
+
     .card-title {
       height: 40px;
       display: flex;
@@ -268,6 +356,7 @@ const current = ref(6);
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
+
       .tag {
         padding: 0 2px;
         height: 24px;
@@ -281,6 +370,7 @@ const current = ref(6);
     margin-top: 24px;
     padding: 8px;
     background-color: #fff;
+
     .card-title {
       height: 40px;
       display: flex;
@@ -294,8 +384,10 @@ const current = ref(6);
 
     .card-body {
       height: 60px;
+
       .setting-list {
         margin: 12px;
+
         .item {
           height: 32px;
         }
