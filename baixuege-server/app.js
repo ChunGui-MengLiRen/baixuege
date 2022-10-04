@@ -7,6 +7,7 @@ const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const koajwt = require('koa-jwt');
 const koaBody = require('koa-body');
+const cors = require('koa2-cors');
 const path = require('path');
 
 const index = require('./routes/index');
@@ -37,6 +38,16 @@ onerror(app);
 // });
 
 // middlewares
+app.use(
+  cors({
+    origin: function (ctx) {
+      ctx.set('Access-Control-Allow-Origin', 'http://localhost:3000');
+      return ctx.header.origin;
+    },
+    methods: ['GET', 'POST'],
+    allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  })
+);
 app.use(
   bodyparser({
     enableTypes: ['json', 'form', 'text'],

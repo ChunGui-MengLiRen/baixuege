@@ -21,7 +21,7 @@ const formState = ref({
   tag: []
 });
 
-const action = '/blog/upload';
+const action = import.meta.env.VITE_APP_BASE_API + '/upload';
 const fileList = ref([]);
 
 const options = ref([
@@ -62,8 +62,8 @@ const getDetailData = async () => {
             uid: '-1',
             name: res.data[0].image,
             status: 'done',
-            url: '/blog' + res.data[0].image,
-            thumbUrl: '/blog' + res.data[0].image
+            url: import.meta.env.VITE_APP_BASE_API + res.data[0].image,
+            thumbUrl: import.meta.env.VITE_APP_BASE_API + res.data[0].image
           }
         ]
       : [];

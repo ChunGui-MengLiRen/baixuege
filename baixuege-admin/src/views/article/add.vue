@@ -20,7 +20,7 @@ const formState = ref({
   tag: []
 });
 
-const action = '/blog/upload';
+const action = import.meta.env.VITE_APP_BASE_API + '/upload';
 const fileList = ref([]);
 
 const options = ref([

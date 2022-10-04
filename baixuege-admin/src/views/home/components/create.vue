@@ -13,7 +13,7 @@ defineProps({
 const emit = defineEmits(['update:visible', 'create']);
 
 const loading = ref(false);
-const action = '/blog/upload';
+const action = import.meta.env.VITE_APP_BASE_API + '/upload';
 
 const fileList = ref([]);
 

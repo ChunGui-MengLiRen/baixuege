@@ -27,7 +27,8 @@ let formState = ref({
 
 const form = ref();
 
-const action = '/blog/upload'; // 上传地址
+const action = import.meta.env.VITE_APP_BASE_API + '/upload';
+
 const fileList = ref([]); // 上传文件列表
 
 // 获取详情
@@ -45,8 +46,8 @@ const getDetailData = async () => {
             uid: '-1',
             name: res.data[0].back_image,
             status: 'done',
-            url: '/blog' + res.data[0].back_image,
-            thumbUrl: '/blog' + res.data[0].back_image
+            url: import.meta.env.VITE_APP_BASE_API + res.data[0].back_image,
+            thumbUrl: import.meta.env.VITE_APP_BASE_API + res.data[0].back_image
           }
         ]
       : [];

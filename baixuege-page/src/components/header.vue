@@ -17,7 +17,7 @@ const toPage = url => {
 };
 
 const toAdmin = () => {
-  window.open('https://www.baidu.com');
+  window.open('http://admin.yangliuyi.top');
 };
 </script>
 
