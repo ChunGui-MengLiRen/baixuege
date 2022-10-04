@@ -1,16 +1,29 @@
 <template>
   <div class="home">
-    <a-form class="form" labelAlign="right" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :form="searchForm">
+    <a-form
+      class="form"
+      label-align="right"
+      :label-col="{ span: 6 }"
+      :wrapper-col="{ span: 18 }"
+      :form="searchForm"
+    >
       <a-row>
         <a-col :span="8">
           <a-form-item label="作者">
-            <a-input placeholder="请输入" v-model:value="searchForm.author_name" />
+            <a-input
+              v-model:value="searchForm.author_name"
+              placeholder="请输入"
+            />
           </a-form-item>
         </a-col>
         <a-col :span="8">
           <a-form-item label="上传时间">
-            <a-range-picker v-model:value="searchForm.time" format="YYYY/MM/DD" value-format="YYYY/MM/DD"
-              style="width: 100%" />
+            <a-range-picker
+              v-model:value="searchForm.time"
+              format="YYYY/MM/DD"
+              value-format="YYYY/MM/DD"
+              style="width: 100%"
+            />
           </a-form-item>
         </a-col>
         <a-col :span="8">
@@ -27,7 +40,12 @@
       <div class="action">
         <a-button type="primary" @click="openCreate">新增</a-button>
       </div>
-      <a-table size="small" :columns="columns" :data-source="data" :pagination="false">
+      <a-table
+        size="small"
+        :columns="columns"
+        :data-source="data"
+        :pagination="false"
+      >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'status'">
             <a-switch v-model:checked="record.status" />
@@ -38,7 +56,12 @@
                 编辑
               </a-button>
               <a-divider type="vertical" />
-              <a-popconfirm title="确认删除当前数据吗？" ok-text="是" cancel-text="否" @confirm="delConfirm(record)">
+              <a-popconfirm
+                title="确认删除当前数据吗？"
+                ok-text="是"
+                cancel-text="否"
+                @confirm="delConfirm(record)"
+              >
                 <a-button type="link" danger size="small">删除</a-button>
               </a-popconfirm>
             </span>
@@ -46,14 +69,20 @@
         </template>
       </a-table>
       <div class="page">
-        <a-pagination v-model:current="pagination.current" v-model:page-size="pagination.pageSize" showSizeChanger
-          :total="pagination.total" :show-total="total => `共 ${total} 条`" @change="pageChange" />
+        <a-pagination
+          v-model:current="pagination.current"
+          v-model:page-size="pagination.pageSize"
+          show-size-changer
+          :total="pagination.total"
+          :show-total="total => `共 ${total} 条`"
+          @change="pageChange"
+        />
       </div>
     </div>
   </div>
 
   <Create v-model:visible="visibleCreate" @create="onCreate" />
-  <Update v-model:visible="visibleUpdate" :id="row.id" @update='onUpdate' />
+  <Update :id="row.id" v-model:visible="visibleUpdate" @update="onUpdate" />
 </template>
 <script setup>
 import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
@@ -61,7 +90,7 @@ import { message } from 'ant-design-vue';
 import { ref, reactive, computed } from 'vue';
 import Create from './components/create.vue';
 import Update from './components/update.vue';
-import { getSayList, delSay } from "../../api/say"
+import { getSayList, delSay } from '../../api/say';
 
 // 查询表单
 const searchForm = ref({
@@ -70,17 +99,16 @@ const searchForm = ref({
 });
 
 // 当前行
-let row = ref({})
+let row = ref({});
 
-const visibleCreate = ref(false);// 新增
-const visibleUpdate = ref(false);// 编辑
-
+const visibleCreate = ref(false); // 新增
+const visibleUpdate = ref(false); // 编辑
 
 const openCreate = () => {
   visibleCreate.value = true;
 };
-const openUpdate = (record) => {
-  row.value = record
+const openUpdate = record => {
+  row.value = record;
   visibleUpdate.value = true;
 };
 
@@ -88,8 +116,8 @@ const openUpdate = (record) => {
 let pagination = ref({
   total: 100,
   current: 1,
-  pageSize: 10,
-})
+  pageSize: 10
+});
 
 const columns = ref([
   {
@@ -97,30 +125,30 @@ const columns = ref([
     dataIndex: 'index',
     key: 'index',
     width: 80,
-    customRender: ({ text, record, index, column }) => `${index + 1}`,
+    customRender: ({ text, record, index, column }) => `${index + 1}`
   },
   {
     title: '内容',
     name: 'content',
     dataIndex: 'content',
-    key: 'content',
+    key: 'content'
   },
   {
     title: '作者',
     name: 'author_name',
     dataIndex: 'author_name',
-    key: 'author_name',
+    key: 'author_name'
   },
   {
     title: '上传时间',
     dataIndex: 'time',
-    key: 'time',
+    key: 'time'
   },
   {
     title: '操作',
     key: 'action',
     width: 140
-  },
+  }
 ]);
 const data = ref([]);
 
@@ -129,38 +157,37 @@ const getList = async () => {
   const res = await getSayList({
     page: {
       current: pagination.value.current,
-      pageSize: pagination.value.pageSize,
+      pageSize: pagination.value.pageSize
     },
     data: searchForm.value
-  })
+  });
   if (res.status == '1') {
-    data.value = res.data.data
-    pagination.value = res.data.page
+    data.value = res.data.data;
+    pagination.value = res.data.page;
   }
-}
+};
 
-getList()
-
+getList();
 
 // 新增成功
 const onCreate = () => {
   visibleCreate.value = false;
-  getList()
-}
+  getList();
+};
 
 // 更新成功
 const onUpdate = () => {
   visibleUpdate.value = false;
-  getList()
-}
+  getList();
+};
 
-const delConfirm = async (record) => {
+const delConfirm = async record => {
   console.log(record);
   try {
-    const res = await delSay(record.id)
+    const res = await delSay(record.id);
     if (res.status == '1') {
       message.success('删除成功！');
-      getList()
+      getList();
     } else {
       message.warning('删除失败！');
     }
@@ -174,20 +201,20 @@ const reset = () => {
   searchForm.value = {
     time: [],
     author_name: ''
-  }
-  getList()
-}
+  };
+  getList();
+};
 
 // 搜索
 const search = () => {
-  getList()
-}
+  getList();
+};
 
 const pageChange = (page, pageSize) => {
-  pagination.value.current = page
-  pagination.value.pageSize = pageSize
-  getList()
-}
+  pagination.value.current = page;
+  pagination.value.pageSize = pageSize;
+  getList();
+};
 </script>
 
 <style lang="less" scoped>

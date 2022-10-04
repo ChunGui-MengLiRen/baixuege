@@ -4,7 +4,7 @@ import request from '../request';
 export function getDetail() {
   return request({
     url: `/about/detail`,
-    method: 'get',
+    method: 'get'
   });
 }
 
@@ -13,6 +13,6 @@ export function updateAbout(data) {
   return request({
     url: `/about/update`,
     method: 'post',
-    data,
+    data
   });
 }

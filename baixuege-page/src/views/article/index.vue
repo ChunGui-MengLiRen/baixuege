@@ -1,82 +1,85 @@
 <script setup>
-import { ref } from "vue";
-import MyFooter from "../../components/footer.vue";
+import { ref } from 'vue';
+import MyFooter from '../../components/footer.vue';
 import {
   QqOutlined,
   WechatOutlined,
   GithubOutlined,
-  RightOutlined,
-} from "@ant-design/icons-vue";
-import { getArticleList } from "../../api"
+  RightOutlined
+} from '@ant-design/icons-vue';
+import { getArticleList } from '../../api';
 import { useRouter, useRoute } from 'vue-router';
 const $router = useRouter();
 const $route = useRoute();
 
-
-const baseURL = import.meta.env.VITE_APP_BASE_API
+const baseURL = import.meta.env.VITE_APP_BASE_API;
 
 const isMusic = ref(false);
 const isRadius = ref(false);
 const current = ref(6);
 
-
-const list = ref([])
+const list = ref([]);
 
 const page = ref({
   current: 1,
   pageSize: 10,
   total: 0
-})
+});
 
 const getData = async () => {
   const res = await getArticleList({
     page: page.value
-  })
+  });
   if (res.status == '1') {
     console.log(res.data);
-    list.value = res.data.data
-    page.value = res.data.page
+    list.value = res.data.data;
+    page.value = res.data.page;
   }
-}
+};
 
-getData()
+getData();
 
-const toDetail = (data) => {
-  $router.push('/article/detail?id=' + data.id)
-}
+const toDetail = data => {
+  $router.push('/article/detail?id=' + data.id);
+};
 
 const pageChange = (page, pageSize) => {
-  page.value.current = page
-  page.value.pageSize = pageSize
-  getData()
-
-}
+  page.value.current = page;
+  page.value.pageSize = pageSize;
+  getData();
+};
 
 const more = () => {
   if (page.value.current < page.value.pages) {
-    page.value.current++
-    getData()
+    page.value.current++;
+    getData();
   }
-}
+};
 
 const toGitHub = () => {
-  window.open('https://github.com/ChunGui-MengLiRen')
-}
+  window.open('https://github.com/ChunGui-MengLiRen');
+};
 </script>
 
 <template>
   <div class="container wrap">
     <div class="article-box">
       <ul>
-        <li v-for="item in list" :key="item.id" class="article-item xl-max-height">
+        <li
+          v-for="item in list"
+          :key="item.id"
+          class="article-item xl-max-height"
+        >
           <div class="image" @click="toDetail(item)">
             <img v-if="item.image" :src="`${baseURL}${item.image}`" alt="" />
             <img v-else src="../../assets/panda.webp" alt="" />
           </div>
           <div class="data">
-            <div class="title article-title-font-size" @click="toDetail(item)">{{item.title}}</div>
+            <div class="title article-title-font-size" @click="toDetail(item)">
+              {{ item.title }}
+            </div>
             <div class="content show-article-content">
-              {{item.info}}
+              {{ item.info }}
             </div>
             <div class="article-tag show-article-tag">
               <!-- <div class="item-tag">javascript</div>
@@ -87,11 +90,14 @@ const toGitHub = () => {
               暂不支持
             </div>
             <div class="meta article-meta-font-size">
-              <span>{{item.author_name}}</span>
+              <span>{{ item.author_name }}</span>
               <span>
-                <span class="hide-article-time">{{item.time.slice(0,10)}}</span>&nbsp;
+                <span class="hide-article-time">{{
+                  item.time.slice(0, 10)
+                }}</span
+                >&nbsp;
                 <span style="display: none" class="show-article-datetime">
-                  {{item.time}}
+                  {{ item.time }}
                 </span>
               </span>
             </div>
@@ -100,10 +106,19 @@ const toGitHub = () => {
       </ul>
       <div class="pagination show-article-pagination">
         <!-- <a-pagination v-model:current="current" :total="500" /> -->
-        <a-pagination v-model:current="page.current" v-model:page-size="page.pageSize" showSizeChanger
-          :total="page.total" :show-total="total => `共 ${total} 条`" @change="pageChange" />
+        <a-pagination
+          v-model:current="page.current"
+          v-model:page-size="page.pageSize"
+          show-size-changer
+          :total="page.total"
+          :show-total="total => `共 ${total} 条`"
+          @change="pageChange"
+        />
       </div>
-      <div class="pagination-button show-article-pagination-button" v-if="page.current!==page.pages">
+      <div
+        v-if="page.current !== page.pages"
+        class="pagination-button show-article-pagination-button"
+      >
         <button @click="more">加载更多</button>
       </div>
     </div>

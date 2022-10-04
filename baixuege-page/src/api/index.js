@@ -4,7 +4,7 @@ import request from '../request';
 export function getHome() {
   return request({
     url: `/page/home`,
-    method: 'get',
+    method: 'get'
   });
 }
 
@@ -13,7 +13,7 @@ export function getArticleList(data) {
   return request({
     url: `/page/articleList`,
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -21,7 +21,7 @@ export function getArticleList(data) {
 export function getArticleDetail(id) {
   return request({
     url: `/page/articleDetail?id=` + id,
-    method: 'get',
+    method: 'get'
   });
 }
 
@@ -30,7 +30,7 @@ export function getSayList(data) {
   return request({
     url: `/page/sayList`,
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -38,6 +38,6 @@ export function getSayList(data) {
 export function getAboutDetail() {
   return request({
     url: `/page/aboutDetail`,
-    method: 'get',
+    method: 'get'
   });
 }

@@ -9,8 +9,12 @@
     </a-layout-header>
     <a-layout>
       <a-layout-sider width="200">
-        <a-menu v-model:selectedKeys="selectedKeys" mode="inline" :style="{ height: '100%', borderRight: 0 }"
-          @select="select">
+        <a-menu
+          v-model:selectedKeys="selectedKeys"
+          mode="inline"
+          :style="{ height: '100%', borderRight: 0 }"
+          @select="select"
+        >
           <a-menu-item key="home">首页</a-menu-item>
           <a-menu-item key="article">文章</a-menu-item>
           <a-menu-item key="say">说说</a-menu-item>
@@ -23,10 +27,12 @@
             {{ item }}
           </a-breadcrumb-item>
         </a-breadcrumb> -->
-        <a-layout-content :style="{
-          background: '#f0f0f0',
-          minHeight: '280px',
-        }">
+        <a-layout-content
+          :style="{
+            background: '#f0f0f0',
+            minHeight: '280px'
+          }"
+        >
           <router-view />
         </a-layout-content>
       </a-layout>
@@ -37,7 +43,7 @@
 import {
   UserOutlined,
   LaptopOutlined,
-  NotificationOutlined,
+  NotificationOutlined
 } from '@ant-design/icons-vue';
 import { ref, toRaw } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -46,16 +52,15 @@ const $route = useRoute();
 let breadcrumbList = ref(['home']);
 console.log(toRaw($route).path.value);
 let selectedKeys = ref([toRaw($route).path.value.split('/')[1]]);
-const select = (value) => {
+const select = value => {
   console.log(value);
-  breadcrumbList.value = value.key.split('/').filter((item) => item);
+  breadcrumbList.value = value.key.split('/').filter(item => item);
   $router.push(value.key);
 };
 const logout = () => {
   $router.push('/login');
-  localStorage.removeItem('BAIXUEGE_TOKEN')
-}
-
+  localStorage.removeItem('BAIXUEGE_TOKEN');
+};
 </script>
 <style lang="less" scoped>
 .layout-container {

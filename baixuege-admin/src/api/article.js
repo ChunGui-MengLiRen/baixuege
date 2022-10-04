@@ -5,7 +5,7 @@ export function getArticleList(data) {
   return request({
     url: `/article/list`,
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -14,7 +14,7 @@ export function addArticle(data) {
   return request({
     url: `/article/add`,
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -22,7 +22,7 @@ export function addArticle(data) {
 export function getDetail(id) {
   return request({
     url: `/article/detail?id=` + id,
-    method: 'get',
+    method: 'get'
   });
 }
 
@@ -31,7 +31,7 @@ export function updateArticle(data) {
   return request({
     url: `/article/update`,
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -39,7 +39,7 @@ export function updateArticle(data) {
 export function delArticle(id) {
   return request({
     url: `/article/delete?id=` + id,
-    method: 'get',
+    method: 'get'
   });
 }
 
@@ -47,6 +47,6 @@ export function delArticle(id) {
 export function changeStatus(id, status) {
   return request({
     url: `/article/change?id=${id}&status=${status}`,
-    method: 'get',
+    method: 'get'
   });
 }

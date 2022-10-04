@@ -1,28 +1,30 @@
 <script setup>
-import { ref } from "vue"
-import { getHome } from "../../api"
+import { ref } from 'vue';
+import { getHome } from '../../api';
 
-const text = ref('')
-const backImage = ref('')
+const text = ref('');
+const backImage = ref('');
 
 const getData = async () => {
-  const res = await getHome()
+  const res = await getHome();
   if (res.status == '1') {
     console.log(res.data);
-    text.value = res.data[0].text
-    backImage.value = import.meta.env.VITE_APP_BASE_API + res.data[0].back_image
+    text.value = res.data[0].text;
+    backImage.value =
+      import.meta.env.VITE_APP_BASE_API + res.data[0].back_image;
   }
-}
+};
 
-getData()
-
+getData();
 </script>
 
 <template>
-  <div class="wrap" :style="{'background-image':`url(${backImage})`}">
-    <h2 class="title-text ">{{text}}</h2>
+  <div class="wrap" :style="{ 'background-image': `url(${backImage})` }">
+    <h2 class="title-text">{{ text }}</h2>
     <div class="beian">
-      <a href="https://beian.miit.gov.cn" target="_blank">皖ICP备2021002798号-1</a>
+      <a href="https://beian.miit.gov.cn" target="_blank"
+        >皖ICP备2021002798号-1</a
+      >
     </div>
   </div>
 </template>

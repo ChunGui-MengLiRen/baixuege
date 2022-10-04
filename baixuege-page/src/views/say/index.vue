@@ -1,33 +1,33 @@
 <script setup>
-import MyFooter from "../../components/footer.vue";
-import { getSayList } from "../../api"
-import { ref } from "vue"
+import MyFooter from '../../components/footer.vue';
+import { getSayList } from '../../api';
+import { ref } from 'vue';
 
-const list = ref([])
+const list = ref([]);
 
 const page = ref({
   current: 1,
-  pageSize: 20,
-})
+  pageSize: 20
+});
 
 const getData = async () => {
   const res = await getSayList({
     page: page.value
-  })
+  });
   if (res.status == '1') {
     console.log(res.data);
-    list.value = res.data.data
+    list.value = res.data.data;
   }
-}
+};
 
-getData()
+getData();
 </script>
 
 <template>
   <div class="container wrap">
     <section class="time-log say-time-log say-time-log-lg say-time-log-xl">
       <ul>
-        <li class="time-item" v-for="item in list" :key="item.id">
+        <li v-for="item in list" :key="item.id" class="time-item">
           <div class="line"></div>
           <div class="dot"></div>
           <div class="content">
@@ -35,12 +35,12 @@ getData()
             <div class="box-head">
               <div class="head-avatar">
                 <img src="../../assets/bing_img.jpg" alt="" />
-                <span>{{item.author_name}}</span>
+                <span>{{ item.author_name }}</span>
               </div>
-              <div class="time">{{item.time}}</div>
+              <div class="time">{{ item.time }}</div>
             </div>
             <div class="box-body">
-              <p>{{item.content}}</p>
+              <p>{{ item.content }}</p>
             </div>
             <!-- <div class="box-footer"></div> -->
           </div>
@@ -57,6 +57,7 @@ getData()
   margin: 0 auto;
   display: flex;
   gap: 24px;
+  min-height: 100vh;
 
   .time-log {
     width: 100%;

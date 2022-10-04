@@ -1,24 +1,24 @@
 <script setup>
-import myDrawer from "./drawer.vue";
-import { MenuOutlined, SettingOutlined } from "@ant-design/icons-vue";
-import { useRouter } from "vue-router";
-import { ref } from "vue";
+import myDrawer from './drawer.vue';
+import { MenuOutlined, SettingOutlined } from '@ant-design/icons-vue';
+import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 const $router = useRouter();
 const toHome = function () {
-  $router.push({ path: "home" });
+  $router.push({ path: 'home' });
 };
 let visible = ref(false);
 const openDrawer = () => {
   visible.value = !visible.value;
 };
-const toPage = (url) => {
+const toPage = url => {
   // $router.push({ path: url });
   visible.value = false;
 };
 
 const toAdmin = () => {
-  window.open('https://www.baidu.com')
-}
+  window.open('https://www.baidu.com');
+};
 </script>
 
 <template>

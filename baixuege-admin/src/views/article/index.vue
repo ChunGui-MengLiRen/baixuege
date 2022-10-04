@@ -1,17 +1,27 @@
 <template>
   <div class="home">
-    <a-form class="form" labelAlign="right" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :form="searchForm">
+    <a-form
+      class="form"
+      label-align="right"
+      :label-col="{ span: 6 }"
+      :wrapper-col="{ span: 18 }"
+      :form="searchForm"
+    >
       <a-row>
         <a-col :span="8">
           <a-form-item label="标题">
-            <a-input placeholder="请输入" v-model:value="searchForm.title">
+            <a-input v-model:value="searchForm.title" placeholder="请输入">
             </a-input>
           </a-form-item>
         </a-col>
         <a-col :span="8">
           <a-form-item label="发布日期">
-            <a-range-picker v-model:value="searchForm.time" format="YYYY/MM/DD" value-format="YYYY/MM/DD"
-              style="width: 100%" />
+            <a-range-picker
+              v-model:value="searchForm.time"
+              format="YYYY/MM/DD"
+              value-format="YYYY/MM/DD"
+              style="width: 100%"
+            />
           </a-form-item>
         </a-col>
         <!-- <a-col :span="8">
@@ -24,7 +34,7 @@
         </a-col> -->
         <a-col :span="8">
           <a-form-item label="状态">
-            <a-select placeholder="请选择" v-model:value="searchForm.status">
+            <a-select v-model:value="searchForm.status" placeholder="请选择">
               <a-select-option :value="1"> 启用 </a-select-option>
               <a-select-option :value="0"> 禁用 </a-select-option>
             </a-select>
@@ -44,10 +54,17 @@
       <div class="action">
         <a-button type="primary" @click="addArticle">新增</a-button>
       </div>
-      <a-table size="small" :columns="columns" :data-source="data" :pagination="false">
+      <a-table
+        size="small"
+        :columns="columns"
+        :data-source="data"
+        :pagination="false"
+      >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'status'">
-            <div :style="{color:record.status?'green':'red'}">{{record.status=='1'?'启用':'禁用'}}</div>
+            <div :style="{ color: record.status ? 'green' : 'red' }">
+              {{ record.status == '1' ? '启用' : '禁用' }}
+            </div>
           </template>
           <template v-else-if="column.key === 'action'">
             <span>
@@ -55,12 +72,25 @@
                 编辑
               </a-button>
               <a-divider type="vertical"></a-divider>
-              <a-popconfirm :title="`确认${record.status=='0'?'启用':'禁用'}当前数据吗？`" ok-text="是" cancel-text="否"
-                @confirm="changeConfirm(record)">
-                <a-button type="link" size="small">{{record.status=='0'?'启用':'禁用'}}</a-button>
+              <a-popconfirm
+                :title="`确认${
+                  record.status == '0' ? '启用' : '禁用'
+                }当前数据吗？`"
+                ok-text="是"
+                cancel-text="否"
+                @confirm="changeConfirm(record)"
+              >
+                <a-button type="link" size="small">{{
+                  record.status == '0' ? '启用' : '禁用'
+                }}</a-button>
               </a-popconfirm>
               <a-divider type="vertical" />
-              <a-popconfirm title="确认删除当前数据吗？" ok-text="是" cancel-text="否" @confirm="delConfirm(record)">
+              <a-popconfirm
+                title="确认删除当前数据吗？"
+                ok-text="是"
+                cancel-text="否"
+                @confirm="delConfirm(record)"
+              >
                 <a-button type="link" danger size="small">删除</a-button>
               </a-popconfirm>
             </span>
@@ -68,8 +98,14 @@
         </template>
       </a-table>
       <div class="page">
-        <a-pagination v-model:current="pagination.current" v-model:page-size="pagination.pageSize" showSizeChanger
-          :total="pagination.total" :show-total="total => `共 ${total} 条`" @change="pageChange" />
+        <a-pagination
+          v-model:current="pagination.current"
+          v-model:page-size="pagination.pageSize"
+          show-size-changer
+          :total="pagination.total"
+          :show-total="total => `共 ${total} 条`"
+          @change="pageChange"
+        />
       </div>
     </div>
   </div>
@@ -79,7 +115,7 @@ import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import { ref, reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { getArticleList, delArticle, changeStatus } from "../../api/article.js";
+import { getArticleList, delArticle, changeStatus } from '../../api/article.js';
 const $router = useRouter();
 const $route = useRoute();
 // 查询表单
@@ -87,13 +123,13 @@ const searchForm = ref({
   title: '',
   tag: undefined,
   time: [],
-  status: undefined,
+  status: undefined
 });
 
 const addArticle = () => {
   $router.push('/article/add');
 };
-const updateArticle = (record) => {
+const updateArticle = record => {
   $router.push('/article/update?id=' + record.id);
 };
 
@@ -102,54 +138,54 @@ const updateArticle = (record) => {
 let pagination = ref({
   total: 100,
   current: 1,
-  pageSize: 10,
-})
+  pageSize: 10
+});
 const columns = ref([
   {
     title: '序号',
     dataIndex: 'index',
     key: 'index',
     width: 80,
-    customRender: ({ text, record, index, column }) => `${index + 1}`,
+    customRender: ({ text, record, index, column }) => `${index + 1}`
   },
   {
     title: '标题',
     name: 'title',
     dataIndex: 'title',
-    key: 'title',
+    key: 'title'
   },
   {
     title: '作者',
     dataIndex: 'author_name',
-    key: 'author_name',
+    key: 'author_name'
   },
   {
     title: '发布日期',
     dataIndex: 'time',
-    key: 'time',
+    key: 'time'
   },
   {
     title: '类型',
     name: 'type',
     dataIndex: 'type',
-    key: 'type',
+    key: 'type'
   },
   {
     title: '标签',
     name: 'tag',
     dataIndex: 'tag',
-    key: 'tag',
+    key: 'tag'
   },
   {
     title: '状态',
     dataIndex: 'status',
-    key: 'status',
+    key: 'status'
   },
   {
     title: '操作',
     key: 'action',
     width: 200
-  },
+  }
 ]);
 let data = ref([]);
 
@@ -158,26 +194,26 @@ const getList = async () => {
   const res = await getArticleList({
     page: {
       current: pagination.value.current,
-      pageSize: pagination.value.pageSize,
+      pageSize: pagination.value.pageSize
     },
     data: searchForm.value
-  })
+  });
   if (res.status == '1') {
-    data.value = res.data.data
-    pagination.value = res.data.page
+    data.value = res.data.data;
+    pagination.value = res.data.page;
   }
-}
+};
 
-getList()
+getList();
 
 // 删除
-const delConfirm = async (record) => {
+const delConfirm = async record => {
   console.log(record);
   try {
-    const res = await delArticle(record.id)
+    const res = await delArticle(record.id);
     if (res.status == '1') {
       message.success('删除成功！');
-      getList()
+      getList();
     } else {
       message.warning('删除失败！');
     }
@@ -187,13 +223,13 @@ const delConfirm = async (record) => {
 };
 
 // 更改状态
-const changeConfirm = async (record) => {
+const changeConfirm = async record => {
   console.log(record);
   try {
-    const res = await changeStatus(record.id, record.status == 1 ? 0 : 1)
+    const res = await changeStatus(record.id, record.status == 1 ? 0 : 1);
     if (res.status == '1') {
       message.success('更新成功！');
-      getList()
+      getList();
     } else {
       message.warning('更新失败！');
     }
@@ -208,23 +244,21 @@ const reset = () => {
     title: '',
     tag: undefined,
     time: [],
-    status: undefined,
-  }
-  getList()
-}
+    status: undefined
+  };
+  getList();
+};
 
 // 搜索
 const search = () => {
-  getList()
-}
+  getList();
+};
 
 const pageChange = (page, pageSize) => {
-  pagination.value.current = page
-  pagination.value.pageSize = pageSize
-  getList()
-
-}
-
+  pagination.value.current = page;
+  pagination.value.pageSize = pageSize;
+  getList();
+};
 </script>
 
 <style lang="less" scoped>

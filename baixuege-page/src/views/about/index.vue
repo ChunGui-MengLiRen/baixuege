@@ -1,21 +1,21 @@
 <script setup>
-import MyFooter from "../../components/footer.vue";
-import { ref } from "vue"
-import { getAboutDetail } from "../../api"
+import MyFooter from '../../components/footer.vue';
+import { ref } from 'vue';
+import { getAboutDetail } from '../../api';
 
-const selfText = ref("")
-const siteText = ref("")
+const selfText = ref('');
+const siteText = ref('');
 
 const getData = async () => {
-  const res = await getAboutDetail()
+  const res = await getAboutDetail();
   if (res.status == '1') {
     console.log(res.data);
-    selfText.value = res.data[0].self
-    siteText.value = res.data[0].site
+    selfText.value = res.data[0].self;
+    siteText.value = res.data[0].site;
   }
-}
+};
 
-getData()
+getData();
 </script>
 
 <template>
@@ -23,13 +23,21 @@ getData()
     <div class="card card-side">
       <div class="head">关于本站</div>
       <div class="body">
-        <v-md-editor v-model="selfText" mode="preview" height="100%"></v-md-editor>
+        <v-md-editor
+          v-model="selfText"
+          mode="preview"
+          height="100%"
+        ></v-md-editor>
       </div>
     </div>
     <div class="card card-self">
       <div class="head">关于我</div>
       <div class="body">
-        <v-md-editor v-model="siteText" mode="preview" height="100%"></v-md-editor>
+        <v-md-editor
+          v-model="siteText"
+          mode="preview"
+          height="100%"
+        ></v-md-editor>
       </div>
     </div>
   </div>

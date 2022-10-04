@@ -5,7 +5,7 @@ const routes = [
   {
     path: '/login',
     component: () => import('../views/login/index.vue'),
-    name: 'Login',
+    name: 'Login'
   },
   {
     path: '/',
@@ -15,45 +15,45 @@ const routes = [
       {
         path: 'home',
         component: () => import('../views/home/index.vue'),
-        name: 'Home',
+        name: 'Home'
       },
       {
         path: 'article',
         component: () => import('../views/article/index.vue'),
-        name: 'Article',
+        name: 'Article'
       },
       {
         path: 'article/add',
         component: () => import('../views/article/add.vue'),
-        name: 'AddArticle',
+        name: 'AddArticle'
       },
       {
         path: 'article/update',
         component: () => import('../views/article/update.vue'),
-        name: 'UpdateArticle',
+        name: 'UpdateArticle'
       },
       {
         path: 'say',
         component: () => import('../views/say/index.vue'),
-        name: 'Say',
+        name: 'Say'
       },
       {
         path: 'about',
         component: () => import('../views/about/index.vue'),
-        name: 'About',
+        name: 'About'
       },
       {
         path: 'about/update',
         component: () => import('../views/about/update.vue'),
-        name: 'UpdateAbout',
-      },
-    ],
-  },
+        name: 'UpdateAbout'
+      }
+    ]
+  }
 ];
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes,
+  routes
 });
 
 export default router;

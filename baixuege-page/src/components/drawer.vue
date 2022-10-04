@@ -1,17 +1,17 @@
 <script setup>
-import { ref, watch, onUpdated } from "vue";
+import { ref, watch, onUpdated } from 'vue';
 const props = defineProps({
-  visible: Boolean,
+  visible: Boolean
 });
-const emit = defineEmits(["update:visible"]);
+const emit = defineEmits(['update:visible']);
 
 const handle = () => {
-  emit("update:visible");
+  emit('update:visible');
 };
 
 onUpdated(() => {
-  document.body.style.touchAction = props.visible ? "none" : "";
-  document.body.style.overflow = props.visible ? "hidden" : "";
+  document.body.style.touchAction = props.visible ? 'none' : '';
+  document.body.style.overflow = props.visible ? 'hidden' : '';
 });
 </script>
 
@@ -20,20 +20,20 @@ onUpdated(() => {
     <div
       class="drawer"
       :class="{
-        'open-drawer ': visible,
+        'open-drawer ': visible
       }"
     >
       <div
         class="drawer-mask"
         :class="{
-          'open-drawer-mask ': visible,
+          'open-drawer-mask ': visible
         }"
         @click="handle"
       ></div>
       <div
         class="drawer-body"
         :class="{
-          'open-drawer-body ': visible,
+          'open-drawer-body ': visible
         }"
       >
         <slot></slot>

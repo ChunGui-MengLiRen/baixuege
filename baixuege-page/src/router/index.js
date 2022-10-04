@@ -10,7 +10,7 @@ const routes = [
       {
         path: 'home',
         component: () => import('../views/home/index.vue'),
-        name: 'Home',
+        name: 'Home'
       },
       {
         path: 'article',
@@ -21,32 +21,32 @@ const routes = [
           {
             path: 'list',
             component: () => import('../views/article/index.vue'),
-            name: 'ArticleList',
+            name: 'ArticleList'
           },
           {
             path: 'detail',
             component: () => import('../views/article/detail.vue'),
-            name: 'ArticleDetail',
-          },
-        ],
+            name: 'ArticleDetail'
+          }
+        ]
       },
       {
         path: 'say',
         component: () => import('../views/say/index.vue'),
-        name: 'Say',
+        name: 'Say'
       },
       {
         path: 'about',
         component: () => import('../views/about/index.vue'),
-        name: 'About',
-      },
-    ],
-  },
+        name: 'About'
+      }
+    ]
+  }
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes
 });
 
 export default router;

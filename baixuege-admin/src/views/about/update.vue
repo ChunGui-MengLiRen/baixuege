@@ -1,47 +1,45 @@
 <script setup>
-import { getDetail, updateAbout } from "../../api/about"
+import { getDetail, updateAbout } from '../../api/about';
 import { ref, reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { message } from 'ant-design-vue';
 const $router = useRouter();
 const $route = useRoute();
 
-let text = ref('')
+let text = ref('');
 
 const getDetailData = async () => {
-  const res = await getDetail()
+  const res = await getDetail();
   if (res.status == '1') {
     console.log(res.data);
-    text.value = res.data[0][$router.currentRoute.value.query.type]
+    text.value = res.data[0][$router.currentRoute.value.query.type];
   }
-}
+};
 
-getDetailData()
+getDetailData();
 
 const cancel = () => {
-  $router.back()
-}
+  $router.back();
+};
 
 const submit = async () => {
   try {
     const res = await updateAbout({
       type: $router.currentRoute.value.query.type,
       text: text.value
-    })
+    });
     if (res.status == '1') {
       message.success('更新成功！');
-      $router.push('/about')
+      $router.push('/about');
     } else {
       message.warning('更新失败！');
     }
   } catch (error) {
     message.error('更新失败！' + error.message);
   }
-
-}
+};
 </script>
-  
-  
+
 <template>
   <div class="add-article">
     <div class="action">
@@ -56,8 +54,7 @@ const submit = async () => {
     </div>
   </div>
 </template>
-  
-  
+
 <style lang="less" scoped>
 .add-article {
   height: 100%;

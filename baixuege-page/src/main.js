@@ -1,11 +1,10 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
-import Antd from "ant-design-vue";
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+import Antd from 'ant-design-vue';
 
-import "ant-design-vue/dist/antd.css";
-import "./style/index.less";
-
+import 'ant-design-vue/dist/antd.css';
+import './style/index.less';
 
 import VueMarkdownEditor from '@kangc/v-md-editor';
 import '@kangc/v-md-editor/lib/style/base-editor.css';
@@ -15,7 +14,7 @@ import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 import Prism from 'prismjs';
 
 VueMarkdownEditor.use(vuepressTheme, {
-  Prism,
+  Prism
 });
 
 const app = createApp(App);
@@ -24,4 +23,4 @@ app.use(router);
 app.use(Antd);
 app.use(VueMarkdownEditor);
 
-app.mount("#app");
+app.mount('#app');

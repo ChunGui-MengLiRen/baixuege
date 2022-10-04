@@ -5,7 +5,7 @@ export function getSayList(data) {
   return request({
     url: `/say/list`,
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -14,7 +14,7 @@ export function addSay(data) {
   return request({
     url: `/say/add`,
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -22,7 +22,7 @@ export function addSay(data) {
 export function getDetail(id) {
   return request({
     url: `/say/detail?id=` + id,
-    method: 'get',
+    method: 'get'
   });
 }
 
@@ -31,7 +31,7 @@ export function updateSay(data) {
   return request({
     url: `/say/update`,
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -39,6 +39,6 @@ export function updateSay(data) {
 export function delSay(id) {
   return request({
     url: `/say/delete?id=` + id,
-    method: 'get',
+    method: 'get'
   });
 }

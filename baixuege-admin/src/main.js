@@ -14,7 +14,7 @@ import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 import Prism from 'prismjs';
 
 VueMarkdownEditor.use(vuepressTheme, {
-  Prism,
+  Prism
 });
 
 const app = createApp(App);

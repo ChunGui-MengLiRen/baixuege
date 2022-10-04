@@ -11,12 +11,12 @@ import router from '../router';
 const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   withCredentials: true,
-  timeout: 10000,
+  timeout: 10000
 });
 
 // 请求拦截器
 service.interceptors.request.use(
-  (config) => {
+  config => {
     const token = localStorage.getItem('BAIXUEGE_TOKEN');
     if (token) {
       config.headers.authorization = 'Bearer ' + token; //将token放到请求头发送给服务器
@@ -34,14 +34,14 @@ service.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
+  error => {
     return Promise.reject(error);
   }
 );
 
 // response interceptor
 service.interceptors.response.use(
-  (response) => {
+  response => {
     const res = response.data;
 
     console.log(response);
@@ -60,7 +60,7 @@ service.interceptors.response.use(
     //   return res;
     // }
   },
-  (error) => {
+  error => {
     // let msg = error.message;
     if (error.response) {
       if (error.response.status === 401) {

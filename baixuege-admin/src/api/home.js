@@ -5,7 +5,7 @@ export function getHomeList(data) {
   return request({
     url: `/home/list`,
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -14,7 +14,7 @@ export function addHome(data) {
   return request({
     url: `/home/add`,
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -22,7 +22,7 @@ export function addHome(data) {
 export function getDetail(id) {
   return request({
     url: `/home/detail?id=` + id,
-    method: 'get',
+    method: 'get'
   });
 }
 
@@ -31,7 +31,7 @@ export function updateHome(data) {
   return request({
     url: `/home/update`,
     method: 'post',
-    data,
+    data
   });
 }
 
@@ -39,15 +39,14 @@ export function updateHome(data) {
 export function delHome(id) {
   return request({
     url: `/home/delete?id=` + id,
-    method: 'get',
+    method: 'get'
   });
 }
-
 
 // 更改状态
 export function changeStatus(id) {
   return request({
     url: `/home/change?id=` + id,
-    method: 'get',
+    method: 'get'
   });
 }
