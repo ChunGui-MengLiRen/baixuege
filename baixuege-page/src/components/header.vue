@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 const $router = useRouter();
 const toHome = function () {
-  $router.push({ path: 'home' });
+  $router.push('/home');
 };
 let visible = ref(false);
 const openDrawer = () => {
