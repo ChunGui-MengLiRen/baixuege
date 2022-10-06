@@ -2,7 +2,7 @@
 import { ref, watch, defineProps, defineEmits } from 'vue';
 import { UploadOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
-import { getDetail, updateSay } from '../../../api/say';
+import { getDetail, updateTags } from '@/api/tags';
 import { number } from 'vue-types';
 
 const props = defineProps({
@@ -22,7 +22,8 @@ const spinning = ref(false);
 const form = ref();
 
 const formState = ref({
-  content: ''
+  label: '',
+  value: ''
 });
 
 // 获取详情
@@ -31,7 +32,8 @@ const getDetailData = async () => {
   const res = await getDetail(props.id);
   if (res.status == '1') {
     console.log(res.data[0]);
-    formState.value.content = res.data[0].content;
+    formState.value.label = res.data[0].label;
+    formState.value.value = res.data[0].value;
   } else {
     message.warning('获取详情失败');
   }
@@ -54,7 +56,7 @@ const handleOk = () => {
     .then(async () => {
       try {
         loading.value = true;
-        const res = await updateSay({
+        const res = await updateTags({
           id: props.id,
           ...formState.value
         });
@@ -110,21 +112,19 @@ const handleCancel = () => {
           autocomplete="off"
         >
           <a-form-item
-            name="content"
-            label="内容"
-            :rules="[{ required: true, message: '请输入内容' }]"
+            name="label"
+            label="类型名称"
+            :rules="[{ required: true, message: '请输入类型名称' }]"
           >
-            <a-textarea
-              v-model:value="formState.content"
-              placeholder="请输入内容"
-              :auto-size="{ minRows: 4 }"
-              :maxlength="500"
-              show-count
-            />
+            <a-input v-model:value="formState.label" placeholder="请输入" />
           </a-form-item>
-          <!-- <a-form-item name="status" label="是否启用">
-            <a-switch v-model:checked="formState.status" />
-          </a-form-item> -->
+          <a-form-item
+            name="value"
+            label="类型数值"
+            :rules="[{ required: true, message: '请输入类型数值' }]"
+          >
+            <a-input v-model:value="formState.value" placeholder="请输入" />
+          </a-form-item>
         </a-form>
       </a-spin>
     </a-modal>

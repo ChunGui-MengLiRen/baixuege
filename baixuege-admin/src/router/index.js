@@ -46,6 +46,16 @@ const routes = [
         path: 'about/update',
         component: () => import('../views/about/update.vue'),
         name: 'UpdateAbout'
+      },
+      {
+        path: 'type',
+        component: () => import('../views/type/index.vue'),
+        name: 'Type'
+      },
+      {
+        path: 'tags',
+        component: () => import('../views/tags/index.vue'),
+        name: 'Tags'
       }
     ]
   }

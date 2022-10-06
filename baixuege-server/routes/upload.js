@@ -2,7 +2,6 @@ const router = require('koa-router')();
 const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
-// const { users } = require("../models/users");
 
 router.post('/upload', async (ctx, next) => {
   try {
@@ -28,7 +27,6 @@ router.post('/upload', async (ctx, next) => {
       size, // 文件大小
       type, // 文件类型
     };
-
   } catch (error) {
     ctx.body = {
       status: '0',

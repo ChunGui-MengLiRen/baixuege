@@ -17,8 +17,4 @@ router.post('/update', updateHome);
 router.get('/delete', delHome);
 router.get('/change', changeStatus);
 
-// router.get('/bar', function (ctx, next) {
-//   ctx.body = 'this is a users/bar response';
-// });
-
 module.exports = router;

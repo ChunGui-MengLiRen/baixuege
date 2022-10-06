@@ -41,6 +41,18 @@
           </template>
           <span>关于</span>
         </a-menu-item>
+        <a-menu-item key="type">
+          <template #icon>
+            <paper-clip-outlined />
+          </template>
+          <span>类型</span>
+        </a-menu-item>
+        <a-menu-item key="tags">
+          <template #icon>
+            <tags-outlined />
+          </template>
+          <span>标签</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -75,7 +87,9 @@ import {
   UserOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  LogoutOutlined
+  LogoutOutlined,
+  TagsOutlined,
+  PaperClipOutlined
 } from '@ant-design/icons-vue';
 import { ref, toRaw } from 'vue';
 import { useRouter, useRoute } from 'vue-router';

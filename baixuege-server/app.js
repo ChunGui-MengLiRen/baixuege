@@ -7,10 +7,10 @@ const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const koajwt = require('koa-jwt');
 const koaBody = require('koa-body');
-const cors = require('koa2-cors');
+const cors = require('koa2-cors'); //跨域
 const path = require('path');
 
-const index = require('./routes/index');
+// 导入路由
 const users = require('./routes/users');
 const article = require('./routes/article');
 const home = require('./routes/home');
@@ -18,36 +18,14 @@ const say = require('./routes/say');
 const upload = require('./routes/upload');
 const about = require('./routes/about');
 const page = require('./routes/page');
+const type = require('./routes/type');
+const tags = require('./routes/tags');
 
 // error handler
 onerror(app);
 
-// app.use((ctx, next) => {
-//   return next().catch((err) => {
-//     if (err.status == 401) {
-//       ctx.status == 401;
-//       ctx.body = {
-//         status: '0',
-//         code: 401,
-//         message: '用户未登录',
-//       };
-//     } else {
-//       throw err;
-//     }
-//   });
-// });
-
-// middlewares
-app.use(
-  cors({
-    origin: function (ctx) {
-      ctx.set('Access-Control-Allow-Origin', 'http://localhost:3000');
-      return ctx.header.origin;
-    },
-    methods: ['GET', 'POST'],
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
-  })
-);
+// 中间件
+app.use(cors()); // 解决跨域
 app.use(
   bodyparser({
     enableTypes: ['json', 'form', 'text'],
@@ -55,6 +33,8 @@ app.use(
 );
 app.use(json());
 app.use(logger());
+
+// 静态资源目录
 app.use(require('koa-static')(__dirname + '/public'));
 
 app.use(
@@ -63,6 +43,7 @@ app.use(
   })
 );
 
+// token
 app.use(
   koajwt({
     // 加密的密钥
@@ -87,23 +68,20 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
 
-// routes
-app.use(index.routes(), index.allowedMethods());
+// routes 路由
 app.use(users.routes(), users.allowedMethods());
 app.use(article.routes(), article.allowedMethods());
 app.use(home.routes(), home.allowedMethods());
 app.use(say.routes(), say.allowedMethods());
 app.use(about.routes(), about.allowedMethods());
 app.use(page.routes(), page.allowedMethods());
+app.use(type.routes(), type.allowedMethods());
+app.use(tags.routes(), tags.allowedMethods());
 
+// 文件上传
 app.use(
   koaBody({
     multipart: true,
-    // formidable: {
-    //   uploadDir: path.join(__dirname, 'public/images'), // 设置文件上传目录
-    //   keepExtensions: true, // 保持文件的后缀
-    //   maxFileSize: 1000 * 1024 * 1024, // 设置上传文件大小最大限制，默认10M
-    // },
   })
 );
 
