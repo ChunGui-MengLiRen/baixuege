@@ -20,7 +20,7 @@
             </a-input>
           </a-form-item>
         </a-col>
-        <a-col :span="8">
+        <a-col v-if="showAll" :span="8">
           <a-form-item label="上传时间">
             <a-range-picker
               v-model:value="searchForm.time"
@@ -30,7 +30,7 @@
             />
           </a-form-item>
         </a-col>
-        <a-col :span="8">
+        <a-col v-if="showAll" :span="8">
           <a-form-item label="状态">
             <a-select v-model:value="searchForm.status" placeholder="请选择">
               <a-select-option :value="1"> 启用 </a-select-option>
@@ -38,11 +38,17 @@
             </a-select>
           </a-form-item>
         </a-col>
-        <a-col :span="8">
+        <a-col :span="8" :offset="showAll ? 8 : 0">
           <a-form-item label=" " :colon="false">
             <a-space>
               <a-button @click="reset">重置</a-button>
               <a-button type="primary" @click="search">搜索</a-button>
+              <up-outlined
+                v-if="showAll"
+                class="arrow"
+                @click="showAll = !showAll"
+              />
+              <down-outlined v-else class="arrow" @click="showAll = !showAll" />
             </a-space>
           </a-form-item>
         </a-col>
@@ -58,6 +64,9 @@
         :data-source="data"
         :pagination="false"
       >
+        <template #headerCell="{ column }">
+          <span>{{ column.title }}</span>
+        </template>
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'status'">
             <div :style="{ color: record.status ? 'green' : 'red' }">
@@ -82,8 +91,12 @@
               >
                 <a-button type="link" size="small">启用</a-button>
               </a-popconfirm>
-              <a-divider type="vertical" />
+              <a-divider
+                v-if="record.status == '0'"
+                type="vertical"
+              ></a-divider>
               <a-popconfirm
+                v-if="record.status == '0'"
                 title="确认删除当前数据吗？"
                 ok-text="是"
                 cancel-text="否"
@@ -107,12 +120,11 @@
       </div>
     </div>
   </div>
-
   <Create v-model:visible="visibleCreate" @create="onCreate" />
   <Update :id="row.id" v-model:visible="visibleUpdate" @update="onUpdate" />
 </template>
 <script setup>
-import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
+import { SmileOutlined, DownOutlined, UpOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import { ref, reactive, computed } from 'vue';
 import Create from './components/create.vue';
@@ -126,6 +138,9 @@ const searchForm = ref({
   time: [],
   status: undefined
 });
+
+// 显示所有查询表单
+let showAll = ref(false);
 
 // 当前行
 let row = ref({});
@@ -149,34 +164,40 @@ const columns = ref([
     dataIndex: 'index',
     key: 'index',
     width: 80,
+    align: 'center',
     customRender: ({ text, record, index, column }) => `${index + 1}`
   },
   {
     title: '图片名称',
     name: 'name',
     dataIndex: 'name',
-    key: 'name'
+    key: 'name',
+    align: 'center'
   },
   {
     title: '首页文字',
     name: 'text',
     dataIndex: 'text',
-    key: 'text'
+    key: 'text',
+    align: 'center'
   },
   {
     title: '上传时间',
     dataIndex: 'time',
-    key: 'time'
+    key: 'time',
+    align: 'center'
   },
   {
     title: '状态',
     dataIndex: 'status',
-    key: 'status'
+    key: 'status',
+    align: 'center'
   },
   {
     title: '操作',
     key: 'action',
-    width: 200
+    width: 200,
+    align: 'center'
   }
 ]);
 
@@ -269,6 +290,7 @@ const search = () => {
   getList();
 };
 
+// 分页
 const pageChange = (page, pageSize) => {
   pagination.value.current = page;
   pagination.value.pageSize = pageSize;
@@ -287,6 +309,12 @@ const pageChange = (page, pageSize) => {
     padding: 24px 24px 0;
     margin-bottom: 24px;
     background-color: #fff;
+    .arrow {
+      color: #999;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
   }
 
   .table {
@@ -305,5 +333,10 @@ const pageChange = (page, pageSize) => {
     text-align: right;
     padding: 24px 0;
   }
+}
+
+/deep/.ant-table-thead > tr > th {
+  font-weight: 600;
+  background: #f2f2f2 !important;
 }
 </style>

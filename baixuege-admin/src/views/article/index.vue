@@ -32,7 +32,7 @@
             </a-select>
           </a-form-item>
         </a-col> -->
-        <a-col :span="8">
+        <a-col v-if="showAll" :span="8">
           <a-form-item label="状态">
             <a-select v-model:value="searchForm.status" placeholder="请选择">
               <a-select-option :value="1"> 启用 </a-select-option>
@@ -40,11 +40,17 @@
             </a-select>
           </a-form-item>
         </a-col>
-        <a-col :span="8">
+        <a-col :span="8" :offset="showAll ? 16 : 0">
           <a-form-item label=" " :colon="false">
             <a-space>
               <a-button @click="reset">重置</a-button>
               <a-button type="primary" @click="search">搜索</a-button>
+              <up-outlined
+                v-if="showAll"
+                class="arrow"
+                @click="showAll = !showAll"
+              />
+              <down-outlined v-else class="arrow" @click="showAll = !showAll" />
             </a-space>
           </a-form-item>
         </a-col>
@@ -111,13 +117,14 @@
   </div>
 </template>
 <script setup>
-import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
+import { SmileOutlined, DownOutlined, UpOutlined } from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import { ref, reactive, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { getArticleList, delArticle, changeStatus } from '../../api/article.js';
 const $router = useRouter();
 const $route = useRoute();
+
 // 查询表单
 const searchForm = ref({
   title: '',
@@ -126,65 +133,79 @@ const searchForm = ref({
   status: undefined
 });
 
+// 显示所有查询表单
+let showAll = ref(false);
+
+// 跳转新增文章
 const addArticle = () => {
   $router.push('/article/add');
 };
+
+// 跳转编辑文章
 const updateArticle = record => {
   $router.push('/article/update?id=' + record.id);
 };
 
-// 分页
 // 分页
 let pagination = ref({
   total: 100,
   current: 1,
   pageSize: 10
 });
+
 const columns = ref([
   {
     title: '序号',
     dataIndex: 'index',
     key: 'index',
     width: 80,
+    align: 'center',
     customRender: ({ text, record, index, column }) => `${index + 1}`
   },
   {
     title: '标题',
     name: 'title',
     dataIndex: 'title',
-    key: 'title'
+    key: 'title',
+    align: 'center'
   },
   {
     title: '作者',
     dataIndex: 'author_name',
-    key: 'author_name'
+    key: 'author_name',
+    align: 'center'
   },
   {
     title: '发布日期',
     dataIndex: 'time',
-    key: 'time'
+    key: 'time',
+    align: 'center'
   },
   {
     title: '类型',
     name: 'type',
     dataIndex: 'type',
-    key: 'type'
+    key: 'type',
+    align: 'center'
   },
   {
     title: '标签',
     name: 'tag',
     dataIndex: 'tag',
-    key: 'tag'
+    key: 'tag',
+    align: 'center'
   },
   {
     title: '状态',
     dataIndex: 'status',
-    key: 'status'
+    key: 'status',
+    align: 'center'
   },
   {
     title: '操作',
     key: 'action',
-    width: 200
+    width: 200,
+    align: 'center'
   }
 ]);
 let data = ref([]);
@@ -254,6 +275,7 @@ const search = () => {
   getList();
 };
 
+// 分页
 const pageChange = (page, pageSize) => {
   pagination.value.current = page;
   pagination.value.pageSize = pageSize;
@@ -290,5 +312,9 @@ const pageChange = (page, pageSize) => {
     text-align: right;
     padding: 24px 0;
   }
+}
+/deep/.ant-table-thead > tr > th {
+  font-weight: 600;
+  background: #f2f2f2 !important;
 }
 </style>

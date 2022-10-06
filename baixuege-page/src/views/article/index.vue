@@ -104,7 +104,7 @@ const toGitHub = () => {
           </div>
         </li>
       </ul>
-      <div class="pagination show-article-pagination">
+      <div v-if="page.total" class="pagination show-article-pagination">
         <!-- <a-pagination v-model:current="current" :total="500" /> -->
         <a-pagination
           v-model:current="page.current"

@@ -6,7 +6,16 @@
       <div><a href="https://beian.miit.gov.cn">皖ICP备2021002798号-1</a></div>
       <div>杨柳依依 保留所有权利</div>
       <div>永不言败的心 永不放弃的梦</div>
-      <div>源代码 | 邮箱 | 关于</div>
+      <div>
+        <a
+          href="https://github.com/ChunGui-MengLiRen/baixuege.git"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          源代码 </a
+        >|
+        <a href="#about">关于</a>
+      </div>
     </div>
   </footer>
 </template>
@@ -22,6 +31,12 @@
   .wrap {
     margin: 0 auto;
     text-align: center;
+    a {
+      color: #c0c2c3;
+      &:hover {
+        color: #00bfa6;
+      }
+    }
   }
 }
 </style>

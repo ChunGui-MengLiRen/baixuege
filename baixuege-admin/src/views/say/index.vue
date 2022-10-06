@@ -125,29 +125,34 @@ const columns = ref([
     dataIndex: 'index',
     key: 'index',
     width: 80,
+    align: 'center',
     customRender: ({ text, record, index, column }) => `${index + 1}`
   },
   {
     title: '内容',
     name: 'content',
     dataIndex: 'content',
-    key: 'content'
+    key: 'content',
+    align: 'center'
   },
   {
     title: '作者',
     name: 'author_name',
     dataIndex: 'author_name',
-    key: 'author_name'
+    key: 'author_name',
+    align: 'center'
   },
   {
     title: '上传时间',
     dataIndex: 'time',
-    key: 'time'
+    key: 'time',
+    align: 'center'
   },
   {
     title: '操作',
     key: 'action',
-    width: 140
+    width: 140,
+    align: 'center'
   }
 ]);
 const data = ref([]);
@@ -246,5 +251,10 @@ const pageChange = (page, pageSize) => {
     text-align: right;
     padding: 24px 0;
   }
+}
+
+/deep/.ant-table-thead > tr > th {
+  font-weight: 600;
+  background: #f2f2f2 !important;
 }
 </style>

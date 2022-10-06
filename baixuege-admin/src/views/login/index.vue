@@ -1,22 +1,42 @@
 <script setup>
-import { defineComponent, reactive } from 'vue';
+import { ref } from 'vue';
+import { message } from 'ant-design-vue';
 import { login } from '../../api/login.js';
 import { useRouter } from 'vue-router';
 const $router = useRouter();
-const formState = reactive({
-  username: 'admin',
-  password: '123456'
+
+// 账号、密码
+const formState = ref({
+  username: '',
+  password: ''
 });
+
+// 登录
 const onFinish = async values => {
-  console.log('Success:', values);
-  const res = await login({
-    username: values.username,
-    password: values.password
-  });
-  if (res.status == '1') {
-    localStorage.setItem('BAIXUEGE_TOKEN', res.data.token);
-    $router.push('/');
+  try {
+    const res = await login({
+      username: values.username,
+      password: values.password
+    });
+    if (res.status == '1') {
+      // 登录成功 存储 token 到本地
+      localStorage.setItem('BAIXUEGE_TOKEN', res.data.token);
+      // 登录成功 跳转到首页
+      $router.push('/');
+    } else {
+      message.warning(res.message);
+    }
+  } catch (error) {
+    message.error(error);
   }
+};
+
+// 重置
+const reset = () => {
+  formState.value = {
+    username: '',
+    password: ''
+  };
 };
 </script>
 
@@ -51,7 +71,7 @@ const onFinish = async values => {
         </a-form-item>
 
         <a-form-item style="text-align: right">
-          <a-button>重置</a-button>
+          <a-button @click="reset">重置</a-button>
           <a-button type="primary" html-type="submit" style="margin-left: 10px">
             登录
           </a-button>

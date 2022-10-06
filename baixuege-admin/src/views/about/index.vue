@@ -1,17 +1,5 @@
 <template>
   <div class="about">
-    <div class="self">
-      <div class="action">
-        <form-outlined class="icon" @click="update('self')" /> 关于我
-      </div>
-      <div class="editor">
-        <v-md-editor
-          v-model="selfText"
-          mode="preview"
-          height="100%"
-        ></v-md-editor>
-      </div>
-    </div>
     <div class="site">
       <div class="action">
         <form-outlined class="icon" @click="update('site')" /> 关于本站
@@ -19,6 +7,18 @@
       <div class="editor">
         <v-md-editor
           v-model="siteText"
+          mode="preview"
+          height="100%"
+        ></v-md-editor>
+      </div>
+    </div>
+    <div class="self">
+      <div class="action">
+        <form-outlined class="icon" @click="update('self')" /> 关于我
+      </div>
+      <div class="editor">
+        <v-md-editor
+          v-model="selfText"
           mode="preview"
           height="100%"
         ></v-md-editor>

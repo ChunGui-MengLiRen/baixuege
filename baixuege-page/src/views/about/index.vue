@@ -24,7 +24,7 @@ getData();
       <div class="head">关于本站</div>
       <div class="body">
         <v-md-editor
-          v-model="selfText"
+          v-model="siteText"
           mode="preview"
           height="100%"
         ></v-md-editor>
@@ -34,7 +34,7 @@ getData();
       <div class="head">关于我</div>
       <div class="body">
         <v-md-editor
-          v-model="siteText"
+          v-model="selfText"
           mode="preview"
           height="100%"
         ></v-md-editor>
@@ -58,15 +58,15 @@ getData();
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    border-radius: 16px;
+    // border-radius: 16px;
     box-shadow: 0px 0px 10px rgba(116, 116, 116, 0.08);
 
     .head {
-      height: 56px;
-      line-height: 56px;
+      height: 48px;
+      line-height: 48px;
       padding-left: 24px;
       border-bottom: 1px solid #eee;
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 600;
     }
 
