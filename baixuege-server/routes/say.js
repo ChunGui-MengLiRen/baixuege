@@ -1,18 +1,18 @@
-const router = require('koa-router')();
+const router = require("koa-router")();
 const {
   sayList,
-  addSay,
+  sayAdd,
   sayDetail,
-  updateSay,
-  delSay,
-} = require('../controller/say');
+  sayUpdate,
+  sayDel,
+} = require("../controller/say");
 
-router.prefix('/say');
+router.prefix("/say");
 
-router.post('/list', sayList);
-router.post('/add', addSay);
-router.get('/detail', sayDetail);
-router.post('/update', updateSay);
-router.get('/delete', delSay);
+router.post("/list", sayList);
+router.post("/add", sayAdd);
+router.get("/detail", sayDetail);
+router.post("/update", sayUpdate);
+router.get("/delete", sayDel);
 
 module.exports = router;

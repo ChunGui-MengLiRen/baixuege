@@ -1,34 +1,34 @@
-const jwt = require('jsonwebtoken');
-const db = require('../db/index');
-const dayjs = require('dayjs');
+const jwt = require("jsonwebtoken");
+const db = require("../db/index");
+const dayjs = require("dayjs");
 
 // 根据token获取当前登录的用户名
 function getCurrentUser(auth) {
-  auth = auth.replace('Bearer ', '');
-  return jwt.verify(auth, 'baixuege-token');
+  auth = auth.replace("Bearer ", "");
+  return jwt.verify(auth, "baixuege-token");
 }
 
 // 获取首页详情 - 页面
-const homePageDetail = async (ctx, next) => {
+const pageHomeDetail = async (ctx, next) => {
   try {
     const sql = `select * from home where status=1`;
     const res = await db.query(sql);
 
     if (res) {
       ctx.body = {
-        status: '1',
-        message: '获取成功',
+        status: "1",
+        message: "获取成功",
         data: res,
       };
     } else {
       ctx.body = {
-        status: '0',
-        message: '获取失败',
+        status: "0",
+        message: "获取失败",
       };
     }
   } catch (error) {
     ctx.body = {
-      status: '0',
+      status: "0",
       message: error.message,
     };
   }
@@ -48,7 +48,7 @@ const pageArticleList = async (ctx, next) => {
     const current = page.current; //当前页数
     const pages = Math.ceil(total / pageSize); // 总页数
 
-    console.log('total', res[0]);
+    console.log("total", res[0]);
 
     const sql = `select * from article where status=1 and is_del=0 limit ${
       (current - 1) * pageSize
@@ -62,8 +62,8 @@ const pageArticleList = async (ctx, next) => {
 
     if (result) {
       ctx.body = {
-        status: '1',
-        message: '获取成功',
+        status: "1",
+        message: "获取成功",
         data: {
           page: {
             current,
@@ -74,20 +74,20 @@ const pageArticleList = async (ctx, next) => {
           data: result.map((item) => {
             return {
               ...item,
-              time: dayjs(item.time).format('YYYY-MM-DD HH:mm:ss'),
+              time: dayjs(item.time).format("YYYY-MM-DD HH:mm:ss"),
             };
           }),
         },
       };
     } else {
       ctx.body = {
-        status: '0',
-        message: '获取失败',
+        status: "0",
+        message: "获取失败",
       };
     }
   } catch (error) {
     ctx.body = {
-      status: '0',
+      status: "0",
       message: error.message,
     };
   }
@@ -100,23 +100,23 @@ const pageArticleDetail = async (ctx, next) => {
     const sql = `select * from article where id='${id}'`;
     const res = await db.query(sql);
 
-    console.log('id', id);
+    console.log("id", id);
 
     if (res) {
       ctx.body = {
-        status: '1',
-        message: '获取成功',
+        status: "1",
+        message: "获取成功",
         data: res,
       };
     } else {
       ctx.body = {
-        status: '0',
-        message: '获取失败',
+        status: "0",
+        message: "获取失败",
       };
     }
   } catch (error) {
     ctx.body = {
-      status: '0',
+      status: "0",
       message: error.message,
     };
   }
@@ -136,9 +136,9 @@ const pageSayList = async (ctx, next) => {
     const current = page.current; //当前页数
     const pages = Math.ceil(total / pageSize); // 总页数
 
-    console.log('total', res[0]);
+    console.log("total", res[0]);
 
-    const sql = `select *  from say where  is_del=0 limit ${
+    const sql = `select * from say where is_del=0 limit ${
       (current - 1) * pageSize
     },${pageSize}`;
 
@@ -148,8 +148,8 @@ const pageSayList = async (ctx, next) => {
 
     if (result) {
       ctx.body = {
-        status: '1',
-        message: '获取成功',
+        status: "1",
+        message: "获取成功",
         data: {
           page: {
             current,
@@ -160,20 +160,20 @@ const pageSayList = async (ctx, next) => {
           data: result.map((item) => {
             return {
               ...item,
-              time: dayjs(item.time).format('YYYY-MM-DD HH:mm:ss'),
+              time: dayjs(item.time).format("YYYY-MM-DD HH:mm:ss"),
             };
           }),
         },
       };
     } else {
       ctx.body = {
-        status: '0',
-        message: '获取失败',
+        status: "0",
+        message: "获取失败",
       };
     }
   } catch (error) {
     ctx.body = {
-      status: '0',
+      status: "0",
       message: error.message,
     };
   }
@@ -187,28 +187,28 @@ const pageAboutDetail = async (ctx, next) => {
 
     if (res) {
       ctx.body = {
-        status: '1',
-        message: '获取成功',
+        status: "1",
+        message: "获取成功",
         data: res,
       };
     } else {
       ctx.body = {
-        status: '0',
-        message: '获取失败',
+        status: "0",
+        message: "获取失败",
       };
     }
   } catch (error) {
     ctx.body = {
-      status: '0',
+      status: "0",
       message: error.message,
     };
   }
 };
 
 module.exports = {
-  homePageDetail,
+  pageHomeDetail,
   pageArticleList,
   pageArticleDetail,
   pageSayList,
-  pageAboutDetail
+  pageAboutDetail,
 };

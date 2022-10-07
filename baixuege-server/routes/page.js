@@ -1,18 +1,18 @@
-const router = require('koa-router')();
+const router = require("koa-router")();
 const {
-  homePageDetail,
+  pageHomeDetail,
   pageArticleList,
   pageArticleDetail,
   pageSayList,
   pageAboutDetail,
-} = require('../controller/page');
+} = require("../controller/page");
 
-router.prefix('/page');
+router.prefix("/page");
 
-router.get('/home', homePageDetail);
-router.post('/articleList', pageArticleList);
-router.get('/articleDetail', pageArticleDetail);
-router.post('/sayList', pageSayList);
-router.get('/aboutDetail', pageAboutDetail);
+router.get("/home", pageHomeDetail);
+router.post("/articleList", pageArticleList);
+router.get("/articleDetail", pageArticleDetail);
+router.post("/sayList", pageSayList);
+router.get("/aboutDetail", pageAboutDetail);
 
 module.exports = router;

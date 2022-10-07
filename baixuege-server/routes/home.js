@@ -1,20 +1,20 @@
-const router = require('koa-router')();
+const router = require("koa-router")();
 const {
   homeList,
-  addHome,
+  homeAdd,
   homeDetail,
-  updateHome,
-  delHome,
-  changeStatus,
-} = require('../controller/home');
+  homeUpdate,
+  homeDel,
+  homeChangeStatus,
+} = require("../controller/home");
 
-router.prefix('/home');
+router.prefix("/home");
 
-router.post('/list', homeList);
-router.post('/add', addHome);
-router.get('/detail', homeDetail);
-router.post('/update', updateHome);
-router.get('/delete', delHome);
-router.get('/change', changeStatus);
+router.post("/list", homeList);
+router.post("/add", homeAdd);
+router.get("/detail", homeDetail);
+router.post("/update", homeUpdate);
+router.get("/delete", homeDel);
+router.get("/change", homeChangeStatus);
 
 module.exports = router;
