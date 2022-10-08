@@ -43,12 +43,12 @@
             <a-space>
               <a-button @click="reset">重置</a-button>
               <a-button type="primary" @click="search">搜索</a-button>
-              <up-outlined
-                v-if="showAll"
-                class="arrow"
-                @click="showAll = !showAll"
-              />
-              <down-outlined v-else class="arrow" @click="showAll = !showAll" />
+              <div class="form-action" @click="showAll = !showAll">
+                <span v-if="showAll">收起</span>
+                <span v-else>展开</span>
+                <up-outlined v-if="showAll" class="arrow" />
+                <down-outlined v-else class="arrow" />
+              </div>
             </a-space>
           </a-form-item>
         </a-col>
@@ -70,7 +70,7 @@
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'status'">
             <div :style="{ color: record.status ? 'green' : 'red' }">
-              {{ record.status == '1' ? '启用' : '禁用' }}
+              {{ record.status == "1" ? "启用" : "禁用" }}
             </div>
           </template>
           <template v-else-if="column.key === 'action'">
@@ -114,7 +114,7 @@
           v-model:page-size="pagination.pageSize"
           show-size-changer
           :total="pagination.total"
-          :show-total="total => `共 ${total} 条`"
+          :show-total="(total) => `共 ${total} 条`"
           @change="pageChange"
         />
       </div>
@@ -124,19 +124,19 @@
   <Update :id="row.id" v-model:visible="visibleUpdate" @update="onUpdate" />
 </template>
 <script setup>
-import { SmileOutlined, DownOutlined, UpOutlined } from '@ant-design/icons-vue';
-import { message } from 'ant-design-vue';
-import { ref, reactive, computed } from 'vue';
-import Create from './components/create.vue';
-import Update from './components/update.vue';
-import { getHomeList, delHome, changeStatus } from '../../api/home';
+import { SmileOutlined, DownOutlined, UpOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
+import { ref, reactive, computed } from "vue";
+import Create from "./components/create.vue";
+import Update from "./components/update.vue";
+import { getHomeList, delHome, changeStatus } from "../../api/home";
 
 // 查询表单
 const searchForm = ref({
-  name: '',
-  text: '',
+  name: "",
+  text: "",
   time: [],
-  status: undefined
+  status: undefined,
 });
 
 // 显示所有查询表单
@@ -154,51 +154,51 @@ let data = ref([]); // 列表数据
 let pagination = ref({
   total: 100,
   current: 1,
-  pageSize: 10
+  pageSize: 10,
 });
 
 // 列
 const columns = ref([
   {
-    title: '序号',
-    dataIndex: 'index',
-    key: 'index',
+    title: "序号",
+    dataIndex: "index",
+    key: "index",
     width: 80,
-    align: 'center',
-    customRender: ({ text, record, index, column }) => `${index + 1}`
+    align: "center",
+    customRender: ({ text, record, index, column }) => `${index + 1}`,
   },
   {
-    title: '图片名称',
-    name: 'name',
-    dataIndex: 'name',
-    key: 'name',
-    align: 'center'
+    title: "图片名称",
+    name: "name",
+    dataIndex: "name",
+    key: "name",
+    align: "center",
   },
   {
-    title: '首页文字',
-    name: 'text',
-    dataIndex: 'text',
-    key: 'text',
-    align: 'center'
+    title: "首页文字",
+    name: "text",
+    dataIndex: "text",
+    key: "text",
+    align: "center",
   },
   {
-    title: '上传时间',
-    dataIndex: 'time',
-    key: 'time',
-    align: 'center'
+    title: "上传时间",
+    dataIndex: "time",
+    key: "time",
+    align: "center",
   },
   {
-    title: '状态',
-    dataIndex: 'status',
-    key: 'status',
-    align: 'center'
+    title: "状态",
+    dataIndex: "status",
+    key: "status",
+    align: "center",
   },
   {
-    title: '操作',
-    key: 'action',
+    title: "操作",
+    key: "action",
     width: 200,
-    align: 'center'
-  }
+    align: "center",
+  },
 ]);
 
 // 获取列表
@@ -206,11 +206,11 @@ const getList = async () => {
   const res = await getHomeList({
     page: {
       current: pagination.value.current,
-      pageSize: pagination.value.pageSize
+      pageSize: pagination.value.pageSize,
     },
-    data: searchForm.value
+    data: searchForm.value,
   });
-  if (res.status == '1') {
+  if (res.status == "1") {
     data.value = res.data.data;
     pagination.value = res.data.page;
   }
@@ -224,7 +224,7 @@ const openCreate = () => {
 };
 
 // 打开编辑弹框
-const openUpdate = record => {
+const openUpdate = (record) => {
   console.log(record);
   row.value = record;
   visibleUpdate.value = true;
@@ -243,44 +243,44 @@ const onUpdate = () => {
 };
 
 // 删除
-const delConfirm = async record => {
+const delConfirm = async (record) => {
   console.log(record);
   try {
     const res = await delHome(record.id);
-    if (res.status == '1') {
-      message.success('删除成功！');
+    if (res.status == "1") {
+      message.success("删除成功！");
       getList();
     } else {
-      message.warning('删除失败！');
+      message.warning("删除失败！");
     }
   } catch (error) {
-    message.error('删除失败！' + error);
+    message.error("删除失败！" + error);
   }
 };
 
 // 更改状态
-const changeConfirm = async record => {
+const changeConfirm = async (record) => {
   console.log(record);
   try {
     const res = await changeStatus(record.id);
-    if (res.status == '1') {
-      message.success('更新成功！');
+    if (res.status == "1") {
+      message.success("更新成功！");
       getList();
     } else {
-      message.warning('更新失败！');
+      message.warning("更新失败！");
     }
   } catch (error) {
-    message.error('更新失败！' + error);
+    message.error("更新失败！" + error);
   }
 };
 
 // 重置
 const reset = () => {
   searchForm.value = {
-    name: '',
-    text: '',
+    name: "",
+    text: "",
     time: [],
-    status: undefined
+    status: undefined,
   };
   getList();
 };
@@ -309,11 +309,12 @@ const pageChange = (page, pageSize) => {
     padding: 24px 24px 0;
     margin-bottom: 24px;
     background-color: #fff;
-    .arrow {
+
+    .form-action {
+      display: flex;
+      align-items: center;
       color: #999;
-      font-size: 18px;
       cursor: pointer;
-      transition: all 0.3s;
     }
   }
 

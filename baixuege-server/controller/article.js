@@ -80,25 +80,14 @@ const articleList = async (ctx, next) => {
 // 新增文章
 const articleAdd = async (ctx, next) => {
   try {
-    const data = ctx.request.body;
+    const { title, image, info, content, status, type, tag } = ctx.request.body;
+
     const author_name = getCurrentUser(ctx.header.authorization).nickname;
     const author = getCurrentUser(ctx.header.authorization).id;
 
-    const updateField = [...Object.keys(data), "time", "author_name"].join(",");
-    const updateValue = [
-      ...Object.values(data).map((item) => {
-        if (typeof item == "number") {
-          return item;
-        } else {
-          return `'${item}'`;
-        }
-      }),
-      `'${dayjs().format("YYYY-MM-DD HH:mm:ss")}'`,
-      `'${currentUser}'`,
-    ].join(",");
-
-    const sql = `insert into article (${updateField}) values (${updateValue});`;
-
+    const sql = `insert into article (title,image,info,content,status,type,tag,time,author_name,author) values ('${title}','${image}','${info}','${content}',${status},'${type}','${tag}','${dayjs().format(
+      "YYYY-MM-DD HH:mm:ss"
+    )}','${author_name}',${author});`;
     console.log(sql);
 
     const res = await db.query(sql);
@@ -127,10 +116,11 @@ const articleAdd = async (ctx, next) => {
 const articleDetail = async (ctx, next) => {
   try {
     const { id } = ctx.request.query;
-    const sql = `select * from article where id='${id}'`;
-    const res = await db.query(sql);
-
     console.log("id", id);
+
+    const sql = `select * from article where id='${id}'`;
+
+    const res = await db.query(sql);
 
     if (res) {
       ctx.body = {
@@ -155,17 +145,10 @@ const articleDetail = async (ctx, next) => {
 // 更新文章
 const articleUpdate = async (ctx, next) => {
   try {
-    const data = ctx.request.body;
+    const { id, title, image, info, content, status, type, tag } =
+      ctx.request.body;
 
-    const field = [];
-    Object.keys(data).forEach((key) => {
-      if (key !== "id") {
-        field.push(`${key}='${data[key]}'`);
-      }
-    });
-
-    const sql = `update article set ${field.join()} where id='${data.id}'`;
-
+    const sql = `update article set title='${title}',image='${image}',info='${info}',content='${content}',status=${status},type='${type}',tag='${tag}' where id='${id}'`;
     console.log(sql);
 
     const res = await db.query(sql);
@@ -194,10 +177,11 @@ const articleUpdate = async (ctx, next) => {
 const articleDel = async (ctx, next) => {
   try {
     const { id } = ctx.request.query;
-    const sql = `update article set is_del='1' where id='${id}'`;
-    const res = await db.query(sql);
-
     console.log("id", id);
+
+    const sql = `update article set is_del='1' where id='${id}'`;
+
+    const res = await db.query(sql);
 
     if (res) {
       ctx.body = {
@@ -222,9 +206,11 @@ const articleDel = async (ctx, next) => {
 const articleChangeStatus = async (ctx, next) => {
   try {
     const { id, status } = ctx.request.query;
-    const sql = `update article set status='${status}' where id='${id}'`;
-    const res = await db.query(sql);
     console.log("id", id);
+
+    const sql = `update article set status=${status} where id='${id}'`;
+
+    const res = await db.query(sql);
 
     if (res) {
       ctx.body = {
