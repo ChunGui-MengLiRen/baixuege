@@ -82,7 +82,7 @@ const sayAdd = async (ctx, next) => {
     const author_name = getCurrentUser(ctx.header.authorization).nickname;
     const author_id = getCurrentUser(ctx.header.authorization).id;
 
-    const sql = `insert into say (content,author_name,author) values ('${content}','${dayjs().format(
+    const sql = `insert into say (content,time,author_name,author) values ('${content}','${dayjs().format(
       "YYYY-MM-DD HH:mm:ss"
     )}','${author_name}',${author_id});`;
     console.log(sql);

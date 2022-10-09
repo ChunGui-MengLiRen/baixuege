@@ -71,7 +71,7 @@
       </a-layout-header>
       <a-layout-content
         :style="{
-          margin: '24px'
+          margin: '24px',
         }"
       >
         <router-view />
@@ -89,10 +89,10 @@ import {
   MenuFoldOutlined,
   LogoutOutlined,
   TagsOutlined,
-  PaperClipOutlined
-} from '@ant-design/icons-vue';
-import { ref, toRaw } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+  PaperClipOutlined,
+} from "@ant-design/icons-vue";
+import { ref, toRaw } from "vue";
+import { useRouter, useRoute } from "vue-router";
 const $router = useRouter();
 const $route = useRoute();
 
@@ -100,20 +100,20 @@ const $route = useRoute();
 let collapsed = ref(false);
 
 // 设置当前选中的菜单
-let selectedKeys = ref([toRaw($route).path.value.split('/')[1]]);
+let selectedKeys = ref([toRaw($route).path.value.split("/")[1]]);
 
 // 菜单改变
-const select = value => {
+const select = (value) => {
   console.log(value);
-  $router.push(value.key);
+  $router.push("/" + value.key);
 };
 
 // 退出登录
 const logout = () => {
   // 跳转登录页
-  $router.push('/login');
+  $router.push("/login");
   // 清除本地 token
-  localStorage.removeItem('BAIXUEGE_TOKEN');
+  localStorage.removeItem("BAIXUEGE_TOKEN");
 };
 </script>
 <style lang="less" scoped>
