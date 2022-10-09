@@ -45,6 +45,7 @@
         :columns="columns"
         :data-source="data"
         :pagination="false"
+        :loading="loading"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'status'">
@@ -74,7 +75,7 @@
           v-model:page-size="pagination.pageSize"
           show-size-changer
           :total="pagination.total"
-          :show-total="total => `共 ${total} 条`"
+          :show-total="(total) => `共 ${total} 条`"
           @change="pageChange"
         />
       </div>
@@ -85,21 +86,23 @@
   <Update :id="row.id" v-model:visible="visibleUpdate" @update="onUpdate" />
 </template>
 <script setup>
-import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
-import { message } from 'ant-design-vue';
-import { ref, reactive, computed } from 'vue';
-import Create from './components/create.vue';
-import Update from './components/update.vue';
-import { getSayList, delSay } from '../../api/say';
+import { SmileOutlined, DownOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
+import { ref, reactive, computed } from "vue";
+import Create from "./components/create.vue";
+import Update from "./components/update.vue";
+import { getSayList, delSay } from "../../api/say";
 
 // 查询表单
 const searchForm = ref({
   time: [],
-  author_name: ''
+  author_name: "",
 });
 
 // 当前行
 let row = ref({});
+
+let loading = ref(false);
 
 const visibleCreate = ref(false); // 新增
 const visibleUpdate = ref(false); // 编辑
@@ -107,7 +110,7 @@ const visibleUpdate = ref(false); // 编辑
 const openCreate = () => {
   visibleCreate.value = true;
 };
-const openUpdate = record => {
+const openUpdate = (record) => {
   row.value = record;
   visibleUpdate.value = true;
 };
@@ -116,59 +119,67 @@ const openUpdate = record => {
 let pagination = ref({
   total: 100,
   current: 1,
-  pageSize: 10
+  pageSize: 10,
 });
 
 const columns = ref([
   {
-    title: '序号',
-    dataIndex: 'index',
-    key: 'index',
+    title: "序号",
+    dataIndex: "index",
+    key: "index",
     width: 80,
-    align: 'center',
-    customRender: ({ text, record, index, column }) => `${index + 1}`
+    align: "center",
+    customRender: ({ text, record, index, column }) => `${index + 1}`,
   },
   {
-    title: '内容',
-    name: 'content',
-    dataIndex: 'content',
-    key: 'content',
-    align: 'center'
+    title: "内容",
+    name: "content",
+    dataIndex: "content",
+    key: "content",
+    align: "center",
   },
   {
-    title: '作者',
-    name: 'author_name',
-    dataIndex: 'author_name',
-    key: 'author_name',
-    align: 'center'
+    title: "作者",
+    name: "author_name",
+    dataIndex: "author_name",
+    key: "author_name",
+    align: "center",
   },
   {
-    title: '上传时间',
-    dataIndex: 'time',
-    key: 'time',
-    align: 'center'
+    title: "上传时间",
+    dataIndex: "time",
+    key: "time",
+    align: "center",
   },
   {
-    title: '操作',
-    key: 'action',
+    title: "操作",
+    key: "action",
     width: 140,
-    align: 'center'
-  }
+    align: "center",
+  },
 ]);
 const data = ref([]);
 
 // 获取列表
 const getList = async () => {
-  const res = await getSayList({
-    page: {
-      current: pagination.value.current,
-      pageSize: pagination.value.pageSize
-    },
-    data: searchForm.value
-  });
-  if (res.status == '1') {
-    data.value = res.data.data;
-    pagination.value = res.data.page;
+  try {
+    const res = await getSayList({
+      page: {
+        current: pagination.value.current,
+        pageSize: pagination.value.pageSize,
+      },
+      data: searchForm.value,
+    });
+    if (res.status == "1") {
+      data.value = res.data.data;
+      pagination.value = res.data.page;
+    } else {
+      message.error("获取列表失败！");
+    }
+  } catch (error) {
+    message.error("获取列表失败！");
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -186,18 +197,18 @@ const onUpdate = () => {
   getList();
 };
 
-const delConfirm = async record => {
+const delConfirm = async (record) => {
   console.log(record);
   try {
     const res = await delSay(record.id);
-    if (res.status == '1') {
-      message.success('删除成功！');
+    if (res.status == "1") {
+      message.success("删除成功！");
       getList();
     } else {
-      message.warning('删除失败！');
+      message.warning("删除失败！");
     }
   } catch (error) {
-    message.error('删除失败！' + error);
+    message.error("删除失败！" + error);
   }
 };
 
@@ -205,7 +216,7 @@ const delConfirm = async record => {
 const reset = () => {
   searchForm.value = {
     time: [],
-    author_name: ''
+    author_name: "",
   };
   getList();
 };

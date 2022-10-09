@@ -1,9 +1,10 @@
 <script setup>
-import { ref, reactive, computed } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { UploadOutlined } from '@ant-design/icons-vue';
-import { message } from 'ant-design-vue';
-import { getDetail, updateArticle } from '../../api/article.js';
+import { ref, reactive, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { UploadOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
+import { getDetail, updateArticle } from "../../api/article.js";
+import { getDict } from "../../api/dict.js";
 
 const $router = useRouter();
 const $route = useRoute();
@@ -12,42 +13,28 @@ const loading = ref(false);
 const spinning = ref(false);
 let form = ref();
 const formState = ref({
-  title: '',
-  image: '',
-  info: '',
-  content: '',
+  title: "",
+  image: "",
+  info: "",
+  content: "",
   status: 1,
   type: undefined,
-  tag: []
+  type_name: "",
+  tag: [],
+  tag_name: "",
 });
 
-const action = import.meta.env.VITE_APP_BASE_API + '/upload';
+const action = import.meta.env.VITE_APP_BASE_API + "/upload";
 const fileList = ref([]);
 
-const options = ref([
-  {
-    label: 'javascript',
-    value: '1'
-  },
-  {
-    label: 'vue',
-    value: '2'
-  },
-  {
-    label: 'css',
-    value: '3'
-  },
-  {
-    label: '随笔',
-    value: '4'
-  }
-]);
+const typeList = ref([]);
+const tagsList = ref([]);
 
 // 获取详情
 const getDetailData = async () => {
   spinning.value = true;
   const res = await getDetail($router.currentRoute.value.query.id);
-  if (res.status == '1') {
+  if (res.status == "1") {
     console.log(res.data[0]);
     formState.value.title = res.data[0].title;
     formState.value.image = res.data[0].image;
@@ -55,24 +42,59 @@ const getDetailData = async () => {
     formState.value.content = res.data[0].content;
     formState.value.status = res.data[0].status;
     formState.value.type = res.data[0].type;
-    formState.value.tag = res.data[0].tag.split(',');
+    formState.value.tag = res.data[0].tag.split(",");
+    formState.value.type_name = res.data[0].type_name;
+    formState.value.tag_name = res.data[0].tag_name;
     fileList.value = res.data[0].image
       ? [
           {
-            uid: '-1',
+            uid: "-1",
             name: res.data[0].image,
-            status: 'done',
+            status: "done",
             url: import.meta.env.VITE_APP_BASE_API + res.data[0].image,
-            thumbUrl: import.meta.env.VITE_APP_BASE_API + res.data[0].image
-          }
+            thumbUrl: import.meta.env.VITE_APP_BASE_API + res.data[0].image,
+          },
         ]
       : [];
   } else {
-    message.warning('获取详情失败');
+    message.warning("获取详情失败");
   }
   spinning.value = false;
 };
-getDetailData();
+
+getDetailData().then((res) => {
+  getDictData();
+});
+
+const getDictData = async () => {
+  try {
+    const res = await getDict();
+    if (res.status == "1") {
+      console.log(res.data);
+      typeList.value = res.data[0];
+      tagsList.value = res.data[1];
+    } else {
+      message.error("获取字典失败！");
+    }
+  } catch (error) {
+    message.error(error);
+  }
+};
+
+const typeChange = (value) => {
+  formState.value.type_name = typeList.value.find(
+    (item) => item.value == value
+  ).label;
+};
+
+const tagChange = (value) => {
+  console.log(value);
+  let tags = [];
+  value.forEach((v) => {
+    tags.push(tagsList.value.find((item) => item.value == v).label);
+  });
+  formState.value.tag_name = tags.join();
+};
 
 const cancel = () => {
   $router.back();
@@ -87,36 +109,36 @@ const submit = () => {
         const res = await updateArticle({
           id: $router.currentRoute.value.query.id,
           ...formState.value,
-          tag: formState.value.tag.join(',')
+          tag: formState.value.tag.join(","),
         });
-        if (res.status == '1') {
-          message.success('更新成功！');
+        if (res.status == "1") {
+          message.success("更新成功！");
           // emit('create');
-          $router.push('/article');
+          $router.push("/article");
         } else {
-          message.warning('更新失败！');
+          message.warning("更新失败！");
         }
         loading.value = false;
       } catch (error) {
         console.log(error);
-        message.error('更新失败！');
+        message.error("更新失败！");
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 };
 
 // 文件上传
-const change = info => {
-  if (info.file.status !== 'uploading') {
+const change = (info) => {
+  if (info.file.status !== "uploading") {
     console.log(info.file, info.fileList);
   }
-  if (info.file.status === 'done') {
+  if (info.file.status === "done") {
     console.log(info);
     formState.value.image = info.file.response.path;
     message.success(`${info.file.name} 文件上传成功`);
-  } else if (info.file.status === 'error') {
+  } else if (info.file.status === "error") {
     message.error(`${info.file.name}文件上传错误`);
   }
 };
@@ -162,9 +184,18 @@ const change = info => {
           </a-col>
           <a-col :span="12">
             <a-form-item label="分类">
-              <a-select v-model:value="formState.type" placeholder="请选择">
-                <a-select-option value="1"> 技术文章 </a-select-option>
-                <a-select-option value="2"> 随笔感想 </a-select-option>
+              <a-select
+                v-model:value="formState.type"
+                placeholder="请选择"
+                @change="typeChange"
+              >
+                <a-select-option
+                  v-for="item in typeList"
+                  :key="item.value"
+                  :value="item.value"
+                >
+                  {{ item.label }}
+                </a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -174,7 +205,8 @@ const change = info => {
                 v-model:value="formState.tag"
                 placeholder="请选择"
                 mode="multiple"
-                :options="options"
+                :options="tagsList"
+                @change="tagChange"
               >
               </a-select>
             </a-form-item>

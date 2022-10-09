@@ -63,6 +63,7 @@
         :columns="columns"
         :data-source="data"
         :pagination="false"
+        :loading="loading"
       >
         <template #headerCell="{ column }">
           <span>{{ column.title }}</span>
@@ -150,6 +151,8 @@ const visibleUpdate = ref(false); // 编辑
 
 let data = ref([]); // 列表数据
 
+let loading = ref(false);
+
 // 分页
 let pagination = ref({
   total: 100,
@@ -203,16 +206,25 @@ const columns = ref([
 
 // 获取列表
 const getList = async () => {
-  const res = await getHomeList({
-    page: {
-      current: pagination.value.current,
-      pageSize: pagination.value.pageSize,
-    },
-    data: searchForm.value,
-  });
-  if (res.status == "1") {
-    data.value = res.data.data;
-    pagination.value = res.data.page;
+  try {
+    loading.value = true;
+    const res = await getHomeList({
+      page: {
+        current: pagination.value.current,
+        pageSize: pagination.value.pageSize,
+      },
+      data: searchForm.value,
+    });
+    if (res.status == "1") {
+      data.value = res.data.data;
+      pagination.value = res.data.page;
+    } else {
+      message.error("获取列表失败！");
+    }
+  } catch (error) {
+    message.error("获取列表失败！");
+  } finally {
+    loading.value = false;
   }
 };
 

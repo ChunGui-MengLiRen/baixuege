@@ -80,12 +80,22 @@ const articleList = async (ctx, next) => {
 // 新增文章
 const articleAdd = async (ctx, next) => {
   try {
-    const { title, image, info, content, status, type, tag } = ctx.request.body;
+    const {
+      title,
+      image,
+      info,
+      content,
+      status,
+      type,
+      tag,
+      type_name,
+      tag_name,
+    } = ctx.request.body;
 
     const author_name = getCurrentUser(ctx.header.authorization).nickname;
     const author = getCurrentUser(ctx.header.authorization).id;
 
-    const sql = `insert into article (title,image,info,content,status,type,tag,time,author_name,author) values ('${title}','${image}','${info}','${content}',${status},'${type}','${tag}','${dayjs().format(
+    const sql = `insert into article (title,image,info,content,status,type,tag,type_name,tag_name,time,author_name,author) values ('${title}','${image}','${info}','${content}',${status},'${type}','${tag}','${type_name}','${tag_name}','${dayjs().format(
       "YYYY-MM-DD HH:mm:ss"
     )}','${author_name}',${author});`;
     console.log(sql);
@@ -145,10 +155,20 @@ const articleDetail = async (ctx, next) => {
 // 更新文章
 const articleUpdate = async (ctx, next) => {
   try {
-    const { id, title, image, info, content, status, type, tag } =
-      ctx.request.body;
+    const {
+      id,
+      title,
+      image,
+      info,
+      content,
+      status,
+      type,
+      tag,
+      type_name,
+      tag_name,
+    } = ctx.request.body;
 
-    const sql = `update article set title='${title}',image='${image}',info='${info}',content='${content}',status=${status},type='${type}',tag='${tag}' where id='${id}'`;
+    const sql = `update article set title='${title}',image='${image}',info='${info}',content='${content}',status=${status},type='${type}',tag='${tag}' ,type_name='${type_name}',tag_name='${tag_name}' where id='${id}'`;
     console.log(sql);
 
     const res = await db.query(sql);

@@ -1,44 +1,44 @@
-import request from '../request';
+import request from "../request";
 
-// 获取说说列表
+// 获取类型列表
 export function getTypeList(data) {
   return request({
     url: `/type/list`,
-    method: 'post',
-    data
+    method: "post",
+    data,
   });
 }
 
-// 新增说说
+// 新增类型
 export function addType(data) {
   return request({
     url: `/type/add`,
-    method: 'post',
-    data
+    method: "post",
+    data,
   });
 }
 
-// 获取说说详情
+// 获取类型详情
 export function getDetail(id) {
   return request({
     url: `/type/detail?id=` + id,
-    method: 'get'
+    method: "get",
   });
 }
 
-// 更新说说
+// 更新类型
 export function updateType(data) {
   return request({
     url: `/type/update`,
-    method: 'post',
-    data
+    method: "post",
+    data,
   });
 }
 
-// 删除说说
+// 删除类型
 export function delType(id) {
   return request({
     url: `/type/delete?id=` + id,
-    method: 'get'
+    method: "get",
   });
 }

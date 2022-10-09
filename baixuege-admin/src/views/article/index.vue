@@ -65,6 +65,7 @@
         :columns="columns"
         :data-source="data"
         :pagination="false"
+        :loading="loading"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'status'">
@@ -146,6 +147,8 @@ const updateArticle = (record) => {
   $router.push("/article/update?id=" + record.id);
 };
 
+let loading = ref(false);
+
 // 分页
 let pagination = ref({
   total: 100,
@@ -183,16 +186,16 @@ const columns = ref([
   },
   {
     title: "类型",
-    name: "type",
-    dataIndex: "type",
-    key: "type",
+    name: "type_name",
+    dataIndex: "type_name",
+    key: "type_name",
     align: "center",
   },
   {
     title: "标签",
-    name: "tag",
-    dataIndex: "tag",
-    key: "tag",
+    name: "tag_name",
+    dataIndex: "tag_name",
+    key: "tag_name",
     align: "center",
   },
   {
@@ -212,16 +215,25 @@ let data = ref([]);
 
 // 获取列表
 const getList = async () => {
-  const res = await getArticleList({
-    page: {
-      current: pagination.value.current,
-      pageSize: pagination.value.pageSize,
-    },
-    data: searchForm.value,
-  });
-  if (res.status == "1") {
-    data.value = res.data.data;
-    pagination.value = res.data.page;
+  try {
+    loading.value = true;
+    const res = await getArticleList({
+      page: {
+        current: pagination.value.current,
+        pageSize: pagination.value.pageSize,
+      },
+      data: searchForm.value,
+    });
+    if (res.status == "1") {
+      data.value = res.data.data;
+      pagination.value = res.data.page;
+    } else {
+      message.error("获取列表失败！");
+    }
+  } catch (error) {
+    message.error("获取列表失败！");
+  } finally {
+    loading.value = false;
   }
 };
 

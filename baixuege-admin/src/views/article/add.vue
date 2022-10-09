@@ -1,9 +1,10 @@
 <script setup>
-import { ref, reactive, computed } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { UploadOutlined } from '@ant-design/icons-vue';
-import { message } from 'ant-design-vue';
-import { addArticle } from '../../api/article.js';
+import { ref, reactive, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { UploadOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
+import { addArticle } from "../../api/article.js";
+import { getDict } from "../../api/dict.js";
 
 const $router = useRouter();
 const $route = useRoute();
@@ -11,36 +12,54 @@ const $route = useRoute();
 const loading = ref(false);
 let form = ref();
 const formState = ref({
-  title: '',
-  image: '',
-  info: '',
-  content: '',
+  title: "",
+  image: "",
+  info: "",
+  content: "",
   status: 1,
   type: undefined,
-  tag: []
+  type_name: "",
+  tag: [],
+  tag_name: "",
 });
 
-const action = import.meta.env.VITE_APP_BASE_API + '/upload';
+const action = import.meta.env.VITE_APP_BASE_API + "/upload";
 const fileList = ref([]);
 
-const options = ref([
-  {
-    label: 'javascript',
-    value: '1'
-  },
-  {
-    label: 'vue',
-    value: '2'
-  },
-  {
-    label: 'css',
-    value: '3'
-  },
-  {
-    label: '随笔',
-    value: '4'
+const typeList = ref([]);
+const tagsList = ref([]);
+
+const getDictData = async () => {
+  try {
+    const res = await getDict();
+    if (res.status == "1") {
+      console.log(res.data);
+      typeList.value = res.data[0];
+      tagsList.value = res.data[1];
+    } else {
+      message.error("获取字典失败！");
+    }
+  } catch (error) {
+    message.error(error);
   }
-]);
+};
+
+getDictData();
+
+const typeChange = (value) => {
+  formState.value.type_name = typeList.value.find(
+    (item) => item.value == value
+  ).label;
+};
+
+const tagChange = (value) => {
+  console.log(value);
+  let tags = [];
+  value.forEach((v) => {
+    tags.push(tagsList.value.find((item) => item.value == v).label);
+  });
+  formState.value.tag_name = tags.join();
+};
 
 const cancel = () => {
   $router.back();
@@ -54,36 +73,36 @@ const submit = () => {
         loading.value = true;
         const res = await addArticle({
           ...formState.value,
-          tag: formState.value.tag.join(',')
+          tag: formState.value.tag.join(","),
         });
-        if (res.status == '1') {
-          message.success('新增成功！');
+        if (res.status == "1") {
+          message.success("新增成功！");
           // emit('create');
-          $router.push('/article');
+          $router.push("/article");
         } else {
-          message.warning('新增失败！');
+          message.warning("新增失败！");
         }
         loading.value = false;
       } catch (error) {
         console.log(error);
-        message.error('新增失败！');
+        message.error("新增失败！");
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 };
 
 // 文件上传
-const change = info => {
-  if (info.file.status !== 'uploading') {
+const change = (info) => {
+  if (info.file.status !== "uploading") {
     console.log(info.file, info.fileList);
   }
-  if (info.file.status === 'done') {
+  if (info.file.status === "done") {
     console.log(info);
     formState.value.image = info.file.response.path;
     message.success(`${info.file.name} 文件上传成功`);
-  } else if (info.file.status === 'error') {
+  } else if (info.file.status === "error") {
     message.error(`${info.file.name}文件上传错误`);
   }
 };
@@ -129,9 +148,18 @@ const change = info => {
           </a-col>
           <a-col :span="12">
             <a-form-item label="分类">
-              <a-select v-model:value="formState.type" placeholder="请选择">
-                <a-select-option value="1"> 技术文章 </a-select-option>
-                <a-select-option value="2"> 随笔感想 </a-select-option>
+              <a-select
+                v-model:value="formState.type"
+                placeholder="请选择"
+                @change="typeChange"
+              >
+                <a-select-option
+                  v-for="item in typeList"
+                  :key="item.value"
+                  :value="item.value"
+                >
+                  {{ item.label }}
+                </a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -141,7 +169,8 @@ const change = info => {
                 v-model:value="formState.tag"
                 placeholder="请选择"
                 mode="multiple"
-                :options="options"
+                :options="tagsList"
+                @change="tagChange"
               >
               </a-select>
             </a-form-item>

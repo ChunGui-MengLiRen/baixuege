@@ -1,25 +1,26 @@
-const Koa = require('koa');
+const Koa = require("koa");
 const app = new Koa();
-const views = require('koa-views');
-const json = require('koa-json');
-const onerror = require('koa-onerror');
-const bodyparser = require('koa-bodyparser');
-const logger = require('koa-logger');
-const koajwt = require('koa-jwt');
-const koaBody = require('koa-body');
-const cors = require('koa2-cors'); //跨域
-const path = require('path');
+const views = require("koa-views");
+const json = require("koa-json");
+const onerror = require("koa-onerror");
+const bodyparser = require("koa-bodyparser");
+const logger = require("koa-logger");
+const koajwt = require("koa-jwt");
+const koaBody = require("koa-body");
+const cors = require("koa2-cors"); //跨域
+const path = require("path");
 
 // 导入路由
-const users = require('./routes/users');
-const article = require('./routes/article');
-const home = require('./routes/home');
-const say = require('./routes/say');
-const upload = require('./routes/upload');
-const about = require('./routes/about');
-const page = require('./routes/page');
-const type = require('./routes/type');
-const tags = require('./routes/tags');
+const users = require("./routes/users");
+const article = require("./routes/article");
+const home = require("./routes/home");
+const say = require("./routes/say");
+const upload = require("./routes/upload");
+const about = require("./routes/about");
+const page = require("./routes/page");
+const type = require("./routes/type");
+const tags = require("./routes/tags");
+const dict = require("./routes/dict");
 
 // error handler
 onerror(app);
@@ -28,18 +29,18 @@ onerror(app);
 app.use(cors()); // 解决跨域
 app.use(
   bodyparser({
-    enableTypes: ['json', 'form', 'text'],
+    enableTypes: ["json", "form", "text"],
   })
 );
 app.use(json());
 app.use(logger());
 
 // 静态资源目录
-app.use(require('koa-static')(__dirname + '/public'));
+app.use(require("koa-static")(__dirname + "/public"));
 
 app.use(
-  views(__dirname + '/views', {
-    extension: 'pug',
+  views(__dirname + "/views", {
+    extension: "pug",
   })
 );
 
@@ -47,7 +48,7 @@ app.use(
 app.use(
   koajwt({
     // 加密的密钥
-    secret: 'baixuege-token',
+    secret: "baixuege-token",
   }).unless({
     // 不需要验证的路由
     path: [
@@ -77,6 +78,7 @@ app.use(about.routes(), about.allowedMethods());
 app.use(page.routes(), page.allowedMethods());
 app.use(type.routes(), type.allowedMethods());
 app.use(tags.routes(), tags.allowedMethods());
+app.use(dict.routes(), dict.allowedMethods());
 
 // 文件上传
 app.use(
@@ -88,8 +90,8 @@ app.use(
 app.use(upload.routes(), upload.allowedMethods());
 
 // error-handling
-app.on('error', (err, ctx) => {
-  console.error('server error', err, ctx);
+app.on("error", (err, ctx) => {
+  console.error("server error", err, ctx);
 });
 
 module.exports = app;
