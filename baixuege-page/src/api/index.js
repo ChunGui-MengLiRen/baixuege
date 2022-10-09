@@ -41,3 +41,11 @@ export function getAboutDetail() {
     method: 'get'
   });
 }
+
+// 获取字典
+export function getDict() {
+  return request({
+    url: `/page/dict`,
+    method: 'get'
+  });
+}

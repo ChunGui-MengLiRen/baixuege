@@ -1,14 +1,15 @@
 <script setup>
-import { ref } from 'vue';
-import MyFooter from '../../components/footer.vue';
+import { ref } from "vue";
+import { message } from "ant-design-vue";
+import MyFooter from "../../components/footer.vue";
 import {
   QqOutlined,
   WechatOutlined,
   GithubOutlined,
-  RightOutlined
-} from '@ant-design/icons-vue';
-import { getArticleList } from '../../api';
-import { useRouter, useRoute } from 'vue-router';
+  RightOutlined,
+} from "@ant-design/icons-vue";
+import { getArticleList, getDict } from "../../api";
+import { useRouter, useRoute } from "vue-router";
 const $router = useRouter();
 const $route = useRoute();
 
@@ -20,27 +21,51 @@ const current = ref(6);
 
 const list = ref([]);
 
+let typeList = ref([]);
+let tagList = ref([]);
+
 const page = ref({
   current: 1,
   pageSize: 10,
-  total: 0
+  total: 0,
 });
 
 const getData = async () => {
-  const res = await getArticleList({
-    page: page.value
-  });
-  if (res.status == '1') {
-    console.log(res.data);
-    list.value = res.data.data;
-    page.value = res.data.page;
+  try {
+    const res = await getArticleList({
+      page: page.value,
+    });
+    if (res.status == "1") {
+      console.log(res.data);
+      list.value = res.data.data.map((item) => {
+        return {
+          ...item,
+          tag_name: item.tag_name ? item.tag_name.split(",") : [],
+        };
+      });
+      page.value = res.data.page;
+    } else {
+      message.error("获取文章失败！");
+    }
+  } catch (error) {
+    message.error("获取文章失败！");
   }
 };
 
 getData();
 
-const toDetail = data => {
-  $router.push('/article/detail?id=' + data.id);
+const getDictData = async () => {
+  const res = await getDict();
+  if (res.status == "1") {
+    console.log(res.data);
+    typeList.value = res.data[0];
+    tagList.value = res.data[1];
+  }
+};
+getDictData();
+
+const toDetail = (data) => {
+  $router.push("/article/detail?id=" + data.id);
 };
 
 const pageChange = (page, pageSize) => {
@@ -57,7 +82,7 @@ const more = () => {
 };
 
 const toGitHub = () => {
-  window.open('https://github.com/ChunGui-MengLiRen');
+  window.open("https://github.com/ChunGui-MengLiRen");
 };
 </script>
 
@@ -82,12 +107,9 @@ const toGitHub = () => {
               {{ item.info }}
             </div>
             <div class="article-tag show-article-tag">
-              <!-- <div class="item-tag">javascript</div>
-              <div class="item-tag">node</div>
-              <div class="item-tag">koa</div>
-              <div class="item-tag">vue</div>
-              <div class="item-tag">react</div> -->
-              暂不支持
+              <div v-for="(val, i) in item.tag_name" :key="i" class="item-tag">
+                {{ val }}
+              </div>
             </div>
             <div class="meta article-meta-font-size">
               <span>{{ item.author_name }}</span>
@@ -111,7 +133,7 @@ const toGitHub = () => {
           v-model:page-size="page.pageSize"
           show-size-changer
           :total="page.total"
-          :show-total="total => `共 ${total} 条`"
+          :show-total="(total) => `共 ${total} 条`"
           @change="pageChange"
         />
       </div>
@@ -163,26 +185,27 @@ const toGitHub = () => {
           <right-outlined />
         </div>
         <div class="card-body">
-          <!-- <div class="tag" v-for="i in 10" :key="i">标签{{ i + 1 }}</div> -->
-          <div>暂不支持</div>
+          <div class="tag" v-for="tag in tagList" :key="tag.id">
+            {{ tag.label }}
+          </div>
         </div>
       </div>
 
-      <div class="card card-setting">
+      <!-- <div class="card card-setting">
         <div class="card-title">
           设置
           <right-outlined />
         </div>
         <div class="card-body">
-          <!-- <ul class="setting-list">
+          <ul class="setting-list">
             <li class="item">播放器：<a-switch v-model:checked="isMusic" /></li>
             <li class="item">
               卡片圆角：<a-switch v-model:checked="isRadius" />
             </li>
-          </ul> -->
+          </ul>
           <div>暂不支持</div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <MyFooter />

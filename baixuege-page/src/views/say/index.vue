@@ -1,22 +1,29 @@
 <script setup>
-import MyFooter from '../../components/footer.vue';
-import { getSayList } from '../../api';
-import { ref } from 'vue';
+import MyFooter from "../../components/footer.vue";
+import { message } from "ant-design-vue";
+import { getSayList } from "../../api";
+import { ref } from "vue";
 
 const list = ref([]);
 
 const page = ref({
   current: 1,
-  pageSize: 20
+  pageSize: 20,
 });
 
 const getData = async () => {
-  const res = await getSayList({
-    page: page.value
-  });
-  if (res.status == '1') {
-    console.log(res.data);
-    list.value = res.data.data;
+  try {
+    const res = await getSayList({
+      page: page.value,
+    });
+    if (res.status == "1") {
+      console.log(res.data);
+      list.value = res.data.data;
+    } else {
+      message.error("获取说说失败！");
+    }
+  } catch (error) {
+    message.error("获取说说失败！");
   }
 };
 

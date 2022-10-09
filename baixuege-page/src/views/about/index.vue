@@ -1,17 +1,24 @@
 <script setup>
-import MyFooter from '../../components/footer.vue';
-import { ref } from 'vue';
-import { getAboutDetail } from '../../api';
+import MyFooter from "../../components/footer.vue";
+import { ref } from "vue";
+import { message } from "ant-design-vue";
+import { getAboutDetail } from "../../api";
 
-const selfText = ref('');
-const siteText = ref('');
+const selfText = ref("");
+const siteText = ref("");
 
 const getData = async () => {
-  const res = await getAboutDetail();
-  if (res.status == '1') {
-    console.log(res.data);
-    selfText.value = res.data[0].self;
-    siteText.value = res.data[0].site;
+  try {
+    const res = await getAboutDetail();
+    if (res.status == "1") {
+      console.log(res.data);
+      selfText.value = res.data[0].self;
+      siteText.value = res.data[0].site;
+    } else {
+      message.error("获取关于失败！");
+    }
+  } catch (error) {
+    message.error("获取关于失败！");
   }
 };
 

@@ -1,17 +1,24 @@
 <script setup>
-import { ref } from 'vue';
-import { getHome } from '../../api';
+import { ref } from "vue";
+import { message } from "ant-design-vue";
+import { getHome } from "../../api";
 
-const text = ref('');
-const backImage = ref('');
+const text = ref("");
+const backImage = ref("");
 
 const getData = async () => {
-  const res = await getHome();
-  if (res.status == '1') {
-    console.log(res.data);
-    text.value = res.data[0].text;
-    backImage.value =
-      import.meta.env.VITE_APP_BASE_API + res.data[0].back_image;
+  try {
+    const res = await getHome();
+    if (res.status == "1") {
+      console.log(res.data);
+      text.value = res.data[0].text;
+      backImage.value =
+        import.meta.env.VITE_APP_BASE_API + res.data[0].back_image;
+    } else {
+      message.error("获取首页失败！");
+    }
+  } catch (error) {
+    message.error("获取首页失败！");
   }
 };
 
