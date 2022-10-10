@@ -234,6 +234,34 @@ const pageDict = async (ctx, next) => {
   }
 };
 
+// 获取菜单列表
+const pageMenuList = async (ctx, next) => {
+  try {
+    let sql = `select id,menu_name,menu_router,sn from menu where is_del=0 and status=1 order by sn`;
+    console.log(sql);
+
+    const result = await db.query(sql);
+    console.log(result);
+    if (result) {
+      ctx.body = {
+        status: "1",
+        message: "获取成功",
+        data: result,
+      };
+    } else {
+      ctx.body = {
+        status: "0",
+        message: "获取失败",
+      };
+    }
+  } catch (error) {
+    ctx.body = {
+      status: "0",
+      message: error.message,
+    };
+  }
+};
+
 module.exports = {
   pageHomeDetail,
   pageArticleList,
@@ -241,4 +269,5 @@ module.exports = {
   pageSayList,
   pageAboutDetail,
   pageDict,
+  pageMenuList,
 };

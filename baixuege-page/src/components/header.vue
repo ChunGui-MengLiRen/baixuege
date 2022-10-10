@@ -1,23 +1,41 @@
 <script setup>
-import myDrawer from './drawer.vue';
-import { MenuOutlined, SettingOutlined } from '@ant-design/icons-vue';
-import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import myDrawer from "./drawer.vue";
+import { MenuOutlined, SettingOutlined } from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
+import { ref } from "vue";
+import { getMenu } from "../api/index";
+import { message } from "ant-design-vue";
 const $router = useRouter();
 const toHome = function () {
-  $router.push('/home');
+  $router.push("/home");
 };
 let visible = ref(false);
+
+let menuList = ref([]);
+
+const getMenuData = async () => {
+  try {
+    const res = await getMenu();
+    if (res.status == "1") {
+      console.log(res);
+      menuList.value = res.data;
+    } else {
+      message.error("获取菜单失败！");
+    }
+  } catch (error) {
+    message.error("获取菜单失败！");
+  }
+};
+getMenuData();
 const openDrawer = () => {
   visible.value = !visible.value;
 };
-const toPage = url => {
+const toPage = (url) => {
   // $router.push({ path: url });
   visible.value = false;
 };
-
 const toAdmin = () => {
-  window.open('http://admin.yangliuyi.top');
+  window.open("http://admin.yangliuyi.top");
 };
 </script>
 
@@ -27,17 +45,8 @@ const toAdmin = () => {
       <div class="avatar" @click="toHome">杨柳依依</div>
       <menu-outlined class="menu-icon hide-menu-icon" @click="openDrawer" />
       <ul class="menu show-menu">
-        <li class="menu-item">
-          <router-link to="/home">首页</router-link>
-        </li>
-        <li class="menu-item">
-          <router-link to="/article">文章</router-link>
-        </li>
-        <li class="menu-item">
-          <router-link to="/say">说说</router-link>
-        </li>
-        <li class="menu-item">
-          <router-link to="/about">关于</router-link>
+        <li class="menu-item" v-for="item in menuList" :key="item.id">
+          <router-link :to="item.menu_router">{{ item.menu_name }}</router-link>
         </li>
         <li class="menu-item">
           <div class="admin" @click="toAdmin">
@@ -49,17 +58,8 @@ const toAdmin = () => {
   </header>
   <myDrawer v-model:visible="visible">
     <ul class="phone-menu" @click="toPage('home')">
-      <li class="phone-menu-item">
-        <router-link to="/home">首页</router-link>
-      </li>
-      <li class="phone-menu-item">
-        <router-link to="/article">文章</router-link>
-      </li>
-      <li class="phone-menu-item">
-        <router-link to="/say">说说</router-link>
-      </li>
-      <li class="phone-menu-item">
-        <router-link to="/about">关于</router-link>
+      <li class="phone-menu-item" v-for="item in menuList" :key="item.id">
+        <router-link :to="item.menu_router">{{ item.menu_name }}</router-link>
       </li>
     </ul>
   </myDrawer>

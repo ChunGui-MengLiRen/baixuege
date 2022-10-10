@@ -53,6 +53,12 @@
           </template>
           <span>标签</span>
         </a-menu-item>
+        <a-menu-item key="menu">
+          <template #icon>
+            <menu-outlined />
+          </template>
+          <span>菜单</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
@@ -90,6 +96,7 @@ import {
   LogoutOutlined,
   TagsOutlined,
   PaperClipOutlined,
+  MenuOutlined,
 } from "@ant-design/icons-vue";
 import { ref, toRaw } from "vue";
 import { useRouter, useRoute } from "vue-router";

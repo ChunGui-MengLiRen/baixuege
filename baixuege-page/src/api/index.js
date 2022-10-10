@@ -1,10 +1,10 @@
-import request from '../request';
+import request from "../request";
 
 // 获取主页
 export function getHome() {
   return request({
     url: `/page/home`,
-    method: 'get'
+    method: "get",
   });
 }
 
@@ -12,8 +12,8 @@ export function getHome() {
 export function getArticleList(data) {
   return request({
     url: `/page/articleList`,
-    method: 'post',
-    data
+    method: "post",
+    data,
   });
 }
 
@@ -21,7 +21,7 @@ export function getArticleList(data) {
 export function getArticleDetail(id) {
   return request({
     url: `/page/articleDetail?id=` + id,
-    method: 'get'
+    method: "get",
   });
 }
 
@@ -29,8 +29,8 @@ export function getArticleDetail(id) {
 export function getSayList(data) {
   return request({
     url: `/page/sayList`,
-    method: 'post',
-    data
+    method: "post",
+    data,
   });
 }
 
@@ -38,7 +38,7 @@ export function getSayList(data) {
 export function getAboutDetail() {
   return request({
     url: `/page/aboutDetail`,
-    method: 'get'
+    method: "get",
   });
 }
 
@@ -46,6 +46,14 @@ export function getAboutDetail() {
 export function getDict() {
   return request({
     url: `/page/dict`,
-    method: 'get'
+    method: "get",
+  });
+}
+
+// 获取菜单
+export function getMenu() {
+  return request({
+    url: `/page/menu`,
+    method: "get",
   });
 }

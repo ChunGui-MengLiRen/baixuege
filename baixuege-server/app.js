@@ -21,6 +21,7 @@ const page = require("./routes/page");
 const type = require("./routes/type");
 const tags = require("./routes/tags");
 const dict = require("./routes/dict");
+const menu = require("./routes/menu");
 
 // error handler
 onerror(app);
@@ -79,6 +80,7 @@ app.use(page.routes(), page.allowedMethods());
 app.use(type.routes(), type.allowedMethods());
 app.use(tags.routes(), tags.allowedMethods());
 app.use(dict.routes(), dict.allowedMethods());
+app.use(menu.routes(), menu.allowedMethods());
 
 // 文件上传
 app.use(
