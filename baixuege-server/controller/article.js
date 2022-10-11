@@ -17,7 +17,7 @@ const articleList = async (ctx, next) => {
 
   try {
     const res = await db.query(
-      `select count(*) as total from article where is_del='0'`
+      `select count(*) as total from article where is_del=0`
     );
     const total = res[0].total; // 总数
     const pageSize = page.pageSize; // 每页条数

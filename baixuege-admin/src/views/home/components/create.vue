@@ -1,26 +1,27 @@
 <script setup>
-import { ref, reactive, defineProps, defineEmits } from 'vue';
-import { addHome } from '../../../api/home';
-import { UploadOutlined } from '@ant-design/icons-vue';
-import { message } from 'ant-design-vue';
+import { ref, reactive, defineProps, defineEmits } from "vue";
+import { addHome } from "../../../api/home";
+import { UploadOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
 
 defineProps({
   visible: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
-const emit = defineEmits(['update:visible', 'create']);
+const emit = defineEmits(["update:visible", "create"]);
 
 const loading = ref(false);
-const action = import.meta.env.VITE_APP_BASE_API + '/upload';
+const action = import.meta.env.VITE_APP_BASE_API + "/upload";
 
 const fileList = ref([]);
 
 const formState = ref({
-  name: '',
-  text: '',
-  back_image: ''
+  name: "",
+  text: "",
+  back_image: "",
+  is_shici: false,
 });
 const form = ref();
 
@@ -32,44 +33,45 @@ const handleOk = async () => {
       try {
         loading.value = true;
         const res = await addHome({
-          ...formState.value
+          ...formState.value,
         });
-        if (res.status == '1') {
-          message.success('新增成功！');
-          emit('create');
+        if (res.status == "1") {
+          message.success("新增成功！");
+          emit("create");
         } else {
-          message.warning('新增失败！');
+          message.warning("新增失败！");
         }
         loading.value = false;
       } catch (error) {
-        message.error('新增失败！');
+        message.error("新增失败！");
       }
     })
-    .catch(err => {
-      console.log('err');
+    .catch((err) => {
+      console.log("err");
     });
 };
 
 // 取消
 const handleCancel = () => {
   formState.value = {
-    name: '',
-    text: '',
-    back_image: ''
+    name: "",
+    text: "",
+    back_image: "",
+    is_shici: false,
   };
-  emit('update:visible', false);
+  emit("update:visible", false);
 };
 
 // 文件上传
-const change = info => {
-  if (info.file.status !== 'uploading') {
+const change = (info) => {
+  if (info.file.status !== "uploading") {
     console.log(info.file, info.fileList);
   }
-  if (info.file.status === 'done') {
+  if (info.file.status === "done") {
     console.log(info);
     formState.value.back_image = info.file.response.path;
     message.success(`${info.file.name} 文件上传成功`);
-  } else if (info.file.status === 'error') {
+  } else if (info.file.status === "error") {
     message.error(`${info.file.name}文件上传错误`);
   }
 };
@@ -110,6 +112,9 @@ const change = info => {
       </a-form-item>
       <a-form-item name="text" label="首页文字">
         <a-input v-model:value="formState.text" placeholder="请输入首页文字" />
+      </a-form-item>
+      <a-form-item name="is_shici" label="使用诗词">
+        <a-switch v-model:checked="formState.is_shici" />
       </a-form-item>
       <!-- <a-form-item name="status" label="是否启用">
           <a-switch v-model:checked="formState.status" />

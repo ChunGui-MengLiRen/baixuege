@@ -179,7 +179,7 @@ const columns = ref([
     align: "center",
   },
   {
-    title: "发布日期",
+    title: "发布/修改日期",
     dataIndex: "time",
     key: "time",
     align: "center",

@@ -1,33 +1,33 @@
 <script setup>
-import { ref, reactive, watch, defineProps, defineEmits } from 'vue';
-import { UploadOutlined } from '@ant-design/icons-vue';
-import { getDetail, updateHome } from '../../../api/home';
-import { message } from 'ant-design-vue';
+import { ref, reactive, watch, defineProps, defineEmits } from "vue";
+import { UploadOutlined } from "@ant-design/icons-vue";
+import { getDetail, updateHome } from "../../../api/home";
+import { message } from "ant-design-vue";
 
 const props = defineProps({
   visible: {
     type: Boolean,
-    default: false
+    default: false,
   },
   id: {
     type: Number,
-    default: undefined
-  }
+    default: undefined,
+  },
 });
-const emit = defineEmits(['update:visible', 'update']);
+const emit = defineEmits(["update:visible", "update"]);
 
 const loading = ref(false);
 const spinning = ref(false);
 
 let formState = ref({
-  name: '',
-  text: '',
-  back_image: ''
+  name: "",
+  text: "",
+  back_image: "",
 });
 
 const form = ref();
 
-const action = import.meta.env.VITE_APP_BASE_API + '/upload';
+const action = import.meta.env.VITE_APP_BASE_API + "/upload";
 
 const fileList = ref([]); // 上传文件列表
 
@@ -35,24 +35,26 @@ const fileList = ref([]); // 上传文件列表
 const getDetailData = async () => {
   spinning.value = true;
   const res = await getDetail(props.id);
-  if (res.status == '1') {
+  if (res.status == "1") {
     console.log(res.data[0]);
     formState.value.name = res.data[0].name;
     formState.value.text = res.data[0].text;
     formState.value.back_image = res.data[0].back_image;
+    formState.value.is_shici = res.data[0].is_shici ? true : false;
     fileList.value = res.data[0].back_image
       ? [
           {
-            uid: '-1',
+            uid: "-1",
             name: res.data[0].back_image,
-            status: 'done',
+            status: "done",
             url: import.meta.env.VITE_APP_BASE_API + res.data[0].back_image,
-            thumbUrl: import.meta.env.VITE_APP_BASE_API + res.data[0].back_image
-          }
+            thumbUrl:
+              import.meta.env.VITE_APP_BASE_API + res.data[0].back_image,
+          },
         ]
       : [];
   } else {
-    message.warning('获取详情失败');
+    message.warning("获取详情失败");
   }
   spinning.value = false;
 };
@@ -60,7 +62,7 @@ const getDetailData = async () => {
 // 打开页面获取详情
 watch(
   () => props.visible,
-  async newVal => {
+  async (newVal) => {
     if (newVal) {
       getDetailData();
     }
@@ -81,40 +83,40 @@ const handleOk = async () => {
         loading.value = true;
         const res = await updateHome({
           id: props.id,
-          ...formState.value
+          ...formState.value,
         });
-        if (res.status == '1') {
-          message.success('更新成功！');
-          emit('update');
+        if (res.status == "1") {
+          message.success("更新成功！");
+          emit("update");
         } else {
-          message.warning('更新失败！');
+          message.warning("更新失败！");
         }
         loading.value = false;
       } catch (error) {
         loading.value = false;
-        message.error('更新失败！');
+        message.error("更新失败！");
       }
     })
-    .catch(err => {
-      console.log('err');
+    .catch((err) => {
+      console.log("err");
     });
 };
 
 // 取消
 const handleCancel = () => {
-  emit('update:visible', false);
+  emit("update:visible", false);
 };
 
 // 文件上传
-const change = info => {
-  if (info.file.status !== 'uploading') {
+const change = (info) => {
+  if (info.file.status !== "uploading") {
     console.log(info.file, info.fileList);
   }
-  if (info.file.status === 'done') {
+  if (info.file.status === "done") {
     console.log(info);
     formState.value.back_image = info.file.response.path;
     message.success(`${info.file.name} 文件上传成功`);
-  } else if (info.file.status === 'error') {
+  } else if (info.file.status === "error") {
     message.error(`${info.file.name}文件上传错误`);
   }
 };
@@ -159,6 +161,9 @@ const change = info => {
             v-model:value="formState.text"
             placeholder="请输入首页文字"
           />
+        </a-form-item>
+        <a-form-item name="is_shici" label="使用诗词">
+          <a-switch v-model:checked="formState.is_shici" />
         </a-form-item>
         <!-- <a-form-item name="status" label="是否启用">
           <a-switch v-model:checked="formState.status" />

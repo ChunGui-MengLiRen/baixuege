@@ -146,7 +146,7 @@ const columns = ref([
     align: "center",
   },
   {
-    title: "上传时间",
+    title: "创建/更新时间",
     dataIndex: "time",
     key: "time",
     align: "center",

@@ -68,8 +68,9 @@ const toDetail = (data) => {
   $router.push("/article/detail?id=" + data.id);
 };
 
-const pageChange = (page, pageSize) => {
-  page.value.current = page;
+const pageChange = (current, pageSize) => {
+  console.log(current, pageSize);
+  page.value.current = current;
   page.value.pageSize = pageSize;
   getData();
 };

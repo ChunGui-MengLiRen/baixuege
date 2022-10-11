@@ -80,11 +80,11 @@ const homeList = async (ctx, next) => {
 // 新增首页
 const homeAdd = async (ctx, next) => {
   try {
-    const { name, text, back_image } = ctx.request.body;
+    const { name, text, back_image, is_shici } = ctx.request.body;
 
-    const sql = `insert into home (name,text,back_image,time) values ('${name}','${text}','${back_image}','${dayjs().format(
-      "YYYY-MM-DD HH:mm:ss"
-    )}');`;
+    const sql = `insert into home (name,text,back_image,time,is_shici) values ('${name}','${text}','${back_image},${
+      is_shici ? 1 : 0
+    }','${dayjs().format("YYYY-MM-DD HH:mm:ss")}');`;
     console.log(sql);
 
     const res = await db.query(sql);
@@ -142,9 +142,11 @@ const homeDetail = async (ctx, next) => {
 // 更新首页
 const homeUpdate = async (ctx, next) => {
   try {
-    const { id, name, text, back_image } = ctx.request.body;
+    const { id, name, text, back_image, is_shici } = ctx.request.body;
 
-    const sql = `update home set name='${name}',text='${text}',back_image='${back_image}' where id='${id}'`;
+    const sql = `update home set name='${name}',text='${text}',back_image='${back_image}',is_shici=${
+      is_shici ? 1 : 0
+    } where id='${id}'`;
     console.log(sql);
 
     const res = await db.query(sql);

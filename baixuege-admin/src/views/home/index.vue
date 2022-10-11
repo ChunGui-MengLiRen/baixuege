@@ -56,7 +56,9 @@
     </a-form>
     <div class="table">
       <div class="action">
-        <a-button type="primary" @click="openCreate">新增</a-button>
+        <a-button type="primary" @click="openCreate"
+          ><plus-outlined />新增</a-button
+        >
       </div>
       <a-table
         size="small"
@@ -69,6 +71,11 @@
           <span>{{ column.title }}</span>
         </template>
         <template #bodyCell="{ column, record }">
+          <template v-if="column.key === 'is_shici'">
+            <div :style="{ color: record.is_shici ? 'green' : 'red' }">
+              {{ record.is_shici == "1" ? "使用" : "禁用" }}
+            </div>
+          </template>
           <template v-if="column.key === 'status'">
             <div :style="{ color: record.status ? 'green' : 'red' }">
               {{ record.status == "1" ? "启用" : "禁用" }}
@@ -77,7 +84,7 @@
           <template v-else-if="column.key === 'action'">
             <span>
               <a-button type="link" size="small" @click="openUpdate(record)">
-                编辑
+                <edit-outlined />编辑
               </a-button>
               <a-divider
                 v-if="record.status == '0'"
@@ -90,7 +97,9 @@
                 cancel-text="否"
                 @confirm="changeConfirm(record)"
               >
-                <a-button type="link" size="small">启用</a-button>
+                <a-button type="link" size="small"
+                  ><retweet-outlined />启用</a-button
+                >
               </a-popconfirm>
               <a-divider
                 v-if="record.status == '0'"
@@ -103,7 +112,9 @@
                 cancel-text="否"
                 @confirm="delConfirm(record)"
               >
-                <a-button type="link" danger size="small">删除</a-button>
+                <a-button type="link" danger size="small"
+                  ><delete-outlined />删除</a-button
+                >
               </a-popconfirm>
             </span>
           </template>
@@ -125,7 +136,15 @@
   <Update :id="row.id" v-model:visible="visibleUpdate" @update="onUpdate" />
 </template>
 <script setup>
-import { SmileOutlined, DownOutlined, UpOutlined } from "@ant-design/icons-vue";
+import {
+  SmileOutlined,
+  DownOutlined,
+  UpOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  RetweetOutlined,
+  PlusOutlined,
+} from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { ref, reactive, computed } from "vue";
 import Create from "./components/create.vue";
@@ -185,7 +204,13 @@ const columns = ref([
     align: "center",
   },
   {
-    title: "上传时间",
+    title: "使用诗词",
+    dataIndex: "is_shici",
+    key: "is_shici",
+    align: "center",
+  },
+  {
+    title: "创建/更新时间",
     dataIndex: "time",
     key: "time",
     align: "center",
@@ -199,7 +224,7 @@ const columns = ref([
   {
     title: "操作",
     key: "action",
-    width: 200,
+    width: 300,
     align: "center",
   },
 ]);
