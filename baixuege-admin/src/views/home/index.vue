@@ -56,9 +56,9 @@
     </a-form>
     <div class="table">
       <div class="action">
-        <a-button type="primary" @click="openCreate"
-          ><plus-outlined />新增</a-button
-        >
+        <a-button type="primary" @click="openCreate">
+          <plus-outlined />新增
+        </a-button>
       </div>
       <a-table
         size="small"
@@ -97,9 +97,9 @@
                 cancel-text="否"
                 @confirm="changeConfirm(record)"
               >
-                <a-button type="link" size="small"
-                  ><retweet-outlined />启用</a-button
-                >
+                <a-button type="link" size="small">
+                  <poweroff-outlined />启用
+                </a-button>
               </a-popconfirm>
               <a-divider
                 v-if="record.status == '0'"
@@ -112,9 +112,9 @@
                 cancel-text="否"
                 @confirm="delConfirm(record)"
               >
-                <a-button type="link" danger size="small"
-                  ><delete-outlined />删除</a-button
-                >
+                <a-button type="link" danger size="small">
+                  <delete-outlined />删除
+                </a-button>
               </a-popconfirm>
             </span>
           </template>
@@ -142,7 +142,7 @@ import {
   UpOutlined,
   EditOutlined,
   DeleteOutlined,
-  RetweetOutlined,
+  PoweroffOutlined,
   PlusOutlined,
 } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";

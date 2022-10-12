@@ -38,7 +38,9 @@
     </a-form>
     <div class="table">
       <div class="action">
-        <a-button type="primary" @click="openCreate">新增</a-button>
+        <a-button type="primary" @click="openCreate">
+          <plus-outlined />新增
+        </a-button>
       </div>
       <a-table
         size="small"
@@ -54,7 +56,7 @@
           <template v-else-if="column.key === 'action'">
             <span>
               <a-button type="link" size="small" @click="openUpdate(record)">
-                编辑
+                <edit-outlined />编辑
               </a-button>
               <a-divider type="vertical" />
               <a-popconfirm
@@ -63,7 +65,9 @@
                 cancel-text="否"
                 @confirm="delConfirm(record)"
               >
-                <a-button type="link" danger size="small">删除</a-button>
+                <a-button type="link" danger size="small">
+                  <delete-outlined />删除
+                </a-button>
               </a-popconfirm>
             </span>
           </template>
@@ -86,7 +90,11 @@
   <Update :id="row.id" v-model:visible="visibleUpdate" @update="onUpdate" />
 </template>
 <script setup>
-import { SmileOutlined, DownOutlined } from "@ant-design/icons-vue";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+} from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { ref, reactive, computed } from "vue";
 import Create from "./components/create.vue";
@@ -154,7 +162,7 @@ const columns = ref([
   {
     title: "操作",
     key: "action",
-    width: 140,
+    width: 200,
     align: "center",
   },
 ]);

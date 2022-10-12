@@ -58,7 +58,9 @@
     </a-form>
     <div class="table">
       <div class="action">
-        <a-button type="primary" @click="addArticle">新增</a-button>
+        <a-button type="primary" @click="addArticle">
+          <plus-outlined />新增
+        </a-button>
       </div>
       <a-table
         size="small"
@@ -76,7 +78,7 @@
           <template v-else-if="column.key === 'action'">
             <span>
               <a-button type="link" size="small" @click="updateArticle(record)">
-                编辑
+                <edit-outlined />编辑
               </a-button>
               <a-divider type="vertical"></a-divider>
               <a-popconfirm
@@ -87,9 +89,10 @@
                 cancel-text="否"
                 @confirm="changeConfirm(record)"
               >
-                <a-button type="link" size="small">{{
-                  record.status == "0" ? "启用" : "禁用"
-                }}</a-button>
+                <a-button type="link" size="small">
+                  <poweroff-outlined />
+                  {{ record.status == "0" ? "启用" : "禁用" }}
+                </a-button>
               </a-popconfirm>
               <a-divider type="vertical" />
               <a-popconfirm
@@ -98,7 +101,9 @@
                 cancel-text="否"
                 @confirm="delConfirm(record)"
               >
-                <a-button type="link" danger size="small">删除</a-button>
+                <a-button type="link" danger size="small">
+                  <delete-outlined />删除
+                </a-button>
               </a-popconfirm>
             </span>
           </template>
@@ -118,7 +123,14 @@
   </div>
 </template>
 <script setup>
-import { SmileOutlined, DownOutlined, UpOutlined } from "@ant-design/icons-vue";
+import {
+  DownOutlined,
+  UpOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  PoweroffOutlined,
+  PlusOutlined,
+} from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { ref, reactive, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
@@ -207,7 +219,7 @@ const columns = ref([
   {
     title: "操作",
     key: "action",
-    width: 200,
+    width: 300,
     align: "center",
   },
 ]);
