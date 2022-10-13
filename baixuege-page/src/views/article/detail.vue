@@ -1,14 +1,14 @@
 <script setup>
-import { ref } from 'vue';
-import MyFooter from '../../components/footer.vue';
+import { ref } from "vue";
+import MyFooter from "../../components/footer.vue";
 import {
   QqOutlined,
   WechatOutlined,
   GithubOutlined,
-  RightOutlined
-} from '@ant-design/icons-vue';
-import { useRouter, useRoute } from 'vue-router';
-import { getArticleDetail } from '../../api';
+  RightOutlined,
+} from "@ant-design/icons-vue";
+import { useRouter, useRoute } from "vue-router";
+import { getArticleDetail } from "../../api";
 
 const $router = useRouter();
 const $route = useRoute();
@@ -19,7 +19,7 @@ const detail = ref({});
 
 const getDetail = async () => {
   const res = await getArticleDetail($router.currentRoute.value.query.id);
-  if (res.status == '1') {
+  if (res.status == "1") {
     console.log(res.data);
     detail.value = res.data[0];
   }

@@ -129,6 +129,32 @@ const submit = () => {
     });
 };
 
+// 编辑器图片上传
+const handleUploadImage = (event, insertImage, files) => {
+  console.log(files);
+  var form = new FormData();
+  form.append("file", files[0]);
+  var xhr = new XMLHttpRequest();
+  xhr.open("post", action, true);
+  xhr.send(form);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      const res = JSON.parse(xhr.response);
+      console.log(res);
+      if (res) {
+        insertImage({
+          url: import.meta.env.VITE_APP_BASE_API + res.path,
+          desc: res.name,
+          width: "auto",
+          height: "auto",
+        });
+      } else {
+        message.error("上传失败！");
+      }
+    }
+  };
+};
+
 // 文件上传
 const change = (info) => {
   if (info.file.status !== "uploading") {
@@ -242,7 +268,10 @@ const change = (info) => {
             <a-form-item name="content" label="文章内容">
               <v-md-editor
                 v-model="formState.content"
+                placeholder="请输入文章"
                 height="600px"
+                @upload-image="handleUploadImage"
+                :disabled-menus="[]"
               ></v-md-editor>
             </a-form-item>
           </a-col>

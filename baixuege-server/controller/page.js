@@ -50,7 +50,7 @@ const pageArticleList = async (ctx, next) => {
 
     console.log("total", res[0]);
 
-    const sql = `select * from article where status=1 and is_del=0 limit ${
+    const sql = `select * from article where status=1 and is_del=0 order by time desc limit ${
       (current - 1) * pageSize
     },${pageSize}`;
 
@@ -138,7 +138,7 @@ const pageSayList = async (ctx, next) => {
 
     console.log("total", res[0]);
 
-    const sql = `select * from say where is_del=0 limit ${
+    const sql = `select * from say where is_del=0 order by time desc limit ${
       (current - 1) * pageSize
     },${pageSize}`;
 

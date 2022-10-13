@@ -93,17 +93,31 @@ const submit = () => {
     });
 };
 
-// const handleUploadImage = (event, insertImage, files) => {
-//   // 拿到 files 之后上传到文件服务器，然后向编辑框中插入对应的内容
-//   console.log(files);
-//   // 此处只做示例
-//   insertImage({
-//     url: "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1269952892,3525182336&fm=26&gp=0.jpg",
-//     desc: "七龙珠",
-//     // width: 'auto',
-//     // height: 'auto',
-//   });
-// };
+// 编辑器图片上传
+const handleUploadImage = (event, insertImage, files) => {
+  console.log(files);
+  var form = new FormData();
+  form.append("file", files[0]);
+  var xhr = new XMLHttpRequest();
+  xhr.open("post", action, true);
+  xhr.send(form);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      const res = JSON.parse(xhr.response);
+      console.log(res);
+      if (res) {
+        insertImage({
+          url: import.meta.env.VITE_APP_BASE_API + res.path,
+          desc: res.name,
+          width: "auto",
+          height: "auto",
+        });
+      } else {
+        message.error("上传失败！");
+      }
+    }
+  };
+};
 
 // 文件上传
 const change = (info) => {
@@ -218,7 +232,9 @@ const change = (info) => {
             <a-form-item name="content" label="文章内容">
               <v-md-editor
                 v-model="formState.content"
+                placeholder="请输入文章"
                 height="600px"
+                @upload-image="handleUploadImage"
                 :disabled-menus="[]"
               />
             </a-form-item>

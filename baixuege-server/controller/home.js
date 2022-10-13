@@ -32,11 +32,15 @@ const homeList = async (ctx, next) => {
         time[0]
       }' and '${time[1]}' ${
         typeof status == "number" ? "and status=" + status : ""
-      } and is_del='0' limit ${(current - 1) * pageSize},${pageSize}`;
+      } and is_del='0' order by time desc limit ${
+        (current - 1) * pageSize
+      },${pageSize} `;
     } else {
       sql = `select * from home where name like '%${name}%' and text like '%${text}%' ${
         typeof status == "number" ? "and status=" + status : ""
-      } and is_del='0' limit ${(current - 1) * pageSize},${pageSize}`;
+      } and is_del='0' order by time desc limit ${
+        (current - 1) * pageSize
+      },${pageSize}`;
     }
     console.log(sql);
 

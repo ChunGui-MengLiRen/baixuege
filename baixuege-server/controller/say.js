@@ -30,11 +30,11 @@ const sayList = async (ctx, next) => {
     if (time.length) {
       sql = `select * from say where author_name like '%${author_name}%' and time between '${
         time[0]
-      }' and '${time[1]}' and is_del='0' limit ${
+      }' and '${time[1]}' and is_del='0' order by time desc limit ${
         (current - 1) * pageSize
       },${pageSize}`;
     } else {
-      sql = `select * from say where author_name like '%${author_name}%' and is_del='0' limit ${
+      sql = `select * from say where author_name like '%${author_name}%' and is_del='0' order by time desc limit ${
         (current - 1) * pageSize
       },${pageSize}`;
     }
