@@ -1,18 +1,19 @@
 <script setup>
-import myDrawer from "./drawer.vue";
-import { MenuOutlined, SettingOutlined } from "@ant-design/icons-vue";
-import { useRouter } from "vue-router";
 import { ref } from "vue";
-import { getMenu } from "../api/index";
+import { useRouter } from "vue-router";
 import { message } from "ant-design-vue";
-const $router = useRouter();
-const toHome = function () {
-  $router.push("/home");
-};
-let visible = ref(false);
+import { MenuOutlined, SettingOutlined } from "@ant-design/icons-vue";
+import myDrawer from "./drawer.vue";
+import { getMenu } from "../api/index";
 
+const $router = useRouter();
+
+// 抽屉显隐
+let visible = ref(false);
+// 菜单列表
 let menuList = ref([]);
 
+// 获取菜单
 const getMenuData = async () => {
   try {
     const res = await getMenu();
@@ -27,13 +28,18 @@ const getMenuData = async () => {
   }
 };
 getMenuData();
+
+// 移动端打开菜单抽屉
 const openDrawer = () => {
   visible.value = !visible.value;
 };
-const toPage = (url) => {
-  // $router.push({ path: url });
-  visible.value = false;
+
+// 跳转首页
+const toHome = function () {
+  $router.push("/home");
 };
+
+// 跳转后台管理
 const toAdmin = () => {
   window.open("http://admin.yangliuyi.top");
 };
@@ -57,7 +63,7 @@ const toAdmin = () => {
     </div>
   </header>
   <myDrawer v-model:visible="visible">
-    <ul class="phone-menu" @click="toPage('home')">
+    <ul class="phone-menu" @click="visible = false">
       <li class="phone-menu-item" v-for="item in menuList" :key="item.id">
         <router-link :to="item.menu_router">{{ item.menu_name }}</router-link>
       </li>
@@ -150,10 +156,6 @@ const toAdmin = () => {
       color: #00bfa6;
       font-weight: 600;
     }
-
-    // &:hover {
-    //   background-color: #666;
-    // }
   }
 }
 </style>

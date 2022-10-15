@@ -1,12 +1,15 @@
 <script setup>
-import MyFooter from "../../components/footer.vue";
 import { ref } from "vue";
 import { message } from "ant-design-vue";
+import MyFooter from "../../components/footer.vue";
 import { getAboutDetail } from "../../api";
 
+// 关于自己
 const selfText = ref("");
+// 关于本站
 const siteText = ref("");
 
+// 获取关于
 const getData = async () => {
   try {
     const res = await getAboutDetail();
@@ -21,7 +24,6 @@ const getData = async () => {
     message.error("获取关于失败！");
   }
 };
-
 getData();
 </script>
 
@@ -65,7 +67,6 @@ getData();
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    // border-radius: 16px;
     box-shadow: 0px 0px 10px rgba(116, 116, 116, 0.08);
 
     .head {
@@ -79,8 +80,6 @@ getData();
 
     .body {
       flex: 1;
-      // padding: 24px;
-      // font-size: 16px;
       display: flex;
       justify-content: center;
     }

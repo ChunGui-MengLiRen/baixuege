@@ -1,35 +1,37 @@
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { message } from "ant-design-vue";
-import MyFooter from "../../components/footer.vue";
 import {
   QqOutlined,
   WechatOutlined,
   GithubOutlined,
   RightOutlined,
 } from "@ant-design/icons-vue";
+import MyFooter from "../../components/footer.vue";
 import { getArticleList, getDict } from "../../api";
-import { useRouter, useRoute } from "vue-router";
+
 const $router = useRouter();
-const $route = useRoute();
 
 const baseURL = import.meta.env.VITE_APP_BASE_API;
 
-const isMusic = ref(false);
-const isRadius = ref(false);
-const current = ref(6);
+// const isMusic = ref(false);
+// const isRadius = ref(false);
+// const current = ref(6);
 
+// 文章列表
 const list = ref([]);
-
+// 类型
 let typeList = ref([]);
+// 标签
 let tagList = ref([]);
-
+// 分页
 const page = ref({
   current: 1,
   pageSize: 10,
   total: 0,
 });
-
+// 获取文章列表
 const getData = async () => {
   try {
     const res = await getArticleList({
@@ -51,9 +53,9 @@ const getData = async () => {
     message.error("获取文章失败！");
   }
 };
-
 getData();
 
+// 获取字典 类型、标签
 const getDictData = async () => {
   const res = await getDict();
   if (res.status == "1") {
@@ -64,10 +66,12 @@ const getDictData = async () => {
 };
 getDictData();
 
+// 跳转文章详情
 const toDetail = (data) => {
   $router.push("/article/detail?id=" + data.id);
 };
 
+// 分页选择
 const pageChange = (current, pageSize) => {
   console.log(current, pageSize);
   page.value.current = current;
@@ -75,6 +79,7 @@ const pageChange = (current, pageSize) => {
   getData();
 };
 
+// 移动端加载更多
 const more = () => {
   if (page.value.current < page.value.pages) {
     page.value.current++;
@@ -82,6 +87,7 @@ const more = () => {
   }
 };
 
+// 跳转github
 const toGitHub = () => {
   window.open("https://github.com/ChunGui-MengLiRen");
 };
@@ -95,13 +101,14 @@ const toGitHub = () => {
           v-for="item in list"
           :key="item.id"
           class="article-item xl-max-height"
+          @click="toDetail(item)"
         >
-          <div class="image" @click="toDetail(item)">
+          <div class="image">
             <img v-if="item.image" :src="`${baseURL}${item.image}`" alt="" />
             <img v-else src="../../assets/panda.webp" alt="" />
           </div>
           <div class="data">
-            <div class="title article-title-font-size" @click="toDetail(item)">
+            <div class="title article-title-font-size">
               {{ item.title }}
             </div>
             <div class="content show-article-content">
@@ -234,6 +241,10 @@ const toGitHub = () => {
     cursor: pointer;
     max-width: 100%;
 
+    &:hover {
+      background-color: #f0f0f0;
+    }
+
     .image {
       width: 30%;
       min-width: 100px;
@@ -283,9 +294,10 @@ const toGitHub = () => {
 
         .item-tag {
           font-size: 14px;
-          padding: 0 4px;
+          padding: 0 6px;
           height: 24px;
           border: 1px solid #ccc;
+          border-radius: 2px;
           cursor: pointer;
         }
       }
@@ -397,9 +409,11 @@ const toGitHub = () => {
       gap: 6px;
 
       .tag {
-        padding: 0 2px;
+        font-size: 14px;
+        padding: 0 6px;
         height: 24px;
         border: 1px solid #ccc;
+        border-radius: 2px;
         cursor: pointer;
       }
     }

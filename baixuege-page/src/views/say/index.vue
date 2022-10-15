@@ -1,16 +1,19 @@
 <script setup>
-import MyFooter from "../../components/footer.vue";
-import { message } from "ant-design-vue";
-import { getSayList } from "../../api";
 import { ref } from "vue";
+import { message } from "ant-design-vue";
+import MyFooter from "../../components/footer.vue";
+import { getSayList } from "../../api";
 
+// 说说列表
 const list = ref([]);
 
+// 分页
 const page = ref({
   current: 1,
   pageSize: 20,
 });
 
+// 获取说说
 const getData = async () => {
   try {
     const res = await getSayList({
@@ -26,7 +29,6 @@ const getData = async () => {
     message.error("获取说说失败！");
   }
 };
-
 getData();
 </script>
 

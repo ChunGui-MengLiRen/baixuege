@@ -7,9 +7,9 @@ import { load } from "jinrishici";
 const text = ref("");
 const backImage = ref("");
 const is_shici = ref(0);
-
 const shici = ref("");
 
+// 获取首页配置
 const getData = async () => {
   try {
     const res = await getHome();
@@ -34,22 +34,21 @@ load(
     shici.value = result.data.content;
   },
   (errData) => {
-    console.log(err);
+    console.log(errData);
+    message.error("获取今日诗词失败！" + errData);
   }
 );
 
 getData();
-
-console.log(load);
 </script>
 
 <template>
   <div class="wrap" :style="{ 'background-image': `url(${backImage})` }">
     <h2 class="title-text">{{ is_shici ? shici : text }}</h2>
     <div class="beian">
-      <a href="https://beian.miit.gov.cn" target="_blank"
-        >皖ICP备2021002798号-1</a
-      >
+      <a href="https://beian.miit.gov.cn" target="_blank">
+        皖ICP备2021002798号-1
+      </a>
     </div>
   </div>
 </template>

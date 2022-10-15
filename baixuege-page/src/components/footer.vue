@@ -3,7 +3,11 @@
 <template>
   <footer class="footer">
     <div class="container wrap">
-      <div><a href="https://beian.miit.gov.cn">皖ICP备2021002798号-1</a></div>
+      <div>
+        <a href="https://beian.miit.gov.cn" target="_blank">
+          皖ICP备2021002798号-1
+        </a>
+      </div>
       <div>杨柳依依 保留所有权利</div>
       <div>永不言败的心 永不放弃的梦</div>
       <div>
