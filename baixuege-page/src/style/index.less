@@ -42,41 +42,56 @@ ol {
   padding: 0;
 }
 
+// sm
 @media screen and (min-width: 640px) {
   .container {
     max-width: 100%;
   }
-  .title-text {
+  // 首页文字
+  .home-title-text {
     font-size: 32px !important;
   }
-  .show-article-content {
+
+  // 文章简介
+  .article-desc-show {
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
     text-overflow: ellipsis;
     -webkit-box-orient: vertical;
     white-space: normal !important;
   }
-  .show-article-datetime {
+
+  // 文章 显示 日期时间
+  .article-datetime-show {
     display: inline-block !important;
   }
-  .hide-article-time {
+
+  // 文章 隐藏 日期
+  .article-date-hide {
     display: none !important;
   }
-  .show-article-pagination {
+
+  // 文章 显示 分页
+  .article-pagination-show {
     display: block !important;
   }
-  .show-article-pagination-button {
+
+  // 文章 隐藏 分页按钮
+  .article-pagination-button-hide {
     display: none !important;
   }
-  .hide-article--pagination {
-    display: none !important;
-  }
-  .show-article-tag {
+
+  //文章 显示 标签
+  .article-tag-show {
     display: flex !important;
   }
+
+  // 文章标题字体大小
   .article-title-font-size {
     font-size: 24px !important;
   }
+
+  // 文章 元信息 字体大小
   .article-meta-font-size {
     font-size: 16px !important;
   }
@@ -84,21 +99,33 @@ ol {
   .say-time-log {
     font-size: 16px !important;
     padding: 48px 24px 0 !important;
+    .line-show {
+      display: block !important;
+    }
+    .dot-show {
+      display: block !important;
+    }
+    .content-margin-left {
+      margin-left: 24px !important;
+    }
     .box-body {
       font-size: 18px !important;
     }
   }
 }
 
+// md
 @media screen and (min-width: 768px) {
   .container {
     max-width: 100%;
   }
-  .title-text {
+  // 首页文字
+  .home-title-text {
     font-size: 32px !important;
   }
 }
 
+// lg
 @media screen and (min-width: 1024px) {
   .container {
     max-width: 100%;
@@ -106,7 +133,7 @@ ol {
   .lg-show {
     display: block !important;
   }
-  .title-text {
+  .home-title-text {
     font-size: 48px !important;
   }
   .show-menu {
@@ -125,28 +152,30 @@ ol {
   }
 }
 
+// xl
 @media screen and (min-width: 1280px) {
   .container {
     max-width: 1280px;
   }
-  .title-text {
+  // 首页文字
+  .home-title-text {
     font-size: 64px !important;
   }
   .xl-show {
     display: block !important;
   }
-
   .say-time-log-xl {
     padding: 48px 64px 0 !important;
   }
 }
 
+// 2xl
 @media screen and (min-width: 1536px) {
-  .title-text {
-    font-size: 80px !important;
-  }
-
   .container {
     max-width: 1496px;
+  }
+  // 首页文字
+  .title-text {
+    font-size: 80px !important;
   }
 }

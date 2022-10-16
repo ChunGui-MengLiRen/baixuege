@@ -41,7 +41,9 @@ const pageArticleList = async (ctx, next) => {
   console.log(page, data);
   try {
     const res = await db.query(
-      `select count(*) as total from article where is_del=0 and status=1`
+      `select count(*) as total from article where is_del=0 and status=1 ${
+        data.type ? "and type=" + data.type : ""
+      }`
     );
     const total = res[0].total; // 总数
     const pageSize = page.pageSize; // 每页条数
@@ -50,9 +52,9 @@ const pageArticleList = async (ctx, next) => {
 
     console.log("total", res[0]);
 
-    const sql = `select * from article where status=1 and is_del=0 order by time desc limit ${
-      (current - 1) * pageSize
-    },${pageSize}`;
+    const sql = `select * from article where status=1 and is_del=0 ${
+      data.type ? "and type=" + data.type : ""
+    } order by time desc limit ${(current - 1) * pageSize},${pageSize}`;
 
     console.log(sql);
 
@@ -129,7 +131,7 @@ const pageSayList = async (ctx, next) => {
   console.log(page, data);
   try {
     const res = await db.query(
-      `select count(*) as total from say where is_del='0'`
+      `select count(*) as total from say where is_del=0`
     );
     const total = res[0].total; // 总数
     const pageSize = page.pageSize; // 每页条数

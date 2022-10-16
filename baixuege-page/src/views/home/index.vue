@@ -44,7 +44,7 @@ getData();
 
 <template>
   <div class="wrap" :style="{ 'background-image': `url(${backImage})` }">
-    <h2 class="title-text">{{ is_shici ? shici : text }}</h2>
+    <h2 class="home-title-text">{{ is_shici ? shici : text }}</h2>
     <div class="beian">
       <a href="https://beian.miit.gov.cn" target="_blank">
         皖ICP备2021002798号-1

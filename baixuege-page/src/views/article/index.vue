@@ -15,12 +15,14 @@ const $router = useRouter();
 
 const baseURL = import.meta.env.VITE_APP_BASE_API;
 
+let loading = ref(false);
+
 // const isMusic = ref(false);
 // const isRadius = ref(false);
-// const current = ref(6);
 
 // 文章列表
 const list = ref([]);
+let articleType = ref("");
 // 类型
 let typeList = ref([]);
 // 标签
@@ -36,6 +38,9 @@ const getData = async () => {
   try {
     const res = await getArticleList({
       page: page.value,
+      data: {
+        type: articleType.value,
+      },
     });
     if (res.status == "1") {
       console.log(res.data);
@@ -66,6 +71,12 @@ const getDictData = async () => {
 };
 getDictData();
 
+// 选择文章类型
+const selectType = (type) => {
+  articleType.value = type;
+  getData();
+};
+
 // 跳转文章详情
 const toDetail = (data) => {
   $router.push("/article/detail?id=" + data.id);
@@ -80,10 +91,34 @@ const pageChange = (current, pageSize) => {
 };
 
 // 移动端加载更多
-const more = () => {
+const more = async () => {
   if (page.value.current < page.value.pages) {
     page.value.current++;
-    getData();
+    try {
+      const res = await getArticleList({
+        page: page.value,
+        data: {
+          type: articleType.value,
+        },
+      });
+      if (res.status == "1") {
+        console.log(res.data);
+        list.value = [
+          ...list.value,
+          ...res.data.data.map((item) => {
+            return {
+              ...item,
+              tag_name: item.tag_name ? item.tag_name.split(",") : [],
+            };
+          }),
+        ];
+        page.value = res.data.page;
+      } else {
+        message.error("获取文章失败！");
+      }
+    } catch (error) {
+      message.error("获取文章失败！");
+    }
   }
 };
 
@@ -97,6 +132,24 @@ const toGitHub = () => {
   <div class="container wrap">
     <div class="article-box">
       <ul>
+        <li class="article-type-head">
+          <div
+            class="type-item"
+            :class="{ 'type-item-selected': !articleType }"
+            @click="selectType('')"
+          >
+            全部文章
+          </div>
+          <div
+            v-for="item in typeList"
+            :key="item.id"
+            class="type-item"
+            :class="{ 'type-item-selected': articleType == item.value }"
+            @click="selectType(item.value)"
+          >
+            {{ item.label }}
+          </div>
+        </li>
         <li
           v-for="item in list"
           :key="item.id"
@@ -111,10 +164,10 @@ const toGitHub = () => {
             <div class="title article-title-font-size">
               {{ item.title }}
             </div>
-            <div class="content show-article-content">
+            <div class="content article-desc-show">
               {{ item.info }}
             </div>
-            <div class="article-tag show-article-tag">
+            <div class="article-tag article-tag-show">
               <div v-for="(val, i) in item.tag_name" :key="i" class="item-tag">
                 {{ val }}
               </div>
@@ -122,11 +175,11 @@ const toGitHub = () => {
             <div class="meta article-meta-font-size">
               <span>{{ item.author_name }}</span>
               <span>
-                <span class="hide-article-time">{{
+                <span class="article-date-hide">{{
                   item.time.slice(0, 10)
                 }}</span
-                >&nbsp;
-                <span style="display: none" class="show-article-datetime">
+                >&nbsp;&nbsp;
+                <span style="display: none" class="article-datetime-show">
                   {{ item.time }}
                 </span>
               </span>
@@ -134,8 +187,7 @@ const toGitHub = () => {
           </div>
         </li>
       </ul>
-      <div v-if="page.total" class="pagination show-article-pagination">
-        <!-- <a-pagination v-model:current="current" :total="500" /> -->
+      <div v-if="page.total" class="pagination article-pagination-show">
         <a-pagination
           v-model:current="page.current"
           v-model:page-size="page.pageSize"
@@ -147,7 +199,7 @@ const toGitHub = () => {
       </div>
       <div
         v-if="page.current !== page.pages"
-        class="pagination-button show-article-pagination-button"
+        class="pagination-button article-pagination-button-hide"
       >
         <button @click="more">加载更多</button>
       </div>
@@ -232,6 +284,23 @@ const toGitHub = () => {
   width: 100%;
   flex: 1;
   background-color: #fff;
+
+  .article-type-head {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    overflow-x: auto;
+
+    .type-item {
+      cursor: pointer;
+      flex-shrink: 0;
+      padding: 0 12px;
+    }
+    .type-item-selected {
+      color: #00bfa6;
+    }
+  }
 
   .article-item {
     border-bottom: 1px solid #eee;

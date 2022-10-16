@@ -10,7 +10,8 @@ const list = ref([]);
 // 分页
 const page = ref({
   current: 1,
-  pageSize: 20,
+  pageSize: 10,
+  total: 0,
 });
 
 // 获取说说
@@ -22,6 +23,7 @@ const getData = async () => {
     if (res.status == "1") {
       console.log(res.data);
       list.value = res.data.data;
+      page.value = res.data.page;
     } else {
       message.error("获取说说失败！");
     }
@@ -30,6 +32,35 @@ const getData = async () => {
   }
 };
 getData();
+
+// 分页选择
+const pageChange = (current, pageSize) => {
+  console.log(current, pageSize);
+  page.value.current = current;
+  page.value.pageSize = pageSize;
+  getData();
+};
+
+// 移动端加载更多
+const more = async () => {
+  if (page.value.current < page.value.pages) {
+    page.value.current++;
+    try {
+      const res = await getSayList({
+        page: page.value,
+      });
+      if (res.status == "1") {
+        console.log(res.data);
+        list.value = [...list.value, ...res.data.data];
+        page.value = res.data.page;
+      } else {
+        message.error("获取说说失败！");
+      }
+    } catch (error) {
+      message.error("获取说说失败！");
+    }
+  }
+};
 </script>
 
 <template>
@@ -37,9 +68,9 @@ getData();
     <section class="time-log say-time-log say-time-log-lg say-time-log-xl">
       <ul>
         <li v-for="item in list" :key="item.id" class="time-item">
-          <div class="line"></div>
-          <div class="dot"></div>
-          <div class="content">
+          <div class="line line-show"></div>
+          <div class="dot dot-show"></div>
+          <div class="content content-margin-left">
             <div class="currnet"></div>
             <div class="box-head">
               <div class="head-avatar">
@@ -55,6 +86,23 @@ getData();
           </div>
         </li>
       </ul>
+
+      <div v-if="page.total" class="pagination article-pagination-show">
+        <a-pagination
+          v-model:current="page.current"
+          v-model:page-size="page.pageSize"
+          show-size-changer
+          :total="page.total"
+          :show-total="(total) => `共 ${total} 条`"
+          @change="pageChange"
+        />
+      </div>
+      <div
+        v-if="page.current !== page.pages"
+        class="pagination-button article-pagination-button-hide"
+      >
+        <button @click="more">加载更多</button>
+      </div>
     </section>
   </div>
   <MyFooter />
@@ -81,6 +129,7 @@ getData();
       margin-bottom: 16px;
 
       .line {
+        display: none;
         position: absolute;
         width: 2px;
         height: calc(100% + 8px);
@@ -90,11 +139,13 @@ getData();
 
       &:last-child {
         .line {
+          display: none;
           height: calc(100% - 30px);
         }
       }
 
       .dot {
+        display: none;
         position: absolute;
         margin-left: -4px;
         width: 10px;
@@ -106,7 +157,7 @@ getData();
       .content {
         position: relative;
         top: -21px;
-        margin-left: 24px;
+        // margin-left: 24px;
         height: 100%;
         padding-bottom: 12px;
         padding: 8px 16px;
@@ -154,6 +205,17 @@ getData();
         }
       }
     }
+  }
+
+  .pagination {
+    display: none;
+    padding: 24px;
+    text-align: right;
+  }
+
+  .pagination-button {
+    padding: 24px;
+    text-align: center;
   }
 }
 </style>

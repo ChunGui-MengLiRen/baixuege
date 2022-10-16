@@ -1,22 +1,22 @@
 <script setup>
-import { ref, reactive, defineProps, defineEmits } from 'vue';
-import { UploadOutlined } from '@ant-design/icons-vue';
-import { message } from 'ant-design-vue';
-import { addSay } from '../../../api/say';
+import { ref, reactive, defineProps, defineEmits } from "vue";
+import { UploadOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
+import { addSay } from "../../../api/say";
 
 defineProps({
   visible: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
-const emit = defineEmits(['update:visible', 'create']);
+const emit = defineEmits(["update:visible", "create"]);
 const loading = ref(false);
 
 const form = ref();
 
 const formState = ref({
-  content: ''
+  content: "",
 });
 
 const handleOk = () => {
@@ -26,28 +26,29 @@ const handleOk = () => {
       try {
         loading.value = true;
         const res = await addSay({
-          ...formState.value
+          ...formState.value,
         });
-        if (res.status == '1') {
-          message.success('新增成功！');
-          emit('create');
+        if (res.status == "1") {
+          handleCancel();
+          message.success("新增成功！");
+          emit("create");
         } else {
-          message.warning('新增失败！');
+          message.warning("新增失败！");
         }
         loading.value = false;
       } catch (error) {
         console.log(error);
-        message.error('新增失败！');
+        message.error("新增失败！");
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 };
 
 const handleCancel = () => {
-  formState.value.content = '';
-  emit('update:visible', false);
+  formState.value.content = "";
+  emit("update:visible", false);
 };
 </script>
 
